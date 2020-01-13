@@ -41,6 +41,7 @@
   ],
   "auth": [ // 应用权限（发布前请删除无用权限）
     101, //发送群消息         sendGroupMsg
+    120, //置群员移除         setGroupKick
     121, //置群员禁言         setGroupBan
     126, //置群成员名片       setGroupCard
     130, //取群成员信息       getGroupMemberInfo

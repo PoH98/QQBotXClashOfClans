@@ -16,11 +16,12 @@ namespace Native.Csharp.App.Bot
     {
         public static void CheckMember(CqGroupMessageEventArgs e)
         {
+            Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到检查指令");
             Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
             var Groupmember = Common.CqApi.GetMemberList(e.FromGroup);
             var me = Common.CqApi.GetLoginQQ();
             ICocCoreClans players = BaseData.Instance.container.Resolve<ICocCoreClans>();
-            var Clanmember = players.GetClansMembers(BaseData.Instance.config["部落冲突"]["Clan_ID"]);
+            var Clanmember = players.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
             if (Clanmember != null)
             {
                 List<string> namelist = new List<string>();
@@ -91,6 +92,7 @@ namespace Native.Csharp.App.Bot
 
         public static void ChangeName(CqGroupMessageEventArgs e)
         {
+            Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到改名指令");
             GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
             if (sendMember.PermitType == PermitType.Holder || sendMember.PermitType == PermitType.Manage)
             {
@@ -132,6 +134,7 @@ namespace Native.Csharp.App.Bot
 
         public static bool NewMember(string id, CqAddGroupRequestEventArgs e)
         {
+            Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到新人申请");
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             Player player = players.GetPlayer(id);
             if (player != null)
@@ -283,6 +286,50 @@ namespace Native.Csharp.App.Bot
             else
             {
                 return true;
+            }
+        }
+
+        public static void Kick(CqGroupMessageEventArgs e)
+        {
+            Common.CqApi.AddLoger(LogerLevel.Info_Receive,"部落冲突群管", "接受到踢人指令");
+            var sender = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
+            if(sender.PermitType == PermitType.None)
+            {
+                Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + sender.Card + "踢出群聊！他娘的没权限还想踢人？");
+                return;
+            }
+            string qq = "";
+            var cqcontent = CqMsg.Parse(e.Message).Contents;
+            if (!cqcontent.Any(x => x.Dictionary.ContainsKey("qq")))
+            {
+                Common.CqApi.AddLoger(LogerLevel.Info_Receive,"部落冲突群管", "没有检测到QQ");
+                return;
+            }
+            foreach (var cqCode in cqcontent)
+            {
+                qq = cqCode.Dictionary["qq"];
+                break;
+            }
+            Common.CqApi.AddLoger(LogerLevel.Debug, "部落冲突内测", "已检测到QQ号" + qq);
+            if (!long.TryParse(qq, out long tag))
+            {
+                var list = Common.CqApi.GetMemberList(e.FromGroup);
+                foreach (var member in list)
+                {
+                    if (member.Card == qq || member.Nick == qq)
+                    {
+                        Common.CqApi.SetGroupMemberRemove(e.FromGroup, member.QQId);
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + member.Card + "踢出群聊！");
+                        break;
+                    }
+                }
+
+            }
+            else
+            {
+                var member = Common.CqApi.GetMemberInfo(e.FromGroup, tag);
+                Common.CqApi.SetGroupMemberRemove(e.FromGroup, member.QQId);
+                Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + member.Card + "踢出群聊！");
             }
         }
     }

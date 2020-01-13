@@ -61,7 +61,7 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message == "/部落战")
                     {
-                        if (Instance.config["部落冲突"].ContainsKey("Clan_ID"))
+                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
                         {
                             ClanAPI.GetWar(e);
                         }
@@ -72,7 +72,7 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message == "/部落成员")
                     {
-                        if (Instance.config["部落冲突"].ContainsKey("Clan_ID"))
+                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
                         {
                             ClanAPI.GetMember(e);
                         }
@@ -83,7 +83,7 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message == "/部落战剩余进攻")
                     {
-                        if (Instance.config["部落冲突"].ContainsKey("Clan_ID"))
+                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
                         {
                             ClanAPI.GetWarLeft(e);
                         }
@@ -94,7 +94,7 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message == "/清人")
                     {
-                        if (Instance.config["部落冲突"].ContainsKey("Clan_ID"))
+                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
                         {
                             AdminAPI.CheckMember(e);
                         }
@@ -123,10 +123,10 @@ namespace Native.Csharp.App.Event
                         Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
                         ICocCoreClans war = Instance.container.Resolve<ICocCoreClans>();
                         var keypairs = valuePairs(configType.部落冲突);
-                        if (keypairs.ContainsKey("Clan_ID"))
+                        if (keypairs.ContainsKey(e.FromGroup.ToString()))
                         {
-                            LeagueWar league = war.GetCurrentWarLeague(keypairs["Clan_ID"]);
-                            if (league != null)
+                            LeagueWar league = war.GetCurrentWarLeague(keypairs[e.FromGroup.ToString()]);
+                            if (league != null && string.IsNullOrEmpty(league.Reason))
                             {
                                 StringBuilder sb = new StringBuilder();
                                 sb.AppendLine("============");
@@ -147,7 +147,7 @@ namespace Native.Csharp.App.Event
                             }
                             else
                             {
-                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能或者当前不在联赛时间");
                             }
                         }
                         else
@@ -177,6 +177,23 @@ namespace Native.Csharp.App.Event
                         if (!found)
                         {
                             Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString());
+                        }
+                    }
+                    else if (e.Message.StartsWith("/踢"))
+                    {
+                        AdminAPI.Kick(e);
+                    }
+                    else if (e.Message.StartsWith("/绑定群 #"))
+                    {
+                        if(Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ).PermitType != PermitType.None)
+                        {
+                            string clanID = e.Message.Split(' ').Where(x => x.Contains("#")).Last();
+                            SetClanID(e.FromGroup, clanID);
+                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已绑定" + e.FromGroup + "为部落ID" + clanID);
+                        }
+                        else
+                        {
+                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
                         }
                     }
                     else

@@ -28,10 +28,10 @@ namespace COCApiTest
                 }
                 BaseData.LoadCOCData();
                 var keypairs = BaseData.valuePairs(BaseData.configType.部落冲突);
-                if (keypairs.ContainsKey("Clan_ID"))
+                if (keypairs.ContainsKey(e.FromGroup.ToString()))
                 {
                     ICocCoreClans clan = BaseData.container.Resolve<ICocCoreClans>();
-                    var clanData = clan.GetCurrentWar(keypairs["Clan_ID"]);
+                    var clanData = clan.GetCurrentWar(keypairs[e.FromGroup.ToString()]);
                     Console.WriteLine(clanData);
                     if (clanData == null)
                     {

@@ -1,12 +1,5 @@
-﻿using System.IO;
-using IniParser;
-using IniParser.Model;
-using Native.Csharp.Sdk.Cqp.EventArgs;
+﻿using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
-using System;
-using System.Text;
-using System.Threading;
-using Native.Csharp.App.Bot;
 
 namespace Native.Csharp.App.Event
 {
@@ -27,18 +20,7 @@ namespace Native.Csharp.App.Event
             // 请务必尽快缩短本方法的执行时间，否则会卡住其他插件以及主程序的加载。
 
             //Common.AppDirectory = Common.CqApi.GetAppDirectory();  // 获取应用数据目录(无需储存数据时，请将此行注释)
-            FileIniDataParser parse = new FileIniDataParser();
-            if (!File.Exists("config.ini"))
-            {
-                BaseData.Instance.config = new IniData();
-                foreach(var section in (configType[])Enum.GetValues(typeof(configType)))
-                {
-                    BaseData.Instance.config.Sections.AddSection(section.ToString());
-                }
-                BaseData.InitFirstUse();
-                parse.WriteFile("config.ini", BaseData.Instance.config, Encoding.Unicode);
-            }
-            BaseData.LoadCOCData();
+            
             // 返回如：D:\CoolQ\data\app\com.example.demo\
             // 应用的所有数据、配置【必须】存放于此目录，避免给用户带来困扰。
         }

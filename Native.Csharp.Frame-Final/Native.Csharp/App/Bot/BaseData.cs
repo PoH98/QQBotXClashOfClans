@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Funq;
 using CocNET;
 using Native.Csharp.Sdk.Cqp.EventArgs;
+using System.Threading;
 
 namespace Native.Csharp.App.Bot
 {
@@ -26,8 +27,12 @@ namespace Native.Csharp.App.Bot
         public CocCore core;
 
         public Container container;
-
         public CqEventArgsBase Event { get; private set; }
+
+        public Thread checkClanWar;
+
+        public string LastClanWarStatus;
+
         public static BaseData Instance
         {
             get
@@ -91,6 +96,13 @@ namespace Native.Csharp.App.Bot
             WebClient wc = new WebClient();
             Instance.IPAddress = wc.DownloadString("http://bot.whatismyipaddress.com/");
             wc.Dispose();
+        }
+
+        public static void SetClanID(long GroupID, string ClanID)
+        {
+            Instance.config["部落冲突"].AddKey(GroupID.ToString(), ClanID);
+            FileIniDataParser parse = new FileIniDataParser();
+            parse.WriteFile("config.ini", Instance.config, Encoding.Unicode);
         }
 
         public static bool CheckIP()

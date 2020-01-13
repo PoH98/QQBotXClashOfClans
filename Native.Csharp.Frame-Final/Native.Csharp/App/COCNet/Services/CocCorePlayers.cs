@@ -23,8 +23,7 @@ namespace CocNET.Services
         public Player GetPlayer(string playerTag)
         {
             var call = REQUEST.GetCall(API_URL_PLAYERS, HttpUtility.UrlEncode(playerTag));
-
-            return REQUEST.GetResponse<Player>(call); ;
+            return REQUEST.GetResponse<Player>(call);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Native.Csharp.App.Event
             //      由于采用了新的容器解析机制, 所以此方法不需要写任何的分发过程
             //      此方法的使用需要熟悉 Unity 框架 (IOC 框架)
             container.RegisterType<IReceiveGroupMessage, GroupMessage>("群消息处理");
-
+            container.RegisterType<IReceiveAddGroupRequest, Event_MemberAddGroup>("群添加请求处理");
         }
 	}
 }

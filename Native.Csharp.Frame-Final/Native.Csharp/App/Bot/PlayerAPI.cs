@@ -2,7 +2,6 @@
 using CocNET.Interfaces;
 using CocNET.Types.Players;
 using IniParser;
-using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Linq;
@@ -16,11 +15,15 @@ namespace Native.Csharp.App.Bot
         {
             try
             {
-                
                 Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
                 if (!BaseData.CheckIP())
                 {
                     TokenApi.GetNewToken();
+                }
+                if (cocid == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+                    return;
                 }
                 ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                 var player = players.GetPlayer(cocid);
@@ -82,6 +85,11 @@ namespace Native.Csharp.App.Bot
         {
             string id = e.Message.Replace("/审核 ", "").Replace(" ", "");
             Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
+            if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+            {
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+                return;
+            }
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             Player player = players.GetPlayer(id);
             if (player != null)

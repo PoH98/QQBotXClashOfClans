@@ -2,6 +2,7 @@
 using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Native.Csharp.App.Bot
@@ -49,7 +50,7 @@ namespace Native.Csharp.App.Bot
         public static void GetWar(CqGroupMessageEventArgs e)
         {
             ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
-            var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"]["Clan_ID"]);
+            var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
             if (clanData == null)
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, "无法获取部落资料！");
@@ -63,7 +64,7 @@ namespace Native.Csharp.App.Bot
                     sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                     sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                     sb.AppendLine();
-                    foreach (var member in clanData.Clan.Members)
+                    foreach (var member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
                     {
                         if (member.Attacks != null)
                         {
@@ -99,7 +100,7 @@ namespace Native.Csharp.App.Bot
                     sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                     sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                     sb.AppendLine();
-                    foreach (var member in clanData.Clan.Members)
+                    foreach (var member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
                     {
                         if (member.Attacks != null)
                         {
@@ -128,6 +129,19 @@ namespace Native.Csharp.App.Bot
                     sb.Append("部落战已结束！");
                     Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
                 }
+                else if (clanData.State == "preparation")
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(Common.CqApi.CqCode_At(e.FromQQ) + "\n你要的部落战资料：\n");
+                    int x = 1;
+                    foreach (var member in clanData.Clan.Members.OrderBy(y => y.MapPosition))
+                    {
+                        sb.AppendLine(x +". "+ member.Name);
+                        x++;
+                    }
+                    sb.AppendLine("当前为准备日");
+                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                }
                 else
                 {
                     Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + " 当前部落无部落战！");
@@ -139,7 +153,7 @@ namespace Native.Csharp.App.Bot
         {
             Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
             ICocCoreClans players = BaseData.Instance.container.Resolve<ICocCoreClans>();
-            var player = players.GetClansMembers(BaseData.Instance.config["部落冲突"]["Clan_ID"]);
+            var player = players.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
             if (player != null)
             {
                 StringBuilder sb = new StringBuilder();
@@ -160,7 +174,7 @@ namespace Native.Csharp.App.Bot
         public static void GetWarLeft(CqGroupMessageEventArgs e)
         {
             ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
-            var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"]["Clan_ID"]);
+            var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
             if (clanData == null)
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, "无法获取部落资料！");

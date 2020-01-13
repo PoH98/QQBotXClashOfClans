@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	此代码由 T4 引擎根据 LibExport.tt 模板生成, 若您不了解以下代码的用处, 请勿修改!
  *	
  *	此文件包含项目 Json 文件的事件导出函数.
@@ -58,7 +58,7 @@ namespace Native.Csharp.App.Core
 			// 请勿随意修改
 			// 
 			Common.AppName = "部落冲突xQQ群管理";
-			Common.AppVersion = Version.Parse ("1.0.0");		
+			Common.AppVersion = Version.Parse ("1.0.1");		
 
 			//
 			// 当前项目名称: com.coc.groupadmin
@@ -123,24 +123,6 @@ namespace Native.Csharp.App.Core
 			}
 			
 			/*
-			 * Id: 1001
-			 * Name: 酷Q启动事件
-			 */
-			if (Common.UnityContainer.IsRegistered<ICqStartup> ("酷Q启动事件") == true)
-			{
-				CqStartup_1001 = Common.UnityContainer.Resolve<ICqStartup> ("酷Q启动事件").CqStartup;
-			}
-			
-			/*
-			 * Id: 1002
-			 * Name: 酷Q关闭事件
-			 */
-			if (Common.UnityContainer.IsRegistered<ICqExit> ("酷Q关闭事件") == true)
-			{
-				CqExit_1002 = Common.UnityContainer.Resolve<ICqExit> ("酷Q关闭事件").CqExit;
-			}
-			
-			/*
 			 * Id: 1003
 			 * Name: 应用已被启用
 			 */
@@ -150,12 +132,16 @@ namespace Native.Csharp.App.Core
 			}
 			
 			/*
-			 * Id: 1004
-			 * Name: 应用将被停用
+			 * Id: 12
+			 * Name: 群添加请求处理
 			 */
-			if (Common.UnityContainer.IsRegistered<ICqAppDisable> ("应用将被停用") == true)
+			if (Common.UnityContainer.IsRegistered<IReceiveAddGroupRequest> ("群添加请求处理") == true)
 			{
-				AppDisable_1004 = Common.UnityContainer.Resolve<ICqAppDisable> ("应用将被停用").CqAppDisable;
+				ReceiveAddGroupRequest_12 = Common.UnityContainer.Resolve<IReceiveAddGroupRequest> ("群添加请求处理").ReceiveAddGroupRequest;
+			}
+			if (Common.UnityContainer.IsRegistered<IReceiveAddGroupBeInvitee> ("群添加请求处理") == true)
+			{
+				ReceiveAddGroupBeInvitee_12 = Common.UnityContainer.Resolve<IReceiveAddGroupBeInvitee> ("群添加请求处理").ReceiveAddGroupBeInvitee;
 			}
 			
 
@@ -190,40 +176,6 @@ namespace Native.Csharp.App.Core
 		}
 
 		/*
-		 * Id: 1001
-		 * Type: 1001
-		 * Name: 酷Q启动事件
-		 * Function: _eventStartup
-		 */
-		public static event EventHandler<CqStartupEventArgs> CqStartup_1001;
-		[DllExport (ExportName = "_eventStartup", CallingConvention = CallingConvention.StdCall)]
-		private static int Evnet__eventStartup ()
-		{
-			if (CqStartup_1001 != null)
-			{
-				CqStartup_1001 (null, new CqStartupEventArgs (1001, "酷Q启动事件"));
-			}
-			return 0;
-		}
-
-		/*
-		 * Id: 1002
-		 * Type: 1002
-		 * Name: 酷Q关闭事件
-		 * Function: _eventExit
-		 */
-		public static event EventHandler<CqExitEventArgs> CqExit_1002;
-		[DllExport (ExportName = "_eventExit", CallingConvention = CallingConvention.StdCall)]
-		private static int Evnet__eventExit ()
-		{
-			if (CqExit_1002 != null)
-			{
-				CqExit_1002 (null, new CqExitEventArgs (1002, "酷Q关闭事件"));
-			}
-			return 0;
-		}
-
-		/*
 		 * Id: 1003
 		 * Type: 1003
 		 * Name: 应用已被启用
@@ -241,20 +193,32 @@ namespace Native.Csharp.App.Core
 		}
 
 		/*
-		 * Id: 1004
-		 * Type: 1004
-		 * Name: 应用将被停用
-		 * Function: _eventDisable
+		 * Id: 12
+		 * Type: 302
+		 * Name: 群添加请求处理
+		 * Function: _eventRequest_AddGroup
 		 */
-		public static event EventHandler<CqAppDisableEventArgs> AppDisable_1004;
-		[DllExport (ExportName = "_eventDisable", CallingConvention = CallingConvention.StdCall)]
-		private static int Evnet__eventDisable ()
+		public static event EventHandler<CqAddGroupRequestEventArgs> ReceiveAddGroupRequest_12;
+		public static event EventHandler<CqAddGroupRequestEventArgs> ReceiveAddGroupBeInvitee_12;
+		[DllExport (ExportName = "_eventRequest_AddGroup", CallingConvention = CallingConvention.StdCall)]
+		private static int Evnet__eventRequest_AddGroup (int subType, int sendTime, long fromGroup, long fromQQ, IntPtr msg, string responseFlag)
 		{
-			if (AppDisable_1004 != null)
+			CqAddGroupRequestEventArgs args = new CqAddGroupRequestEventArgs (12, "群添加请求处理", sendTime.ToDateTime (), fromGroup, fromQQ, msg.ToString (_defaultEncoding), responseFlag);
+			if (subType == 1)
 			{
-				AppDisable_1004 (null, new CqAppDisableEventArgs (1004, "应用将被停用"));
+				if (ReceiveAddGroupRequest_12 != null)
+				{
+					ReceiveAddGroupRequest_12 (null, args);
+				}
 			}
-			return 0;
+			else if (subType == 2)
+			{
+				if (ReceiveAddGroupBeInvitee_12 != null)
+				{
+					ReceiveAddGroupBeInvitee_12 (null, args);
+				}
+			}
+			return Convert.ToInt32 (args.Handler);
 		}
 
 
