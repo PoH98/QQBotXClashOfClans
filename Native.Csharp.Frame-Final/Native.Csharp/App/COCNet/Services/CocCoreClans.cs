@@ -129,5 +129,18 @@ namespace CocNET.Services
 
             return currentWar;
         }
+        /// <summary>
+        /// Warning! This is war Tag not clan Tag!!
+        /// </summary>
+        /// <param name="warTag"></param>
+        /// <returns></returns>
+        public LeagueWarRound GetCurrentWarLeagueRound(string warTag)
+        {
+            var call = Request.GetCall("clanwarleagues", "wars", HttpUtility.UrlEncode(warTag));
+
+            var currentWar = Request.GetResponse<LeagueWarRound>(call);
+
+            return currentWar;
+        }
     }
 }

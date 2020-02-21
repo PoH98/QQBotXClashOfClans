@@ -1,9 +1,6 @@
 ﻿using System;
-using Funq;
 using System.Linq;
-using CocNET;
 using CocNET.Interfaces;
-using IniParser;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 using System.Text;
@@ -120,40 +117,11 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message.StartsWith("/联赛"))
                     {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
-                        ICocCoreClans war = Instance.container.Resolve<ICocCoreClans>();
-                        var keypairs = valuePairs(configType.部落冲突);
-                        if (keypairs.ContainsKey(e.FromGroup.ToString()))
-                        {
-                            LeagueWar league = war.GetCurrentWarLeague(keypairs[e.FromGroup.ToString()]);
-                            if (league != null && string.IsNullOrEmpty(league.Reason))
-                            {
-                                StringBuilder sb = new StringBuilder();
-                                sb.AppendLine("============");
-                                foreach (var clan in league.Clans)
-                                {
-                                    sb.AppendLine("部落名: " + clan.Name);
-                                    sb.AppendLine("参赛成员：" + clan.Members.Length);
-                                    sb.AppendLine("-----------");
-                                    for (int x = 4; x <= 13; x++)
-                                    {
-                                        int count = clan.Members.Count(m => m.TownhallLevel == x);
-                                        if (count > 0)
-                                            sb.AppendLine("拥有" + Instance.THLevels[x] + "本 x" + count);
-                                    }
-                                    sb.AppendLine("============");
-                                }
-                                Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
-                            }
-                            else
-                            {
-                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能或者当前不在联赛时间");
-                            }
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
-                        }
+                        ClanAPI.GetLeagueWar(e);
+                    }
+                    else if (e.Message == "/拉霸")
+                    {
+
                     }
                     else if (e.Message.StartsWith("/下载 "))
                     {
@@ -196,6 +164,30 @@ namespace Native.Csharp.App.Event
                             Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
                         }
                     }
+                    else if (e.Message == "/工作")
+                    {
+                        GameAPI.MemberWork(e);
+                    }
+                    else if(e.Message == "/我")
+                    {
+                        GameAPI.MemberCheck(e);
+                    }
+                    else if(e.Message == "/21点")
+                    {
+                        GameAPI.Member21Point(e);
+                    }
+                    else if(e.Message == "/排名")
+                    {
+                        GameAPI.GetRank(e);
+                    }
+                    else if (e.Message.StartsWith("/打劫"))
+                    {
+                        GameAPI.Robber(e);
+                    }
+                    else if (e.Message.StartsWith("/购买"))
+                    {
+                        GameAPI.Shop(e);
+                    }
                     else
                     {
                         GroupMemberInfo me = Common.CqApi.GetMemberInfo(e.FromGroup, Common.CqApi.GetLoginQQ());
@@ -204,7 +196,7 @@ namespace Native.Csharp.App.Event
                             try
                             {
                                 GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-                                if (sendMember.PermitType == PermitType.Holder || sendMember.PermitType == PermitType.Manage)
+                                if (sendMember.PermitType != PermitType.Holder && sendMember.PermitType != PermitType.Manage && (sendMember.JoiningTime - DateTime.Now).Days < 15)
                                 {
                                     foreach (var keyvalue in valuePairs(configType.禁止词句))
                                     {

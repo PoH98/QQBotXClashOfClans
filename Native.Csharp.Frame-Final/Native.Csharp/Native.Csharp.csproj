@@ -77,6 +77,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
@@ -84,6 +85,7 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -115,6 +117,7 @@
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
     <Compile Include="App\Bot\ClanApi.cs" />
+    <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\PlayerAPI.cs" />
     <Compile Include="App\Bot\Threading.cs" />
     <Compile Include="App\COCNet\CocCore.cs" />
@@ -138,7 +141,9 @@
     <Compile Include="App\COCNet\Types\Clans\CurrentWar\WarMember.cs" />
     <Compile Include="App\COCNet\Types\Clans\LeagueWar\LeagueClan.cs" />
     <Compile Include="App\COCNet\Types\Clans\LeagueWar\LeagueMember.cs" />
+    <Compile Include="App\COCNet\Types\Clans\LeagueWar\LeagueRounds.cs" />
     <Compile Include="App\COCNet\Types\Clans\LeagueWar\LeagueWar.cs" />
+    <Compile Include="App\COCNet\Types\Clans\LeagueWar\LeagueWarRounds.cs" />
     <Compile Include="App\COCNet\Types\Clans\Opponent.cs" />
     <Compile Include="App\COCNet\Types\Clans\WarLog.cs" />
     <Compile Include="App\COCNet\Types\Clans\WarLogs.cs" />
@@ -189,6 +194,17 @@
     <Compile Include="App\Event\Event_CqStartup.cs" />
     <Compile Include="App\Event\Event_MemberAdded.cs" />
     <Compile Include="App\Event\Event_MemberAddGroup.cs" />
+    <Compile Include="App\Event\Event_MemberLeave.cs" />
+    <Compile Include="App\Event\Event_UI.cs" />
+    <Compile Include="App\GameData\Enums.cs" />
+    <Compile Include="App\GameData\GameMember.cs" />
+    <Compile Include="App\GameData\Weapon.cs" />
+    <Compile Include="App\Setting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App\Setting.Designer.cs">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repair\Core\Kernel32.cs" />
     <Compile Include="Repair\Enum\LoadLibraryFlags.cs" />
@@ -227,6 +243,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StatusExport.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App\Setting.resx">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ImportGroup Label=".NET DllExport" />

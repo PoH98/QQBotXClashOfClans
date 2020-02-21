@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CocNET.Types.Clans.CurrentWar;
+using Newtonsoft.Json;
 
 namespace CocNET.Types.Clans.LeagueWar
 {
@@ -12,5 +13,11 @@ namespace CocNET.Types.Clans.LeagueWar
 
         [JsonProperty("townhallLevel")]
         public int TownhallLevel { get; set; }
+
+        [JsonProperty("mapPosition")]
+        public int MapPosition { get; set; }
+
+        [JsonProperty("attacks")]
+        public WarAttack[] Attacks { get; set; }
     }
 }

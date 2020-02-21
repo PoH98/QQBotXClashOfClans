@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp.Model
 {
-	/// <summary>
-	/// 群信息
-	/// </summary>
-	public class GroupInfo
+    /// <summary>
+    /// 群信息
+    /// </summary>
+    [Serializable]
+    public class GroupInfo
 	{
 		/// <summary>
 		/// 群号码

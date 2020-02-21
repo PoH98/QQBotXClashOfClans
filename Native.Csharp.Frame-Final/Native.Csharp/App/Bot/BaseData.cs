@@ -10,6 +10,7 @@ using Funq;
 using CocNET;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Threading;
+using Native.Csharp.Sdk.Cqp.Model;
 
 namespace Native.Csharp.App.Bot
 {

@@ -15,6 +15,7 @@ namespace Native.Csharp.App.Bot
                 Thread.Sleep(1000);
                 if (DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
                 {
+                    GameAPI.SaveData();
                     ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
                     try
                     {
@@ -22,6 +23,7 @@ namespace Native.Csharp.App.Bot
                         {
                             if (clanID.KeyName.All(char.IsDigit))
                             {
+                                GameAPI.GetGroupMembers(Convert.ToInt64(clanID.KeyName));
                                 var clanData = clan.GetCurrentWar(clanID.Value);
                                 if (string.IsNullOrEmpty(clanData.Message))
                                 {

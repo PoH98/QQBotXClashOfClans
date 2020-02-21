@@ -144,6 +144,19 @@ namespace Native.Csharp.App.Core
 				ReceiveAddGroupBeInvitee_12 = Common.UnityContainer.Resolve<IReceiveAddGroupBeInvitee> ("群添加请求处理").ReceiveAddGroupBeInvitee;
 			}
 			
+			/*
+			 * Id: 6
+			 * Name: 群成员减少事件处理
+			 */
+			if (Common.UnityContainer.IsRegistered<IReceiveGroupMemberLeave> ("群成员减少事件处理") == true)
+			{
+				ReceiveMemberLeave_6 = Common.UnityContainer.Resolve<IReceiveGroupMemberLeave> ("群成员减少事件处理").ReceiveGroupMemberLeave;
+			}
+			if (Common.UnityContainer.IsRegistered<IReceiveGroupMemberRemove> ("群成员减少事件处理") == true)
+			{
+				ReceiveMemberRemove_6 = Common.UnityContainer.Resolve<IReceiveGroupMemberRemove> ("群成员减少事件处理").ReceiveGroupMemberRemove;
+			}
+			
 
 		}
 		#endregion
@@ -216,6 +229,35 @@ namespace Native.Csharp.App.Core
 				if (ReceiveAddGroupBeInvitee_12 != null)
 				{
 					ReceiveAddGroupBeInvitee_12 (null, args);
+				}
+			}
+			return Convert.ToInt32 (args.Handler);
+		}
+
+		/*
+		 * Id: 6
+		 * Type: 102
+		 * Name: 群成员减少事件处理
+		 * Function: _eventSystem_GroupMemberDecrease
+		 */
+		public static event EventHandler<CqGroupMemberDecreaseEventArgs> ReceiveMemberLeave_6;
+		public static event EventHandler<CqGroupMemberDecreaseEventArgs> ReceiveMemberRemove_6;
+		[DllExport (ExportName = "_eventSystem_GroupMemberDecrease", CallingConvention = CallingConvention.StdCall)]
+		private static int Evnet__eventSystem_GroupMemberDecrease (int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ)
+		{
+			CqGroupMemberDecreaseEventArgs args = new CqGroupMemberDecreaseEventArgs (6, "群成员减少事件处理", sendTime.ToDateTime (), fromGroup, fromQQ, beingOperateQQ);
+			if (subType == 1)
+			{
+				if (ReceiveMemberLeave_6 != null)
+				{
+					ReceiveMemberLeave_6 (null, args);
+				}
+			}
+			else if (subType == 2)
+			{
+				if (ReceiveMemberRemove_6 != null)
+				{
+					ReceiveMemberRemove_6 (null, args);
 				}
 			}
 			return Convert.ToInt32 (args.Handler);

@@ -20,6 +20,12 @@ namespace CocNET.Types.Clans.LeagueWar
         [JsonProperty("badgeUrls")]
         public Dictionary<string, string> BadgeUrls { get; set; }
 
+        [JsonProperty("attacks")]
+        public int Attacks { get; set; }
+
+        [JsonProperty("stars")]
+        public int Stars { get; set; }
+
         [JsonProperty("members")]
         public LeagueMember[] Members { get; set; }
     }

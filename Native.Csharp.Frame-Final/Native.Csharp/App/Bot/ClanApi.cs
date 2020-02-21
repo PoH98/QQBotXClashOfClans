@@ -1,9 +1,10 @@
 ﻿using CocNET.Interfaces;
-using Native.Csharp.Sdk.Cqp;
+using CocNET.Types.Clans.LeagueWar;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Linq;
 using System.Text;
+using static Native.Csharp.App.Bot.BaseData;
 
 namespace Native.Csharp.App.Bot
 {
@@ -139,13 +140,151 @@ namespace Native.Csharp.App.Bot
                         sb.AppendLine(x +". "+ member.Name);
                         x++;
                     }
+                    sb.AppendLine("开战时间为: " + clanData.EndTime);
                     sb.AppendLine("当前为准备日");
                     Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                }
+                else if (clanData.Reason == "inMaintenance")
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + " 当前服务器在维护！");
                 }
                 else
                 {
                     Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + " 当前部落无部落战！");
                 }
+            }
+        }
+
+        public static void GetLeagueWar(CqGroupMessageEventArgs e)
+        {
+            Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
+            ICocCoreClans war = Instance.container.Resolve<ICocCoreClans>();
+            var keypairs = valuePairs(configType.部落冲突);
+            if (keypairs.ContainsKey(e.FromGroup.ToString()))
+            {
+                LeagueWar league = war.GetCurrentWarLeague(keypairs[e.FromGroup.ToString()]);
+                if (league != null && string.IsNullOrEmpty(league.Reason))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("============");
+                    foreach (var clan in league.Clans)
+                    {
+                        sb.AppendLine("部落名: " + clan.Name);
+                        sb.AppendLine("参赛成员：" + clan.Members.Length);
+                        sb.AppendLine("-----------");
+                        for (int x = 4; x <= 13; x++)
+                        {
+                            int count = clan.Members.Count(m => m.TownhallLevel == x);
+                            if (count > 0)
+                                sb.AppendLine("拥有" + Instance.THLevels[x] + "本 x" + count);
+                        }
+                        sb.AppendLine("============");
+
+                    }
+                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                    sb.Clear();
+                    Array.Reverse(league.Rounds);
+                    bool ResourceGet = false;
+                    foreach(var rounds in league.Rounds)
+                    {
+                        foreach(var warTag in rounds.warTags)
+                        {
+                            var roundData =  war.GetCurrentWarLeagueRound(warTag);
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突", "联赛部落" + roundData.clan.Name +" vs "+ roundData.opponent.Name);
+                            if(roundData.clan.Tag == keypairs[e.FromGroup.ToString()])
+                            {
+                                if(roundData.state == "preparation")
+                                {
+                                    sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                    int loc = 1;
+                                    foreach (var member in roundData.clan.Members.ToList().OrderBy(x => x.MapPosition))
+                                    {
+                                        sb.AppendLine(loc + ". " +member.Name);
+                                        loc++;
+                                    }
+                                    sb.AppendLine("对手为" + roundData.opponent.Name);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                    sb.Clear();
+                                }
+                                else if (roundData.state == "inWar")
+                                {
+                                    sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                    int loc = 1;
+                                    foreach (var member in roundData.clan.Members.ToList().OrderBy(x => x.MapPosition))
+                                    {
+                                        string attacked = "还没进攻";
+                                        if (member.Attacks != null)
+                                        {
+                                            attacked = "已获得" + member.Attacks[0].Stars + "星！";
+                                        }
+                                        sb.AppendLine(loc + ". " +member.Name + " - " + attacked);
+                                        loc++;
+                                    }
+                                    sb.AppendLine("对手为" + roundData.opponent.Name);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                    sb.Clear();
+                                    ResourceGet = true;
+                                    break;
+                                }
+                            }
+                            else if (roundData.opponent.Tag == keypairs[e.FromGroup.ToString()])
+                            {
+                                if (roundData.state == "preparation")
+                                {
+                                    sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                    int loc = 1;
+                                    foreach (var member in roundData.opponent.Members.ToList().OrderBy(x => x.MapPosition))
+                                    {
+                                        sb.AppendLine(loc + ". " +member.Name);
+                                        loc++;
+                                    }
+                                    sb.AppendLine("对手为" + roundData.clan.Name);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                    sb.Clear();
+                                }
+                                else if (roundData.state == "inWar")
+                                {
+                                    sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                    int loc = 1;
+                                    foreach (var member in roundData.opponent.Members.ToList().OrderBy(x => x.MapPosition))
+                                    {
+                                        string attacked = "还没进攻";
+                                        if (member.Attacks != null)
+                                        {
+                                            attacked = "已获得" + member.Attacks[0].Stars + "星！";
+                                        }
+                                        sb.AppendLine(loc + ". " +member.Name + " - " + attacked);
+                                        loc++;
+                                    }
+                                    sb.AppendLine("对手为" + roundData.clan.Name);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                    sb.Clear();
+                                    ResourceGet = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (ResourceGet)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(league.Reason))
+                {
+                    if (league.Reason == "inMaintenance")
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + " 当前服务器在维护！");
+                    }
+                }
+                else
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能或者当前不在联赛时间");
+                }
+            }
+            else
+            {
+                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
             }
         }
 
@@ -181,8 +320,14 @@ namespace Native.Csharp.App.Bot
             }
             else
             {
-
-                if (clanData.State == "inWar")
+                if (!string.IsNullOrEmpty(clanData.Reason))
+                {
+                    if (clanData.Reason == "inMaintenance")
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + " 当前服务器在维护！");
+                    }
+                }
+                else if (clanData.State == "inWar")
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.Append( Common.CqApi.CqCode_At(e.FromQQ) + "\n你要的部落战资料：\n");

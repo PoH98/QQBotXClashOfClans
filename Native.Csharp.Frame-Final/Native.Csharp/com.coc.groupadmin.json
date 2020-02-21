@@ -6,7 +6,7 @@
   "ret": 1, // 返回码，固定为1
   "apiver": 9, // Api版本，本SDK为9
   "name": "部落冲突xQQ群管理", // 应用名称
-  "version": "1.0.1", // 应用版本
+  "version": "1.0.2", // 应用版本
   "version_id": 1, // 应用顺序版本（每次发布时至少+1）
   "author": "PoH98", // 应用作者
   "description": "部落冲突群自动请求用户审核+对比游戏内部落情况",
@@ -31,6 +31,13 @@
       "name": "群添加请求处理",
       "function": "_eventRequest_AddGroup",
       "priority": 30000
+    },
+    {
+      "id": 6,
+      "type": 102,
+      "name": "群成员减少事件处理",
+      "function": "_eventSystem_GroupMemberDecrease",
+      "priority": 30000
     }
   ],
   "menu": [ // 设置菜单（发布前请删除无用菜单，如果无需设置菜单请全部删除）
@@ -49,6 +56,7 @@
     132, //取群信息           getGroupInfo
     151, //置群添加请求       setGroupAddRequest
     160, //取群成员列表       getGroupMemberList
+    161, //取群列表           getGroupList
     180 //撤回消息           deleteMsg
   ]
 }

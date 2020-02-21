@@ -19,5 +19,6 @@ namespace CocNET.Interfaces
         List<Member> GetClansMembers(string clanTag);
         War GetCurrentWar(string clanTag);
         LeagueWar GetCurrentWarLeague(string clanTag);
+        LeagueWarRound GetCurrentWarLeagueRound(string warTag);
     }
 }

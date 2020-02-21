@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Native.Csharp.Sdk.Cqp.Model
 {
-	/// <summary>
-	/// 描述 QQ 好友信息的类
-	/// </summary>
-	public class FriendInfo
+    /// <summary>
+    /// 描述 QQ 好友信息的类
+    /// </summary>
+    [Serializable]
+    public class FriendInfo
 	{
 		/// <summary>
 		/// QQ帐号

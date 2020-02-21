@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp.Model
 {
-	/// <summary>
-	/// 群匿名
-	/// </summary>
-	public class GroupAnonymous
+    /// <summary>
+    /// 群匿名
+    /// </summary>
+    [Serializable]
+    public class GroupAnonymous
 	{
 		/// <summary>
 		/// 匿名用户标识

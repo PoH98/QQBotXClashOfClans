@@ -31,7 +31,7 @@ namespace Native.Csharp.App.Bot
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("大本营等级：" + player.TownHallLevel + "，名字：" + player.Name);
-                    sb.AppendLine("进攻次数: " + player.AttackWins + "，防御次数: " + player.DefenseWins);
+                    sb.AppendLine("进攻次数: " + player.AttackWins + "，防御次数: " + player.DefenseWins + "，战星: " + player.WarStars);
                     sb.AppendLine("兵力：");
                     foreach (var troop in player.Troops)
                     {

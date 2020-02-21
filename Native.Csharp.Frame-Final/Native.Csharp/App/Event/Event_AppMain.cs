@@ -53,6 +53,8 @@ namespace Native.Csharp.App.Event
             //      此方法的使用需要熟悉 Unity 框架 (IOC 框架)
             container.RegisterType<IReceiveGroupMessage, GroupMessage>("群消息处理");
             container.RegisterType<IReceiveAddGroupRequest, Event_MemberAddGroup>("群添加请求处理");
+            container.RegisterType<IReceiveGroupMemberLeave, Event_MemberLeave>("群成员减少事件处理");
+            container.RegisterType<ICallMenu, Event_UI>("打开设置");
         }
 	}
 }

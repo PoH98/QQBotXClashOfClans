@@ -6,10 +6,11 @@ using System.Text;
 
 namespace Native.Csharp.Sdk.Cqp.Model
 {
-	/// <summary>
-	/// 群成员信息
-	/// </summary>
-	public class GroupMemberInfo
+    /// <summary>
+    /// 群成员信息
+    /// </summary>
+    [Serializable]
+    public class GroupMemberInfo
 	{
 		/// <summary>
 		/// 获取或设置一个值, 指示成员所在群

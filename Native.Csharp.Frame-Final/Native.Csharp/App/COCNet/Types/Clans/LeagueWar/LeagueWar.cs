@@ -12,7 +12,9 @@ namespace CocNET.Types.Clans.LeagueWar
         public string Season { get; set; }
 
         [JsonProperty("clans")]
-
         public LeagueClan[] Clans { get; set; }
+
+        [JsonProperty("rounds")]
+        public LeagueRounds[] Rounds { get; set; }
     }
 }

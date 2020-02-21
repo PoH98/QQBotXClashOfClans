@@ -46,6 +46,7 @@ namespace Native.Csharp.App.Event
                 BaseData.Instance.checkClanWar.Abort();
                 BaseData.Instance.checkClanWar = null;
             }
+            GameAPI.ReadData();
             BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);
             BaseData.Instance.checkClanWar.IsBackground = true;
             BaseData.Instance.checkClanWar.Start();
