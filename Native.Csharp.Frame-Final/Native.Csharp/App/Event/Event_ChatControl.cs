@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using CocNET.Interfaces;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 using System.Text;
 using static Native.Csharp.App.Bot.BaseData;
 using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
-using CocNET.Types.Clans.LeagueWar;
 using System.Net;
 using Native.Csharp.Sdk.Cqp.Enum;
 
@@ -121,7 +119,15 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message == "/拉霸")
                     {
-
+                        GameAPI.JackPot(e);
+                    }
+                    else if(e.Message == "/寻宝")
+                    {
+                        GameAPI.FindTreasure(e);
+                    }
+                    else if(e.Message == "/帮助")
+                    {
+                        GameAPI.Help(e);
                     }
                     else if (e.Message.StartsWith("/下载 "))
                     {

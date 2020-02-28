@@ -61,6 +61,53 @@ namespace Native.Csharp.App.Bot
             { Work.给大雪怪带孩子, 50000 }
         };
 
+        private string[] TreasureFindingSuccess = 
+        new string[] 
+        { 
+            "你在寻宝路上看见了个蓝色狸猫，他给了你一个圆柱体后就跳到个圈里消失了，你获得了%G%元！",
+            "你在寻宝路上看见了个戴皇冠的人，他身上不停冒出绿色的票卷，他给了你一张绿色的卷后就消失了，你拿去卖掉后获得了%G%元！",
+            "你在森林里迷路了，在那里你看见了个小房子，房子里传出了'面对恐惧的最好办法...'，你没继续听下去就把房子炸了，并且在那里找到了%G%元，并且发现其实回家的路就被这破房子拦住了！",
+            "你到海上去寻宝，回去的路上搭了个小船，有个老妇人在你隔壁咳嗽了一声，你没在意，下船后你开始了莫名的咳嗽并且开始发烧。你获得了%G%元！",
+            "你在森林里找到了个宝箱，然而有个在打篮球的男人在你回家的时候阻拦了你，你轻松把他的篮球踢飞后赶紧溜回了家。你获得了%G%元！",
+            "你经过了一个遗迹，找到了个石制面具，你把他卖给了个黄金头发的男人，你获得了%G%元！",
+            "你刚出门，邻居的老婆婆就把你叫住，她给了你个红苹果，你看过这个故事，便把老婆婆杀死，并且拿她的苹果卖给了路边戴红帽的小女孩，你获得了%G%元！",
+            "你到海上寻宝，路上看见了个举着个火炬的女性雕像，下船后你在路上捡到个黑色的小东西，里面塞满了大量印着某个人的纸张，上面全写了100$，你把这些破纸卖给了个捡破烂的，获得了%G%元！",
+            "你出门后发现今天在下雪，你门口站着个火柴在卖女孩，你跟她买了个女孩后把女孩拿去点燃了取暖，并且在融化的雪地里找到了个小宝箱，获得了%G%元！",
+            "你在寻宝路上发现了地上充满了坑，你生气的破骂了一顿，这肯定又是某主播挖的坑！幸运的是，你在其中一个坑里挖到了些宝藏，你获得了%G%元！"
+        };
+
+        private string[] TreasureFindingFailed = 
+        new string[] 
+        {
+            "你到森林里发现了个巨龙，你使用了大量精力用煮菜刀把龙打死了，当你打开宝箱时箱子突然跳出了大量的杂草，你突然惊醒发现你满口的杂草，只好自讨无趣回家了！",
+            "你在寻宝路上找到了个老旧的城堡，正当你想要进去的时候你看见了好几个天使在拉着个野蛮人往这里走来，你躲起来后看见天使把野蛮人拉进去城堡里，没多久就发出了惨叫，你吓得赶紧逃离了这个地方！",
+            "你在路上看见了口井，你往下面丢了个金币希望可以在今天内寻到一些好的宝藏，井底回应了你的愿望，发出了呱呱呱的叫声！",
+            "你在路上看见了个老巫师在点头，你跟他一起点头，到了傍晚后你觉得颈部酸痛就回家了",
+            "你找到了传说中的龙王之穴，里面的龙王告诉你他知道宝藏的地点，然而他一直滔滔不绝的一直在说他以前的辉煌事迹，你听不下去只好回家了！",
+            "你在路上看见个帅气的男人在不停的抖动肩膀，他似乎放出了魔法控制了你的身体，你不由自主的跟他一起抖动肩膀，直到隔天你好不容易挣脱了魔法的控制后赶紧逃回了家！",
+            "你在个美好的早晨突然看见个包着头巾的男人喊着去东北玩泥巴，还说什么他大连没有家，你觉得他是疯子就只好呆在家里的被窝里瑟瑟发抖！",
+            "你躺在床上玩了一天的手机，并且在一个群聊里的机器人寻找到了大量宝藏！",
+            "你走到了个名叫滑尾的奇怪村庄，发现这里正在与一名奇怪金发男人发生战争，金发男人疯狂的往村子里丢各种奇怪会爆炸的纸，而滑尾村庄则疯狂的在向金发男人使用会发光的小长方形玩意反击。你为了避免被战火烧及赶紧跑回了家！",
+            "你到了个小村庄，发现这里已经被强盗洗劫一空，而强盗似乎还在不远处在搬运窃取到的厕纸，你吓得赶紧跑回了家！"
+        };
+        public static void FindTreasure(CqGroupMessageEventArgs e)
+        {
+            Random rnd = new Random();
+            var result = rnd.Next(0, 19);
+            if (result >= 10)
+            {
+                result -= 10;
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + Instance.TreasureFindingFailed[result]);
+            }
+            else
+            {
+                var member = getMember(e);
+                var coin = rnd.Next(10, 50);
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + Instance.TreasureFindingSuccess[result].Replace("%G%", coin.ToString()));
+                member.Cash += coin;
+            }
+        }
+
         private static GameAPI instance;
         public static void GetGroupMembers(long GroupID)
         {
@@ -212,7 +259,7 @@ namespace Native.Csharp.App.Bot
 
         public static void Help(CqGroupMessageEventArgs e)
         {
-            Common.CqApi.SendGroupMessage(e.FromGroup, "群里小游戏帮助：\n每日可/工作一次，超过一次将会进院治疗！(扣工资)\n每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要10分钟后才可继续进行！\n/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以半价出售哦！");
+            Common.CqApi.SendGroupMessage(e.FromGroup, "群里小游戏帮助：\n每日可/工作一次，超过一次将会进院治疗！(扣工资)\n每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要10分钟后才可继续进行！\n/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以半价出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot哦！\n/寻宝或许可以获得意外惊喜？");
         }
 
         public static void Robber(CqGroupMessageEventArgs e)
@@ -593,7 +640,7 @@ namespace Native.Csharp.App.Bot
                     mem.PlayTime = DateTime.Now;
                     Random rnd = new Random();
                     int num1, num2, num3;
-                    if (DateTime.Now.Hour == 12)
+                    if (DateTime.Now.Hour == 8)
                     {
                         num1 = rnd.Next(0, 6);
                         num2 = rnd.Next(0, 6);
@@ -608,12 +655,17 @@ namespace Native.Csharp.App.Bot
                     if (num1 == num2 && num2 == num3)
                     {
                         //Jackpot!
-                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "恭喜获得了Jackpot!!获得了1000元！！");
-                        mem.Cash += 1000;
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "恭喜获得了Jackpot!!获得了3000元！！");
+                        mem.Cash += 3000;
                     }
-                    else if (num1 == num2 || num2 == num3 || num3 == num1)
+                    else if (num1 == num2)
                     {
                         Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了50元奖励！");
+                        mem.Cash += 50;
+                    }
+                    else if (num2 == num3 || num3 == num1)
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|");
                         mem.Cash -= 50;
                     }
                     else

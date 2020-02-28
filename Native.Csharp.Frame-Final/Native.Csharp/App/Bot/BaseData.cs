@@ -22,7 +22,6 @@ namespace Native.Csharp.App.Bot
         public  Dictionary<string, string> translation { get; private set; }
 
         private string IPAddress;
-
         public long Group { get; private set; }
 
         public CocCore core;
@@ -94,9 +93,19 @@ namespace Native.Csharp.App.Bot
                 }
                 parse.WriteFile("Townhall.ini", Instance.thConfig,Encoding.Unicode);
             }
-            WebClient wc = new WebClient();
-            Instance.IPAddress = wc.DownloadString("http://bot.whatismyipaddress.com/");
-            wc.Dispose();
+            try 
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                WebClient wc = new WebClient();
+                Instance.IPAddress = wc.DownloadString("http://bot.whatismyipaddress.com/");
+                wc.Dispose();
+            }
+            catch
+            {
+                Instance.IPAddress = "0.0.0.0";
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突错误", "无法获取当前IP, 将会稍后再试！");
+            }
         }
 
         public static void SetClanID(long GroupID, string ClanID)
