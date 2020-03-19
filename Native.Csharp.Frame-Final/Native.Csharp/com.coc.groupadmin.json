@@ -26,6 +26,13 @@
       "function": "_eventEnable"
     },
     {
+      "id": 1002,
+      "type": 1002,
+      "name": "酷Q关闭事件",
+      "priority": 30000,
+      "function": "_eventExit"
+    },
+    {
       "id": 12,
       "type": 302,
       "name": "群添加请求处理",

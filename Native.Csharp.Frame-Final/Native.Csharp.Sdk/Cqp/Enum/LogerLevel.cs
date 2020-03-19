@@ -38,9 +38,6 @@ namespace Native.Csharp.Sdk.Cqp.Enum
 		/// 错误
 		/// </summary>
 		Error = 30,
-		/// <summary>
-		/// 严重错误
-		/// </summary>
-		Fatal = 40
+
 	}
 }

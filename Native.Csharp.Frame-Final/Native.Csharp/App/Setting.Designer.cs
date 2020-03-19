@@ -50,7 +50,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 47);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Debug Save";
+            this.button1.Text = "储存游戏资料";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -70,7 +70,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 47);
             this.button3.TabIndex = 2;
-            this.button3.Text = "Debug Load";
+            this.button3.Text = "加载游戏资料";
             this.button3.UseVisualStyleBackColor = true;
             // 
             // button4
@@ -79,7 +79,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 47);
             this.button4.TabIndex = 3;
-            this.button4.Text = "Debug GetMember";
+            this.button4.Text = "重新刷新群成员";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 

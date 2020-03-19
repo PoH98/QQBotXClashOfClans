@@ -14,6 +14,7 @@ namespace Native.Csharp.App.Bot
 {
     public class GameAPI
     {
+        #region 准备变数
         public static GameAPI Instance
         {
             get
@@ -64,16 +65,16 @@ namespace Native.Csharp.App.Bot
         private string[] TreasureFindingSuccess = 
         new string[] 
         { 
-            "你在寻宝路上看见了个蓝色狸猫，他给了你一个圆柱体后就跳到个圈里消失了，你获得了%G%元！",
-            "你在寻宝路上看见了个戴皇冠的人，他身上不停冒出绿色的票卷，他给了你一张绿色的卷后就消失了，你拿去卖掉后获得了%G%元！",
-            "你在森林里迷路了，在那里你看见了个小房子，房子里传出了'面对恐惧的最好办法...'，你没继续听下去就把房子炸了，并且在那里找到了%G%元，并且发现其实回家的路就被这破房子拦住了！",
-            "你到海上去寻宝，回去的路上搭了个小船，有个老妇人在你隔壁咳嗽了一声，你没在意，下船后你开始了莫名的咳嗽并且开始发烧。你获得了%G%元！",
-            "你在森林里找到了个宝箱，然而有个在打篮球的男人在你回家的时候阻拦了你，你轻松把他的篮球踢飞后赶紧溜回了家。你获得了%G%元！",
-            "你经过了一个遗迹，找到了个石制面具，你把他卖给了个黄金头发的男人，你获得了%G%元！",
-            "你刚出门，邻居的老婆婆就把你叫住，她给了你个红苹果，你看过这个故事，便把老婆婆杀死，并且拿她的苹果卖给了路边戴红帽的小女孩，你获得了%G%元！",
-            "你到海上寻宝，路上看见了个举着个火炬的女性雕像，下船后你在路上捡到个黑色的小东西，里面塞满了大量印着某个人的纸张，上面全写了100$，你把这些破纸卖给了个捡破烂的，获得了%G%元！",
-            "你出门后发现今天在下雪，你门口站着个火柴在卖女孩，你跟她买了个女孩后把女孩拿去点燃了取暖，并且在融化的雪地里找到了个小宝箱，获得了%G%元！",
-            "你在寻宝路上发现了地上充满了坑，你生气的破骂了一顿，这肯定又是某主播挖的坑！幸运的是，你在其中一个坑里挖到了些宝藏，你获得了%G%元！"
+            "你在寻宝路上看见了个蓝色狸猫，他给了你一个圆柱体后就跳到个圈里消失了，你获得了%G%金币！",
+            "你在寻宝路上看见了个戴皇冠的人，他身上不停冒出绿色的票卷，他给了你一张绿色的卷后就消失了，你拿去卖掉后获得了%G%金币！",
+            "你在森林里迷路了，在那里你看见了个小房子，房子里传出了'面对恐惧的最好办法...'，你没继续听下去就把房子炸了，并且在那里找到了%G%金币，并且发现其实回家的路就被这破房子拦住了！",
+            "你到海上去寻宝，回去的路上搭了个小船，有个老妇人在你隔壁咳嗽了一声，你没在意，下船后你开始了莫名的咳嗽并且开始发烧。你获得了%G%金币！",
+            "你在森林里找到了个宝箱，然而有个在打篮球的男人在你回家的时候阻拦了你，你轻松把他的篮球踢飞后赶紧溜回了家。你获得了%G%金币！",
+            "你经过了一个遗迹，找到了个石制面具，你把他卖给了个黄金头发的男人，你获得了%G%金币！",
+            "你刚出门，邻居的老婆婆就把你叫住，她给了你个红苹果，你看过这个故事，便把老婆婆杀死，并且拿她的苹果卖给了路边戴红帽的小女孩，你获得了%G%金币！",
+            "你到海上寻宝，路上看见了个举着个火炬的女性雕像，下船后你在路上捡到个黑色的小东西，里面塞满了大量印着某个人的纸张，上面全写了100$，你把这些破纸卖给了个捡破烂的，获得了%G%金币！",
+            "你出门后发现今天在下雪，你门口站着个火柴在卖女孩，你跟她买了个女孩后把女孩拿去点燃了取暖，并且在融化的雪地里找到了个小宝箱，获得了%G%金币！",
+            "你在寻宝路上发现了地上充满了坑，你生气的破骂了一顿，这肯定又是某主播挖的坑！幸运的是，你在其中一个坑里挖到了些宝藏，你获得了%G%金币！"
         };
 
         private string[] TreasureFindingFailed = 
@@ -90,8 +91,24 @@ namespace Native.Csharp.App.Bot
             "你走到了个名叫滑尾的奇怪村庄，发现这里正在与一名奇怪金发男人发生战争，金发男人疯狂的往村子里丢各种奇怪会爆炸的纸，而滑尾村庄则疯狂的在向金发男人使用会发光的小长方形玩意反击。你为了避免被战火烧及赶紧跑回了家！",
             "你到了个小村庄，发现这里已经被强盗洗劫一空，而强盗似乎还在不远处在搬运窃取到的厕纸，你吓得赶紧跑回了家！"
         };
+
+        private static GameAPI instance;
+        #endregion
         public static void FindTreasure(CqGroupMessageEventArgs e)
         {
+            var member = getMember(e);
+            if (member.PlayTime == null)
+            {
+                member.PlayTime = DateTime.MinValue;
+            }
+            var nextPlay = member.PlayTime.AddMinutes(10);
+            if (DateTime.Now < nextPlay)
+            {
+                var wait = nextPlay - DateTime.Now;
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你才刚回到家又想出门，结果不小心被被窝缠住无法动弹。请在" + wait.Minutes + "分钟" + wait.Seconds + "秒后尝试！");
+                return;
+            }
+            member.PlayTime = DateTime.Now;
             Random rnd = new Random();
             var result = rnd.Next(0, 19);
             if (result >= 10)
@@ -101,14 +118,11 @@ namespace Native.Csharp.App.Bot
             }
             else
             {
-                var member = getMember(e);
                 var coin = rnd.Next(10, 50);
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + Instance.TreasureFindingSuccess[result].Replace("%G%", coin.ToString()));
                 member.Cash += coin;
             }
         }
-
-        private static GameAPI instance;
         public static void GetGroupMembers(long GroupID)
         {
             if (Instance.members.ContainsKey(GroupID))
@@ -158,7 +172,7 @@ namespace Native.Csharp.App.Bot
                 if (mem.Checked.Date != DateTime.Now.Date)
                 {
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine(Common.CqApi.CqCode_At(e.FromQQ) + "已" + mem.Work.ToString() + ", 获取了" + Instance.工资[mem.Work] + "元！");
+                    sb.AppendLine(Common.CqApi.CqCode_At(e.FromQQ) + "已" + mem.Work.ToString() + ", 获取了" + Instance.工资[mem.Work] + "金币！");
                     if (mem.Checked.AddDays(1).Date == DateTime.Now.Date)
                     {
                         mem.Combo++;
@@ -185,7 +199,7 @@ namespace Native.Csharp.App.Bot
                         if (mem.Combo == 5)
                         {
                             mem.Combo = 0;
-                            sb.AppendLine("\n恭喜连续工作获得勤工奖！额外获得了500元！");
+                            sb.AppendLine("\n恭喜连续工作获得勤工奖！额外获得了500金币！");
                             mem.Cash += 500;
                         }
                     }
@@ -200,7 +214,7 @@ namespace Native.Csharp.App.Bot
                     if(mem.Exp > Instance.需要经验值[mem.Work] && mem.Work != Work.给大雪怪带孩子)
                     {
                         mem.Work = mem.Work.Next();
-                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已升级啦！接下来的工作为" + mem.Work.ToString() + ", 工资为" + Instance.工资[mem.Work] + "元！");
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已升级啦！接下来的工作为" + mem.Work.ToString() + ", 工资为" + Instance.工资[mem.Work] + "金币！");
                     }
                 }
                 else
@@ -222,7 +236,7 @@ namespace Native.Csharp.App.Bot
                 var groupmember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
                 Instance.gameMembers[e.FromGroup].Add(newMember(groupmember));
                 mem = getMember(e);
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已" + mem.Work.ToString() + ", 获取了" + Instance.工资[mem.Work] + "元！");
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已" + mem.Work.ToString() + ", 获取了" + Instance.工资[mem.Work] + "金币！");
                 mem.Exp += Instance.工资[mem.Work];
                 mem.Cash += Instance.工资[mem.Work];
                 mem.Checked = DateTime.Now;
@@ -234,9 +248,33 @@ namespace Native.Csharp.App.Bot
             ResolveDictionary(e.FromGroup);
             StringBuilder sb = new StringBuilder();
             var members = Instance.gameMembers[e.FromGroup].OrderBy(x => x.Cash).Reverse().ToArray();
-            for(int x = 0; x < 10; x++)
+            if(members.Length > 10)
             {
-                sb.AppendLine((x + 1).ToString() + ". " +members[x].Member.Card + " 拥有 " + members[x].Cash + " 元，并且已拥有 " + members[x].Exp + " 点经验值！");
+                for (int x = 0; x < 10; x++)
+                {
+                    try
+                    {
+                        sb.AppendLine((x + 1).ToString() + ". " + members[x].Member.Card + " 拥有 " + members[x].Cash + " 金币，并且已拥有 " + members[x].Exp + " 点经验值！");
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+            else
+            {
+                for (int x = 0; x < members.Length; x++)
+                {
+                    try
+                    {
+                        sb.AppendLine((x + 1).ToString() + ". " + members[x].Member.Card + " 拥有 " + members[x].Cash + " 金币，并且已拥有 " + members[x].Exp + " 点经验值！");
+                    }
+                    catch
+                    {
+
+                    }
+                }
             }
             Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
         }
@@ -256,6 +294,8 @@ namespace Native.Csharp.App.Bot
                 binaryFile.Flush();
             }
         }
+
+
 
         public static void Help(CqGroupMessageEventArgs e)
         {
@@ -310,7 +350,7 @@ namespace Native.Csharp.App.Bot
             {
                 Random rnd = new Random();
                 var reduce = rnd.Next(100, 300);
-                Common.CqApi.SendGroupMessage(e.FromGroup,Common.CqApi.CqCode_At(e.FromQQ) + "把自己打了一顿，进了大本营医院，付" + reduce + "元医药费！");
+                Common.CqApi.SendGroupMessage(e.FromGroup,Common.CqApi.CqCode_At(e.FromQQ) + "把自己打了一顿，进了大本营医院，付" + reduce + "金币医药费！");
                 prey.Cash -= reduce;
                 return;
             }
@@ -327,23 +367,25 @@ namespace Native.Csharp.App.Bot
                 while (me.CurrentHP > 0 && prey.CurrentHP > 0);
                 if (me.CurrentHP > 0)
                 {
-                    var get = prey.Cash / 10;
+                    var percent = rnd.Next(2, 6);
+                    var get = (prey.Cash / 100) * percent;
                     prey.Cash -= get;
                     me.Cash += get;
-                    Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(e.FromQQ) + "打劫成功！获得了" + get + "元！");
+                    Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(e.FromQQ) + "打劫成功！获得了" + get + "金币！");
                 }
-                else if(me.CurrentHP <= 0 && prey.CurrentHP <= 0)
+                else if (me.CurrentHP <= 0 && prey.CurrentHP <= 0)
                 {
                     Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜两个人都挂了，你们都在训练营里复活又跑了出来，然而双方都没有任何损失");
                 }
                 else
                 {
-                    if(me.Cash > 0)
+                    if (me.Cash > 0)
                     {
-                        var get = me.Cash / 10;
+                        var percent = rnd.Next(2, 6);
+                        var get = (prey.Cash / 100) * percent;
                         prey.Cash += get;
                         me.Cash -= get;
-                        Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(prey.Member.QQId) + "防御成功！还从打劫者身上获得了" + get + "元！");
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(prey.Member.QQId) + "防御成功！还从打劫者身上获得了" + get + "金币！");
                     }
                     else
                     {
@@ -416,7 +458,7 @@ namespace Native.Csharp.App.Bot
                 {
                     check = "还没工作！";
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "的钱包现在有" + mem.Cash + "元！\n经验值为" + mem.Exp + "点！手里的武器是" + mem.weapon.Name + "\n今天" + check);
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "的钱包现在有" + mem.Cash + "金币！\n经验值为" + mem.Exp + "点！手里的武器是" + mem.weapon.Name + "\n今天" + check);
             }
             else
             {
@@ -432,7 +474,7 @@ namespace Native.Csharp.App.Bot
                 {
                     check = "还没工作！";
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "的钱包现在有" + mem.Cash + "元！\n经验值为" + mem.Exp + "点！手里的武器是" + mem.weapon.Name + "\n今天" + check);
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "的钱包现在有" + mem.Cash + "金币！\n经验值为" + mem.Exp + "点！手里的武器是" + mem.weapon.Name + "\n今天" + check);
             }
         }
 
@@ -482,7 +524,7 @@ namespace Native.Csharp.App.Bot
                         if (mem.Exp > Instance.需要经验值[mem.Work] && mem.Work != Work.给大雪怪带孩子)
                         {
                             mem.Work = mem.Work.Next();
-                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已升级啦！接下来的工作为" + mem.Work.ToString() + ", 工资为" + Instance.工资[mem.Work] + "元！");
+                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已升级啦！接下来的工作为" + mem.Work.ToString() + ", 工资为" + Instance.工资[mem.Work] + "金币！");
                         }
                     }
                     else
@@ -551,7 +593,14 @@ namespace Native.Csharp.App.Bot
 
         public static GameMember getMember(CqGroupMessageEventArgs e)
         {
-            return Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.FromQQ).FirstOrDefault();
+            var result = Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.FromQQ).FirstOrDefault(); 
+            if(result == null)
+            {
+                GetGroupMembers(e.FromGroup);
+                Instance.gameMembers[e.FromGroup].Add(newMember(Instance.members[e.FromGroup].Where(x => x.QQId == e.FromQQ).FirstOrDefault()));
+                result = Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.FromQQ).FirstOrDefault();
+            }
+            return result;
         }
 
         private static void ResolveDictionary(long groupID)
@@ -569,13 +618,18 @@ namespace Native.Csharp.App.Bot
             else
             {
                 var members = Instance.gameMembers[groupID];
+                List<GameMember> removeMember = new List<GameMember>();
                 foreach (var gameMember in members)
                 {
                     if(Instance.gameMembers[groupID].Where(x => x.Member.QQId == gameMember.Member.QQId).Count() > 1)
                     {
                         //Remove Duplicated
-                        Instance.gameMembers[groupID].Remove(gameMember);
+                        removeMember.Add(gameMember);
                     }
+                }
+                foreach(var remove in removeMember)
+                {
+                    Instance.gameMembers[groupID].Remove(remove);
                 }
             }
         }
@@ -655,12 +709,12 @@ namespace Native.Csharp.App.Bot
                     if (num1 == num2 && num2 == num3)
                     {
                         //Jackpot!
-                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "恭喜获得了Jackpot!!获得了3000元！！");
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "恭喜获得了Jackpot!!获得了3000金币！！");
                         mem.Cash += 3000;
                     }
                     else if (num1 == num2)
                     {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了50元奖励！");
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了50金币奖励！");
                         mem.Cash += 50;
                     }
                     else if (num2 == num3 || num3 == num1)

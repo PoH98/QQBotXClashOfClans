@@ -58,7 +58,7 @@ namespace Native.Csharp.App.Core
 			// 请勿随意修改
 			// 
 			Common.AppName = "部落冲突xQQ群管理";
-			Common.AppVersion = Version.Parse ("1.0.1");		
+			Common.AppVersion = Version.Parse ("1.0.2");		
 
 			//
 			// 当前项目名称: com.coc.groupadmin
@@ -132,6 +132,15 @@ namespace Native.Csharp.App.Core
 			}
 			
 			/*
+			 * Id: 1002
+			 * Name: 酷Q关闭事件
+			 */
+			if (Common.UnityContainer.IsRegistered<ICqExit> ("酷Q关闭事件") == true)
+			{
+				CqExit_1002 = Common.UnityContainer.Resolve<ICqExit> ("酷Q关闭事件").CqExit;
+			}
+			
+			/*
 			 * Id: 12
 			 * Name: 群添加请求处理
 			 */
@@ -201,6 +210,23 @@ namespace Native.Csharp.App.Core
 			if (AppEnable_1003 != null)
 			{
 				AppEnable_1003 (null, new CqAppEnableEventArgs (1003, "应用已被启用"));
+			}
+			return 0;
+		}
+
+		/*
+		 * Id: 1002
+		 * Type: 1002
+		 * Name: 酷Q关闭事件
+		 * Function: _eventExit
+		 */
+		public static event EventHandler<CqExitEventArgs> CqExit_1002;
+		[DllExport (ExportName = "_eventExit", CallingConvention = CallingConvention.StdCall)]
+		private static int Evnet__eventExit ()
+		{
+			if (CqExit_1002 != null)
+			{
+				CqExit_1002 (null, new CqExitEventArgs (1002, "酷Q关闭事件"));
 			}
 			return 0;
 		}

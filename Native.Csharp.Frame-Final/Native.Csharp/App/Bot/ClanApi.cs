@@ -117,7 +117,7 @@ namespace Native.Csharp.App.Bot
                                 {
                                     sb.Append("❷");
                                 }
-                                sb.Append(attack.Stars + "星|摧毁:" + attack.DestructionPercentage + "%\n");
+                                sb.Append("攻击了"+clanData.Opponent.Members.Where(y => y.Tag == attack.DefenderTag).FirstOrDefault().MapPosition+"号获得"+attack.Stars + "星|摧毁:" + attack.DestructionPercentage + "%\n");
                                 x++;
                             }
                             sb.Append("\n");
@@ -189,78 +189,47 @@ namespace Native.Csharp.App.Bot
                     {
                         foreach(var warTag in rounds.warTags)
                         {
-                            var roundData =  war.GetCurrentWarLeagueRound(warTag);
-                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突", "联赛部落" + roundData.clan.Name +" vs "+ roundData.opponent.Name);
-                            if(roundData.clan.Tag == keypairs[e.FromGroup.ToString()])
+                            if (warTag != "#0")
                             {
-                                if(roundData.state == "preparation")
+                                var roundData = war.GetCurrentWarLeagueRound(warTag);
+                                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突", "联赛部落" + roundData.clan.Name + " vs " + roundData.opponent.Name);
+                                if (roundData.clan.Tag == keypairs[e.FromGroup.ToString()])
                                 {
-                                    sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                                    int loc = 1;
-                                    foreach (var member in roundData.clan.Members.ToList().OrderBy(x => x.MapPosition))
+                                    if (roundData.state == "preparation")
                                     {
-                                        sb.AppendLine(loc + ". " +member.Name);
-                                        loc++;
+                                        sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                        sb.AppendLine("对手为" + roundData.opponent.Name);
+                                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                        sb.Clear();
                                     }
-                                    sb.AppendLine("对手为" + roundData.opponent.Name);
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
-                                    sb.Clear();
+                                    else if (roundData.state == "inWar")
+                                    {
+                                        sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                        sb.AppendLine("对手为" + roundData.opponent.Name);
+                                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                        sb.Clear();
+                                        ResourceGet = true;
+                                        break;
+                                    }
                                 }
-                                else if (roundData.state == "inWar")
+                                else if (roundData.opponent.Tag == keypairs[e.FromGroup.ToString()])
                                 {
-                                    sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                                    int loc = 1;
-                                    foreach (var member in roundData.clan.Members.ToList().OrderBy(x => x.MapPosition))
+                                    if (roundData.state == "preparation")
                                     {
-                                        string attacked = "还没进攻";
-                                        if (member.Attacks != null)
-                                        {
-                                            attacked = "已获得" + member.Attacks[0].Stars + "星！";
-                                        }
-                                        sb.AppendLine(loc + ". " +member.Name + " - " + attacked);
-                                        loc++;
+                                        sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                        sb.AppendLine("对手为" + roundData.clan.Name);
+                                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                        sb.Clear();
                                     }
-                                    sb.AppendLine("对手为" + roundData.opponent.Name);
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
-                                    sb.Clear();
-                                    ResourceGet = true;
-                                    break;
-                                }
-                            }
-                            else if (roundData.opponent.Tag == keypairs[e.FromGroup.ToString()])
-                            {
-                                if (roundData.state == "preparation")
-                                {
-                                    sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                                    int loc = 1;
-                                    foreach (var member in roundData.opponent.Members.ToList().OrderBy(x => x.MapPosition))
+                                    else if (roundData.state == "inWar")
                                     {
-                                        sb.AppendLine(loc + ". " +member.Name);
-                                        loc++;
+                                        sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
+                                        sb.AppendLine("对手为" + roundData.clan.Name);
+                                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                                        sb.Clear();
+                                        ResourceGet = true;
+                                        break;
                                     }
-                                    sb.AppendLine("对手为" + roundData.clan.Name);
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
-                                    sb.Clear();
-                                }
-                                else if (roundData.state == "inWar")
-                                {
-                                    sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                                    int loc = 1;
-                                    foreach (var member in roundData.opponent.Members.ToList().OrderBy(x => x.MapPosition))
-                                    {
-                                        string attacked = "还没进攻";
-                                        if (member.Attacks != null)
-                                        {
-                                            attacked = "已获得" + member.Attacks[0].Stars + "星！";
-                                        }
-                                        sb.AppendLine(loc + ". " +member.Name + " - " + attacked);
-                                        loc++;
-                                    }
-                                    sb.AppendLine("对手为" + roundData.clan.Name);
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
-                                    sb.Clear();
-                                    ResourceGet = true;
-                                    break;
                                 }
                             }
                         }

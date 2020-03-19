@@ -9,14 +9,24 @@ namespace Native.Csharp.App.Event
     {
         public void ReceiveGroupMemberLeave(object sender, CqGroupMemberDecreaseEventArgs e)
         {
-            var exit = GameAPI.Instance.members[e.FromGroup].Where(x => x.QQId == e.FromQQ);
+            var exit = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.BeingOperateQQ);
             if (exit.Count() > 0)
             {
-                Common.CqApi.SendGroupMessage(e.FromGroup, exit.ToArray()[0].Card + " 已退群！");
+                Common.CqApi.SendGroupMessage(e.FromGroup, exit.ToArray()[0].Member.Card + " 已退群！");
             }
             else
             {
-                Common.CqApi.SendGroupMessage(e.FromGroup, e.FromQQ + " 已退群！");
+                Common.CqApi.SendGroupMessage(e.FromGroup, e.BeingOperateQQ + " 已退群！");
+            }
+            try
+            {
+                var member = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.BeingOperateQQ).FirstOrDefault();
+                if(member != null)
+                    GameAPI.Instance.gameMembers[e.FromGroup].Remove(member);
+            }
+            catch
+            {
+
             }
         }
     }

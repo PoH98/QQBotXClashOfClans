@@ -33,6 +33,7 @@ namespace Native.Csharp.App.Bot
 
         public string LastClanWarStatus;
 
+        public bool GameEnabled = true;
         public static BaseData Instance
         {
             get
@@ -68,6 +69,10 @@ namespace Native.Csharp.App.Bot
 
         public static void LoadCOCData()
         {
+            if (File.Exists("XGame.txt"))
+            {
+                Instance.GameEnabled = false;
+            }
             FileIniDataParser parse = new FileIniDataParser();
             Instance.config = parse.ReadFile("config.ini", Encoding.Unicode);
             if (Instance.config != null)

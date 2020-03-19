@@ -8,6 +8,7 @@ using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using System.Net;
 using Native.Csharp.Sdk.Cqp.Enum;
+using Native.Csharp.Sdk.Cqp;
 
 namespace Native.Csharp.App.Event
 {
@@ -117,18 +118,6 @@ namespace Native.Csharp.App.Event
                     {
                         ClanAPI.GetLeagueWar(e);
                     }
-                    else if (e.Message == "/拉霸")
-                    {
-                        GameAPI.JackPot(e);
-                    }
-                    else if(e.Message == "/寻宝")
-                    {
-                        GameAPI.FindTreasure(e);
-                    }
-                    else if(e.Message == "/帮助")
-                    {
-                        GameAPI.Help(e);
-                    }
                     else if (e.Message.StartsWith("/下载 "))
                     {
                         string version = e.Message.Remove(0, 4);
@@ -152,6 +141,10 @@ namespace Native.Csharp.App.Event
                         {
                             Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString());
                         }
+                        else
+                        {
+                            sb.Clear();
+                        }
                     }
                     else if (e.Message.StartsWith("/踢"))
                     {
@@ -170,32 +163,47 @@ namespace Native.Csharp.App.Event
                             Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
                         }
                     }
-                    else if (e.Message == "/工作")
-                    {
-                        GameAPI.MemberWork(e);
-                    }
-                    else if(e.Message == "/我")
-                    {
-                        GameAPI.MemberCheck(e);
-                    }
-                    else if(e.Message == "/21点")
-                    {
-                        GameAPI.Member21Point(e);
-                    }
-                    else if(e.Message == "/排名")
-                    {
-                        GameAPI.GetRank(e);
-                    }
-                    else if (e.Message.StartsWith("/打劫"))
-                    {
-                        GameAPI.Robber(e);
-                    }
-                    else if (e.Message.StartsWith("/购买"))
-                    {
-                        GameAPI.Shop(e);
-                    }
                     else
                     {
+                        if (Instance.GameEnabled)
+                        {
+                            if (e.Message == "/拉霸")
+                            {
+                                GameAPI.JackPot(e);
+                            }
+                            else if (e.Message == "/寻宝")
+                            {
+                                GameAPI.FindTreasure(e);
+                            }
+                            else if (e.Message == "/帮助")
+                            {
+                                GameAPI.Help(e);
+                            }
+                            else if (e.Message == "/工作")
+                            {
+                                GameAPI.MemberWork(e);
+                            }
+                            else if (e.Message == "/我")
+                            {
+                                GameAPI.MemberCheck(e);
+                            }
+                            else if (e.Message == "/21点")
+                            {
+                                GameAPI.Member21Point(e);
+                            }
+                            else if (e.Message == "/排名")
+                            {
+                                GameAPI.GetRank(e);
+                            }
+                            else if (e.Message.StartsWith("/打劫"))
+                            {
+                                GameAPI.Robber(e);
+                            }
+                            else if (e.Message.StartsWith("/购买"))
+                            {
+                                GameAPI.Shop(e);
+                            }
+                        }
                         GroupMemberInfo me = Common.CqApi.GetMemberInfo(e.FromGroup, Common.CqApi.GetLoginQQ());
                         if (me.PermitType == PermitType.Holder || me.PermitType == PermitType.Manage)
                         {

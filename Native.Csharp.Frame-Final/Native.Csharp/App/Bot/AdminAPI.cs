@@ -127,6 +127,11 @@ namespace Native.Csharp.App.Bot
                 {
                     ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                     var player = players.GetPlayer(newname);
+                    if (!string.IsNullOrEmpty(player.Reason))
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "找不到玩家资料或者玩家标签错误: " + player.Reason);
+                        return;
+                    }
                     newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                 }
                 else
@@ -142,6 +147,11 @@ namespace Native.Csharp.App.Bot
                 {
                     ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                     var player = players.GetPlayer(newname);
+                    if (!string.IsNullOrEmpty(player.Reason))
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "找不到玩家资料或者玩家标签错误: " + player.Reason);
+                        return;
+                    }
                     newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                 }
                 else
