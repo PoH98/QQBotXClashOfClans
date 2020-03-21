@@ -81,7 +81,7 @@ namespace Native.Csharp.App.Bot
                                 {
                                     sb.Append("❷");
                                 }
-                                sb.Append(attack.Stars + "星|摧毁:" + attack.DestructionPercentage + "%\n");
+                                sb.Append("攻击了" + clanData.Opponent.Members.Where(y => y.Tag == attack.DefenderTag).FirstOrDefault().MapPosition + "号获得" + attack.Stars + "星|摧毁:" + attack.DestructionPercentage + "%\n");
                                 x++;
                             }
                             sb.Append("\n");
@@ -140,7 +140,7 @@ namespace Native.Csharp.App.Bot
                         sb.AppendLine(x +". "+ member.Name);
                         x++;
                     }
-                    sb.AppendLine("开战时间为: " + clanData.EndTime);
+                    sb.AppendLine("开战时间为: " + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                     sb.AppendLine("当前为准备日");
                     Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
                 }

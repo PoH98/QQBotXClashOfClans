@@ -8,7 +8,9 @@ using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using System.Net;
 using Native.Csharp.Sdk.Cqp.Enum;
-using Native.Csharp.Sdk.Cqp;
+using System.Threading;
+using System.Diagnostics;
+using System.Management;
 
 namespace Native.Csharp.App.Event
 {
@@ -162,6 +164,33 @@ namespace Native.Csharp.App.Event
                         {
                             Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
                         }
+                    }
+                    else if (e.Message == "/服务器")
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: "+DateTime.Now.ToString()+"\n服务器CPU状态: ");
+                        ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
+                        foreach (ManagementObject obj in searcher.Get())
+                        {
+                            var name = obj["Name"];
+                            if (name.ToString() == "_Total")
+                            {
+                                var usage = obj["PercentProcessorTime"];
+                                sb.AppendLine(usage.ToString() + "%");
+                            }
+                        }
+                        var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+                        sb.Append("服务器内存使用: ");
+                        var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
+                            FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                            TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                        }).FirstOrDefault();
+
+                        if (memoryValues != null)
+                        {
+                            sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
+                        }
+                        Common.CqApi.SendGroupMessage(e.FromGroup,sb.ToString());
                     }
                     else
                     {
