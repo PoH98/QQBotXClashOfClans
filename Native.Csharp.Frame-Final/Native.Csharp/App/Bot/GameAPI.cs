@@ -9,6 +9,9 @@ using System.Text;
 using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp;
 using System.Reflection;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace Native.Csharp.App.Bot
 {
@@ -27,8 +30,6 @@ namespace Native.Csharp.App.Bot
             }
         }
         public List<Weapon> weapon = new List<Weapon>();
-
-        public Dictionary<long, List<GroupMemberInfo>> members = new Dictionary<long, List<GroupMemberInfo>>();
 
         public Dictionary<long, List<GameMember>> gameMembers = new Dictionary<long, List<GameMember>>();
 
@@ -125,26 +126,17 @@ namespace Native.Csharp.App.Bot
         }
         public static void GetGroupMembers(long GroupID)
         {
-            if (Instance.members.ContainsKey(GroupID))
-            {
-                Instance.members[GroupID] = Common.CqApi.GetMemberList(GroupID);
-            }
-            else
-            {
-                Instance.members.Add(GroupID, new List<GroupMemberInfo>());
-                Instance.members[GroupID] = Common.CqApi.GetMemberList(GroupID);
-            }
             if (!Instance.gameMembers.ContainsKey(GroupID))
             {
                 Instance.gameMembers.Add(GroupID, new List<GameMember>());
-                foreach(var mem in Instance.members[GroupID])
+                foreach(var mem in Common.CqApi.GetMemberList(GroupID))
                 {
                     Instance.gameMembers[GroupID].Add(newMember(mem));
                 }
             }
             else
             {
-                var temp = Instance.members[GroupID];
+                var temp = Common.CqApi.GetMemberList(GroupID);
                 foreach (var mem in temp)
                 {
                     var memDat = Instance.gameMembers[GroupID].Where(x => x.Member.QQId == mem.QQId);
@@ -153,7 +145,7 @@ namespace Native.Csharp.App.Bot
                     else if (memDat.Count() > 1)
                     {
                         foreach (var m in memDat)
-                            if (m != memDat.OrderBy(x => x.Exp).Reverse().Last())
+                            if (m != memDat.OrderByDescending(x => x.Cash).First())
                                 Instance.gameMembers[GroupID].Remove(m);
                     }
                     else
@@ -282,16 +274,31 @@ namespace Native.Csharp.App.Bot
         public static void SaveData()
         {
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突游戏", "已备份群成员资料！");
-            var fi = new FileInfo(@"com.coc.groupadmin.bin");
-            if (fi.Exists)
+            foreach (var group in Instance.gameMembers)
             {
-                fi.Delete();
-            }
-            using (var binaryFile = fi.Create())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(binaryFile, Instance.gameMembers);
-                binaryFile.Flush();
+                if (!Directory.Exists("com.coc.groupadmin\\" + group.Key))
+                {
+                    Directory.CreateDirectory("com.coc.groupadmin\\" + group.Key);
+                }
+                foreach (var member in group.Value)
+                {
+                    if (File.Exists("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin"))
+                    {
+                        File.Delete("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin");
+                    }
+                    XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
+                    using (var sww = new StringWriter())
+                    {
+                        XmlWriterSettings settings = new XmlWriterSettings();
+                        settings.Indent = true;
+                        settings.Encoding = Encoding.Unicode;
+                        using (XmlWriter writer = XmlWriter.Create(sww, settings))
+                        {
+                            xsSubmit.Serialize(writer, member);
+                            File.WriteAllText("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", sww.ToString(), Encoding.Unicode);
+                        }
+                    }
+                }
             }
         }
 
@@ -403,40 +410,133 @@ namespace Native.Csharp.App.Bot
 
         public static void ReadData()
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
+            try
             {
-                if (type.GetInterface("Weapon", true) != null)
+                Instance.weapon.Clear();
+                Instance.weapon.Add(new None());
+                Instance.weapon.Add(new Lighting());
+                Instance.weapon.Add(new Magic());
+                Instance.weapon.Add(new Pekka());
+                Instance.weapon.Add(new Knive());
+                Instance.weapon.Add(new XBow());
+                Instance.weapon.Add(new Inferno());
+                Instance.weapon.Add(new UltraWeapon1());
+                Instance.weapon.Add(new UltraWeapon2());
+                if (!Directory.Exists("com.coc.groupadmin"))
                 {
-                    var w = Assembly.GetExecutingAssembly().CreateInstance(type.FullName, true) as Weapon;
-                    if (w != null)
+                    Directory.CreateDirectory("com.coc.groupadmin");
+                    if (File.Exists("com.coc.groupadmin.bin"))
                     {
-                        Instance.weapon.Add(w);
+                        try
+                        {
+                            var fi = new FileInfo(@"com.coc.groupadmin.bin");
+                            using (var binaryFile = fi.OpenRead())
+                            {
+                                var binaryFormatter = new BinaryFormatter();
+                                var gameMembers = (Dictionary<long, List<GameMember>>)binaryFormatter.Deserialize(binaryFile);
+                                foreach (var group in gameMembers)
+                                {
+                                    Directory.CreateDirectory("com.coc.groupadmin\\" + group.Key);
+                                    foreach (var member in group.Value)
+                                    {
+                                        if (!File.Exists("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin"))
+                                        {
+                                            XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
+                                            using (var sww = new StringWriter())
+                                            {
+                                                using (XmlWriter writer = XmlWriter.Create(sww))
+                                                {
+                                                    xsSubmit.Serialize(writer, member);
+                                                    File.WriteAllText("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", sww.ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "部落冲突游戏", "无法加载旧资料，已自动强制移除！");
+                        }
+                        finally
+                        {
+                            File.Delete(@"com.coc.groupadmin.bin");
+                        }
+                    }
+                }
+                else
+                {
+                    if(Instance.gameMembers == null)
+                    {
+                        Instance.gameMembers = new Dictionary<long, List<GameMember>>();
+                    }
+                    Instance.gameMembers.Clear();
+                    foreach (var groupDirectory in Directory.GetDirectories("com.coc.groupadmin", "*", SearchOption.TopDirectoryOnly).Where(f => Regex.IsMatch(f, @"[\\/]\d+$")).ToList())
+                    {
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", groupDirectory);
+                        Instance.gameMembers.Add(Convert.ToInt64(groupDirectory.Split('\\').Last()), new List<GameMember>());
+                        var members = Common.CqApi.GetMemberList(Convert.ToInt64(groupDirectory.Split('\\').Last()));
+                        if(members == null)
+                        {
+                            //Maybe the group is error
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "群错误", "无法获取群号" + Convert.ToInt64(groupDirectory.Split('\\').Last()) + "的资料");
+                            continue;
+                        }
+                        var savedData = Directory.GetFiles(groupDirectory, "*.bin", SearchOption.TopDirectoryOnly).ToList();
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "QQ群成员："+members.Count + "|已储存资料：" + savedData.Count);
+                        if (savedData.Count < members.Count)
+                        {
+                            //Data less than group
+                            foreach (var member in members)
+                            {
+                                if (!savedData.Any(x => x.Contains(member.QQId.ToString())))
+                                {
+                                    XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
+                                    using (var sww = new StringWriter())
+                                    {
+                                        using (XmlWriter writer = XmlWriter.Create(sww))
+                                        {
+                                            xsSubmit.Serialize(writer, newMember(member));
+                                            File.WriteAllText(Path.Combine(groupDirectory, member.QQId + ".bin"), sww.ToString());
+                                        }
+                                    }
+                                }
+                            }
+                            ReadData();
+                        }
+                        else if (savedData.Count > members.Count)
+                        {
+                            //Data more than group
+                            foreach (var data in savedData)
+                            {
+                                if (!members.Any(x => x.QQId == Convert.ToInt64(data.Split('\\').Last())))
+                                {
+                                    File.Delete(data);
+                                }
+                            }
+                            ReadData();
+                        }
+                        else
+                        {
+                            foreach (var memberDirectory in savedData)
+                            {
+                                using (var stream = File.OpenRead(memberDirectory))
+                                {
+                                    var serializer = new XmlSerializer(typeof(GameMember));
+                                    var result = serializer.Deserialize(stream) as GameMember;
+                                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "读取资料" + result.Member.QQId + "当前钱包：" + result.Cash + "，当前经验值" + result.Exp );
+                                    Instance.gameMembers[Convert.ToInt64(groupDirectory.Split('\\').Last())].Add(result);
+                                }
+                            }
+                        }
                     }
                 }
             }
-            if (!File.Exists("com.coc.groupadmin.bin"))
+            catch(Exception ex)
             {
-                foreach (var group in Common.CqApi.GetGroupList())
-                {
-                    GetGroupMembers(group.Id);
-                }
-                return;
+                Common.CqApi.AddFatalError(ex.ToString());
             }
-            try
-            {
-                var fi = new FileInfo(@"com.coc.groupadmin.bin");
-                using (var binaryFile = fi.OpenRead())
-                {
-                    var binaryFormatter = new BinaryFormatter();
-                    Instance.gameMembers = (Dictionary<long, List<GameMember>>)binaryFormatter.Deserialize(binaryFile);
-                }
-            }
-            catch
-            {
-                File.Delete(@"com.coc.groupadmin.bin");
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "部落冲突游戏", "无法加载旧资料，已自动强制移除！");
-            }
-
         }
 
         public static void MemberCheck(CqGroupMessageEventArgs e)
@@ -597,8 +697,8 @@ namespace Native.Csharp.App.Bot
             if(result == null)
             {
                 GetGroupMembers(e.FromGroup);
-                Instance.gameMembers[e.FromGroup].Add(newMember(Instance.members[e.FromGroup].Where(x => x.QQId == e.FromQQ).FirstOrDefault()));
-                result = Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.FromQQ).FirstOrDefault();
+                Instance.gameMembers[e.FromGroup].Add(newMember(Common.CqApi.GetMemberList(e.FromGroup).Where(x => x.QQId == e.FromQQ).FirstOrDefault()));
+                result = Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.FromQQ).OrderByDescending(x => x.Cash).FirstOrDefault();
             }
             return result;
         }
@@ -683,9 +783,10 @@ namespace Native.Csharp.App.Bot
                 {
                     mem.PlayTime = DateTime.MinValue;
                 }
-                if ((DateTime.Now - mem.PlayTime).Minutes < 10)
+                var nextPlay = mem.PlayTime.AddMinutes(10);
+                if (DateTime.Now < nextPlay)
                 {
-                    var wait = (mem.PlayTime.AddMinutes(10) - DateTime.Now);
+                    var wait = nextPlay - DateTime.Now;
                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "由于你过于积极的想要赌博，被保安抓了出去，请在" + wait.Minutes + "分钟" + wait.Seconds + "秒后尝试！");
                     return;
                 }
