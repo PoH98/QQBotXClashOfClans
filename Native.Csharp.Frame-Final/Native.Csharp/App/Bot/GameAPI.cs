@@ -474,62 +474,71 @@ namespace Native.Csharp.App.Bot
                     Instance.gameMembers.Clear();
                     foreach (var groupDirectory in Directory.GetDirectories("com.coc.groupadmin", "*", SearchOption.TopDirectoryOnly).Where(f => Regex.IsMatch(f, @"[\\/]\d+$")).ToList())
                     {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", groupDirectory);
-                        Instance.gameMembers.Add(Convert.ToInt64(groupDirectory.Split('\\').Last()), new List<GameMember>());
-                        var members = Common.CqApi.GetMemberList(Convert.ToInt64(groupDirectory.Split('\\').Last()));
-                        if(members == null)
+                        try
                         {
-                            //Maybe the group is error
-                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "群错误", "无法获取群号" + Convert.ToInt64(groupDirectory.Split('\\').Last()) + "的资料");
-                            continue;
-                        }
-                        var savedData = Directory.GetFiles(groupDirectory, "*.bin", SearchOption.TopDirectoryOnly).ToList();
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "QQ群成员："+members.Count + "|已储存资料：" + savedData.Count);
-                        if (savedData.Count < members.Count)
-                        {
-                            //Data less than group
-                            foreach (var member in members)
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", groupDirectory);
+                            Instance.gameMembers.Add(Convert.ToInt64(groupDirectory.Split('\\').Last()), new List<GameMember>());
+                            var members = Common.CqApi.GetMemberList(Convert.ToInt64(groupDirectory.Split('\\').Last()));
+                            if (members == null)
                             {
-                                if (!savedData.Any(x => x.Contains(member.QQId.ToString())))
+                                //Maybe the group is error
+                                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "群错误", "无法获取群号" + Convert.ToInt64(groupDirectory.Split('\\').Last()) + "的资料");
+                                continue;
+                            }
+                            var savedData = Directory.GetFiles(groupDirectory, "*.bin", SearchOption.TopDirectoryOnly).ToList();
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "QQ群成员：" + members.Count + "|已储存资料：" + savedData.Count);
+                            if (savedData.Count < members.Count)
+                            {
+                                //Data less than group
+                                foreach (var member in members)
                                 {
-                                    XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
-                                    using (var sww = new StringWriter())
+                                    if (!savedData.Any(x => x.Contains(member.QQId.ToString())))
                                     {
-                                        using (XmlWriter writer = XmlWriter.Create(sww))
+                                        XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
+                                        using (var sww = new StringWriter())
                                         {
-                                            xsSubmit.Serialize(writer, newMember(member));
-                                            File.WriteAllText(Path.Combine(groupDirectory, member.QQId + ".bin"), sww.ToString());
+                                            using (XmlWriter writer = XmlWriter.Create(sww))
+                                            {
+                                                xsSubmit.Serialize(writer, newMember(member));
+                                                File.WriteAllText(Path.Combine(groupDirectory, member.QQId + ".bin"), sww.ToString());
+                                            }
                                         }
                                     }
                                 }
+                                ReadData();
                             }
-                            ReadData();
-                        }
-                        else if (savedData.Count > members.Count)
-                        {
-                            //Data more than group
-                            foreach (var data in savedData)
+                            else if (savedData.Count > members.Count)
                             {
-                                if (!members.Any(x => x.QQId == Convert.ToInt64(data.Split('\\').Last())))
+                                //Data more than group
+                                foreach (var data in savedData)
                                 {
-                                    File.Delete(data);
+                                    if (!members.Any(x => x.QQId.ToString() == data.Split('\\').Last().Replace(".bin","")))
+                                    {
+                                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "正在删除资料！群员：" + data.Split('\\').Last());
+                                        File.Delete(data);
+                                    }
+                                }
+                                ReadData();
+                            }
+                            else
+                            {
+                                foreach (var memberDirectory in savedData)
+                                {
+                                    using (var stream = File.OpenRead(memberDirectory))
+                                    {
+                                        var serializer = new XmlSerializer(typeof(GameMember));
+                                        var result = serializer.Deserialize(stream) as GameMember;
+                                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "读取资料" + result.Member.QQId + "当前钱包：" + result.Cash + "，当前经验值" + result.Exp);
+                                        Instance.gameMembers[Convert.ToInt64(groupDirectory.Split('\\').Last())].Add(result);
+                                    }
                                 }
                             }
-                            ReadData();
                         }
-                        else
+                        catch
                         {
-                            foreach (var memberDirectory in savedData)
-                            {
-                                using (var stream = File.OpenRead(memberDirectory))
-                                {
-                                    var serializer = new XmlSerializer(typeof(GameMember));
-                                    var result = serializer.Deserialize(stream) as GameMember;
-                                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "读取资料" + result.Member.QQId + "当前钱包：" + result.Cash + "，当前经验值" + result.Exp );
-                                    Instance.gameMembers[Convert.ToInt64(groupDirectory.Split('\\').Last())].Add(result);
-                                }
-                            }
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "读取资料错误！错误群号：" + groupDirectory.Split('\\').Last());
                         }
+                       
                     }
                 }
             }
