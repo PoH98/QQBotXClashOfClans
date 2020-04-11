@@ -6,6 +6,7 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Native.Csharp.App.Bot
 {
@@ -83,13 +84,128 @@ namespace Native.Csharp.App.Bot
 
         public static void CheckMember(CqGroupMessageEventArgs e)
         {
-            string id = e.Message.Replace("/审核 ", "").Replace(" ", "");
             Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
+            string id = string.Empty;
+            if (e.Message.Contains("#"))
+            {
+                //发送标签审核
+                id = e.Message.Replace("/审核 ", "").Replace(" ", "");
+            }
+            else if (e.Message == "/审核")
+            {
+                var gameName = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ).Card;
+                if (gameName.Contains("-"))
+                {
+                    ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                    var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
+                    var member = cplayer.Where(x => x.Name == gameName.Split('-').Last()).FirstOrDefault();
+                    if(member != null)
+                        id = member.Tag;
+                    else
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你不在部落里！请发送标签进行审核！");
+                        return;
+                    }
+                }
+                else if (gameName.Contains(","))
+                {
+                    ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                    var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
+                    Random rnd = new Random();
+                    foreach (var name in gameName.Split(','))
+                    {
+                        if (!string.IsNullOrWhiteSpace(name))
+                        {
+                            if (name.StartsWith(" "))
+                            {
+                                var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
+                                if (p != null)
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(p.Tag));
+                                }
+                                else
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                }
+                            }
+                            else
+                            {
+                                var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
+                                if (p != null)
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(p.Tag));
+                                }
+                                else
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                }
+                            }
+                            //delay for a while
+                            Thread.Sleep(rnd.Next(1000, 3000));
+                        }
+                    }
+                    rnd = null;
+                }
+                else if (gameName.Contains("，"))
+                {
+                    ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                    var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
+                    Random rnd = new Random();
+                    foreach (var name in gameName.Split(','))
+                    {
+                        if (!string.IsNullOrWhiteSpace(name))
+                        {
+                            if (name.StartsWith(" "))
+                            {
+                                var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
+                                if (p != null)
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(p.Tag));
+                                }
+                                else
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                }
+                            }
+                            else
+                            {
+                                var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
+                                if (p != null)
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(p.Tag));
+                                }
+                                else
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                }
+                            }
+                            //delay for a while
+                            Thread.Sleep(rnd.Next(1000, 3000));
+                        }
+                    }
+                    rnd = null;
+                }
+                else
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "无效的标签！");
+                    return;
+                }
+            }
+            else
+            {
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "无效的标签！");
+                return;
+            }
             if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
                 return;
             }
+            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+        }
+
+        private static string 审核(string id)
+        {
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             Player player = players.GetPlayer(id);
             if (player != null)
@@ -180,7 +296,7 @@ namespace Native.Csharp.App.Bot
                 {
                     sb.AppendLine("已满级");
                 }
-                if(player.Heroes.Count > 0)
+                if (player.Heroes.Count > 0)
                 {
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
@@ -228,11 +344,11 @@ namespace Native.Csharp.App.Bot
                 {
                     sb.AppendLine("注意：严禁升本！否则将会被机票！");
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + " 您要的审核资料如下：\n" + sb.ToString());
+                return " 您要的审核资料如下：\n" + sb.ToString();
             }
             else
             {
-                Common.CqApi.SendGroupMessage(e.FromGroup, "未知的部落冲突ID，无法搜索该玩家资料！");
+                return "未知的部落冲突ID，无法搜索该玩家资料！";
             }
         }
     }

@@ -7,8 +7,10 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using static Native.Csharp.App.Bot.BaseData;
 
 namespace Native.Csharp.App.Bot
 {
@@ -178,6 +180,11 @@ namespace Native.Csharp.App.Bot
 
         public static bool NewMember(string id, CqAddGroupRequestEventArgs e)
         {
+            if (Directory.GetFiles("com.coc.groupadmin\\Blacklist").Any(x=> x.EndsWith(e.FromQQ.ToString())))
+            {
+                //在黑名单内，直接拒绝
+                return false;
+            }
             Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到新人申请");
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             List<int> levels = new List<int>();
@@ -340,11 +347,25 @@ namespace Native.Csharp.App.Bot
             }
             else
             {
+                //申请是来骂人的
+                foreach (var keyvalue in valuePairs(configType.禁止词句))
+                {
+                    if (id == keyvalue.Key)
+                    {
+                        if (int.TryParse(keyvalue.Value, out int ticks))
+                        {
+                            if (ticks > 0)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
                 return true;
             }
         }
 
-        public static void Kick(CqGroupMessageEventArgs e)
+        public static void Kick(bool BlackList, CqGroupMessageEventArgs e)
         {
             Common.CqApi.AddLoger(LogerLevel.Info_Receive,"部落冲突群管", "接受到踢人指令");
             var sender = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
@@ -375,6 +396,14 @@ namespace Native.Csharp.App.Bot
                 var member = Common.CqApi.GetMemberInfo(e.FromGroup, tag);
                 Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + member.Nick + "|" + member.Card + "踢出群聊！");
                 Common.CqApi.SetGroupMemberRemove(e.FromGroup, member.QQId);
+                if (BlackList)
+                {
+                    if (!Directory.Exists("com.coc.groupadmin\\Blacklist"))
+                    {
+                        Directory.CreateDirectory("com.coc.groupadmin\\Blacklist");
+                    }
+                    File.WriteAllText("com.coc.groupadmin\\Blacklist\\" + member.QQId, "");
+                }
             }
         }
     }

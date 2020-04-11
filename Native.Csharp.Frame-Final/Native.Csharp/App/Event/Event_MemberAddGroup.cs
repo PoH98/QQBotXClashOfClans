@@ -4,6 +4,7 @@ using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.App.Bot;
 using System;
 using System.Linq;
+using System.IO;
 
 namespace Native.Csharp.App.Event
 {
@@ -29,6 +30,11 @@ namespace Native.Csharp.App.Event
                 }
                 else
                 {
+                    if (Directory.GetFiles("com.coc.groupadmin\\Blacklist").Any(x => x.EndsWith(e.FromQQ.ToString())))
+                    {
+                        //在黑名单内，直接拒绝
+                        Common.CqApi.SetGroupAddRequest(e.ResponseFlag, RequestType.GroupAdd, ResponseType.FAIL, "已被拉黑！");
+                    }
                     Common.CqApi.SetGroupAddRequest(e.ResponseFlag, RequestType.GroupAdd, ResponseType.PASS, "");
                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "新人请发玩家标签审核！");
                 }
@@ -37,6 +43,11 @@ namespace Native.Csharp.App.Event
             {
                 if(ex is NullReferenceException)
                 {
+                    if (Directory.GetFiles("com.coc.groupadmin\\Blacklist").Any(x => x.EndsWith(e.FromQQ.ToString())))
+                    {
+                        //在黑名单内，直接拒绝
+                        Common.CqApi.SetGroupAddRequest(e.ResponseFlag, RequestType.GroupAdd, ResponseType.FAIL, "已被拉黑！");
+                    }
                     Common.CqApi.SetGroupAddRequest(e.ResponseFlag, RequestType.GroupAdd, ResponseType.PASS, "");
                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "新人请发玩家标签审核！申请时玩家标签无效！");
                 }

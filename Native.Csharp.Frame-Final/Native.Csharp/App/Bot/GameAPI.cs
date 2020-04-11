@@ -287,22 +287,16 @@ namespace Native.Csharp.App.Bot
                         File.Delete("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin");
                     }
                     XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
-                    using (var sww = new StringWriter())
+                    using (var sww = new FileStream("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", FileMode.OpenOrCreate))
                     {
-                        XmlWriterSettings settings = new XmlWriterSettings();
-                        settings.Indent = true;
-                        settings.Encoding = Encoding.Unicode;
-                        using (XmlWriter writer = XmlWriter.Create(sww, settings))
+                        using (XmlTextWriter writer = new XmlTextWriter(sww, null))
                         {
                             xsSubmit.Serialize(writer, member);
-                            File.WriteAllText("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", sww.ToString(), Encoding.Unicode);
                         }
                     }
                 }
             }
         }
-
-
 
         public static void Help(CqGroupMessageEventArgs e)
         {
@@ -442,12 +436,11 @@ namespace Native.Csharp.App.Bot
                                         if (!File.Exists("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin"))
                                         {
                                             XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
-                                            using (var sww = new StringWriter())
+                                            using (var sww = new FileStream("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", FileMode.OpenOrCreate))
                                             {
-                                                using (XmlWriter writer = XmlWriter.Create(sww))
+                                                using (XmlTextWriter writer = new XmlTextWriter(sww, null))
                                                 {
                                                     xsSubmit.Serialize(writer, member);
-                                                    File.WriteAllText("com.coc.groupadmin\\" + group.Key + "\\" + member.Member.QQId + ".bin", sww.ToString());
                                                 }
                                             }
                                         }
@@ -495,12 +488,11 @@ namespace Native.Csharp.App.Bot
                                     if (!savedData.Any(x => x.Contains(member.QQId.ToString())))
                                     {
                                         XmlSerializer xsSubmit = new XmlSerializer(typeof(GameMember));
-                                        using (var sww = new StringWriter())
+                                        using (var sww = new FileStream(Path.Combine(groupDirectory, member.QQId + ".bin"), FileMode.OpenOrCreate))
                                         {
-                                            using (XmlWriter writer = XmlWriter.Create(sww))
+                                            using (XmlTextWriter writer = new XmlTextWriter(sww, null))
                                             {
                                                 xsSubmit.Serialize(writer, newMember(member));
-                                                File.WriteAllText(Path.Combine(groupDirectory, member.QQId + ".bin"), sww.ToString());
                                             }
                                         }
                                     }
@@ -534,9 +526,9 @@ namespace Native.Csharp.App.Bot
                                 }
                             }
                         }
-                        catch
+                        catch(Exception ex)
                         {
-                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "读取资料错误！错误群号：" + groupDirectory.Split('\\').Last());
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "游戏加载", "读取资料错误！错误群号：" + groupDirectory.Split('\\').Last() + ": " + ex.ToString());
                         }
                        
                     }

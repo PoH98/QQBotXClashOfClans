@@ -193,7 +193,7 @@ namespace Native.Csharp.App.Bot
                             {
                                 var roundData = war.GetCurrentWarLeagueRound(warTag);
                                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突", "联赛部落" + roundData.clan.Name + " vs " + roundData.opponent.Name);
-                                if (roundData.clan.Tag == keypairs[e.FromGroup.ToString()])
+                                if (roundData.clan.Tag == keypairs[e.FromGroup.ToString()].ToUpper())
                                 {
                                     if (roundData.state == "preparation")
                                     {
@@ -206,13 +206,14 @@ namespace Native.Csharp.App.Bot
                                     {
                                         sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                         sb.AppendLine("对手为" + roundData.opponent.Name);
+                                        sb.AppendLine("当前我方战星: " + roundData.clan.Stars + ", 敌方战星: " + roundData.opponent.Stars);
                                         Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
                                         sb.Clear();
                                         ResourceGet = true;
                                         break;
                                     }
                                 }
-                                else if (roundData.opponent.Tag == keypairs[e.FromGroup.ToString()])
+                                else if (roundData.opponent.Tag == keypairs[e.FromGroup.ToString()].ToUpper())
                                 {
                                     if (roundData.state == "preparation")
                                     {
@@ -225,6 +226,7 @@ namespace Native.Csharp.App.Bot
                                     {
                                         sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                         sb.AppendLine("对手为" + roundData.clan.Name);
+                                        sb.AppendLine("当前我方战星: " + roundData.opponent.Stars + ", 敌方战星: " + roundData.clan.Stars);
                                         Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
                                         sb.Clear();
                                         ResourceGet = true;

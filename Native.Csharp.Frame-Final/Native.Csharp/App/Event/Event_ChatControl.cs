@@ -112,7 +112,7 @@ namespace Native.Csharp.App.Event
                             Common.CqApi.SendGroupMessage(e.FromGroup, "确保/改名格式为 /改名 @成员 新昵称 或者 /改名 @成员 #部落冲突玩家标签");
                         }
                     }
-                    else if (e.Message.StartsWith("/审核 #"))
+                    else if (e.Message.StartsWith("/审核"))
                     {
                         PlayerAPI.CheckMember(e);
                     }
@@ -150,7 +150,7 @@ namespace Native.Csharp.App.Event
                     }
                     else if (e.Message.StartsWith("/踢"))
                     {
-                        AdminAPI.Kick(e);
+                        AdminAPI.Kick(false,e);
                     }
                     else if (e.Message.StartsWith("/绑定群 #"))
                     {
@@ -191,6 +191,10 @@ namespace Native.Csharp.App.Event
                             sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
                         }
                         Common.CqApi.SendGroupMessage(e.FromGroup,sb.ToString());
+                    }
+                    else if (e.Message.StartsWith("/拉黑"))
+                    {
+                        AdminAPI.Kick(true,e);
                     }
                     else
                     {

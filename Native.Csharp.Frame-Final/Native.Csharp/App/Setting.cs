@@ -39,7 +39,16 @@ namespace Native.Csharp.App
             {
                 if (clanID.KeyName.All(char.IsDigit))
                 {
-                    GameAPI.GetGroupMembers(Convert.ToInt64(clanID.KeyName));
+                    try
+                    {
+                        GameAPI.GetGroupMembers(Convert.ToInt64(clanID.KeyName));
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "群组加载", clanID.KeyName + "加载完毕！");
+                    }
+                    catch(Exception exception)
+                    {
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "群组加载失败", clanID.KeyName + "Exception: " + exception.ToString());
+                        continue;
+                    }
                 }
             }
         }
