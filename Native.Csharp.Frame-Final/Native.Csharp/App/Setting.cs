@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +16,13 @@ namespace Native.Csharp.App
 {
     public partial class Setting : Form
     {
+        private ProcessStartInfo cmd = new ProcessStartInfo()
+        {
+            FileName = "cmd.exe",
+            Arguments = "/c bin\\node.exe .src/decompressApk.js i --loglevel error",
+            CreateNoWindow = true,
+            WindowStyle = ProcessWindowStyle.Hidden
+        };
         public Setting()
         {
             InitializeComponent();
@@ -91,6 +101,58 @@ namespace Native.Csharp.App
         private void button3_Click(object sender, EventArgs e)
         {
             GameAPI.ReadData();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Apk")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Apk"));
+                MessageBox.Show("请把apk丢到文件夹内");
+                Process.Start("explorer.exe",Path.Combine(Environment.CurrentDirectory, "Apk"));
+                return;
+            }
+            if (!Directory.Exists("bin\\src"))
+            {
+                File.WriteAllBytes("sc-compression.zip", Resource.sc_compression);
+                ZipFile.ExtractToDirectory("sc-compression.zip", "bin");
+                File.Delete("sc-compression.zip");
+            }
+            var apks = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Apk"), "*.apk");
+            if (apks.Length > 0)
+            {
+                foreach(var apk in apks)
+                {
+                    textBox1.AppendText("Extracting files " + apk + Environment.NewLine);
+                    File.Move(apk, apk.Replace(".apk", ".zip"));
+                    try
+                    {
+                        ZipFile.ExtractToDirectory(apk.Replace(".apk", ".zip"), "Apk");
+                    }
+                    catch
+                    {
+
+                    }
+                    File.Move(apk.Replace(".apk", ".zip"), apk);
+                    Decompress(apk.Remove(apk.Length-4));
+                }
+            }
+            textBox1.AppendText("\n============================\nDone!\n============================\n");
+        }
+
+        private void Decompress (string path)
+        {
+            if(Directory.GetDirectories(path).Length > 0)
+            {
+                foreach(var subPath in Directory.GetDirectories(path))
+                {
+                    Decompress(subPath);
+                }
+            }
+            textBox1.AppendText("Decompress " + path);
+            File.WriteAllText("bin\\src\\decompressApk.js", Resource.decompressApk.Replace("#PATH#", $"const anyPath = '{path.Replace("\\", "/")}'"));
+            Process.Start(cmd);
+            textBox1.AppendText("Decompress done!");
         }
     }
 }

@@ -10,7 +10,7 @@ using Funq;
 using CocNET;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Threading;
-using Native.Csharp.Sdk.Cqp.Model;
+using DataAccess;
 
 namespace Native.Csharp.App.Bot
 {
@@ -34,6 +34,8 @@ namespace Native.Csharp.App.Bot
         public string LastClanWarStatus;
 
         public bool GameEnabled = true;
+
+        public MutableDataTable texts;
         public static BaseData Instance
         {
             get
@@ -110,6 +112,18 @@ namespace Native.Csharp.App.Bot
             {
                 Instance.IPAddress = "0.0.0.0";
                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突错误", "无法获取当前IP, 将会稍后再试！");
+            }
+            //Coc decrypted texts.csv
+            if (File.Exists("texts.csv"))
+            {
+                try
+                {
+                    Instance.texts = DataTable.New.ReadCsv("texts.csv");
+                }
+                catch
+                {
+                    Instance.texts = null;
+                }
             }
         }
 

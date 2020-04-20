@@ -8,9 +8,8 @@ using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using System.Net;
 using Native.Csharp.Sdk.Cqp.Enum;
-using System.Threading;
-using System.Diagnostics;
 using System.Management;
+using Native.Csharp.Sdk.Cqp;
 
 namespace Native.Csharp.App.Event
 {
@@ -243,7 +242,8 @@ namespace Native.Csharp.App.Event
                             try
                             {
                                 GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-                                if (sendMember.PermitType != PermitType.Holder && sendMember.PermitType != PermitType.Manage && (sendMember.JoiningTime - DateTime.Now).Days < 15)
+                                Common.CqApi.AddLoger(LogerLevel.Debug, "发消息成员资料", "已加群"+ (DateTime.Now - sendMember.JoiningTime).Days + "天");
+                                if (sendMember.PermitType != PermitType.Holder && sendMember.PermitType != PermitType.Manage && (DateTime.Now - sendMember.JoiningTime).Days < 15)
                                 {
                                     foreach (var keyvalue in valuePairs(configType.禁止词句))
                                     {

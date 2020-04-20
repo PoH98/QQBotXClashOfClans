@@ -36,37 +36,58 @@ namespace Native.Csharp.App.Bot
                     sb.AppendLine("兵力：");
                     foreach (var troop in player.Troops)
                     {
-                        try
+                        if (BaseData.Instance.texts != null)
                         {
-                            sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " - " + troop.Level + "级");
+                            sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " - " + troop.Level + "级");
                         }
-                        catch
+                        else
                         {
-                            sb.AppendLine(troop.Name + " - " + troop.Level + "级");
+                            try
+                            {
+                                sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " - " + troop.Level + "级");
+                            }
+                            catch
+                            {
+                                sb.AppendLine(troop.Name + " - " + troop.Level + "级");
+                            }
                         }
                     }
                     sb.AppendLine("药水：");
                     foreach (var spell in player.Spells)
                     {
-                        try
+                        if (BaseData.Instance.texts != null)
                         {
-                            sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " - " + spell.Level + "级");
+                            sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " - " + spell.Level + "级");
                         }
-                        catch
+                        else
                         {
-                            sb.AppendLine(spell.Name + " - " + spell.Level + "级");
+                            try
+                            {
+                                sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " - " + spell.Level + "级");
+                            }
+                            catch
+                            {
+                                sb.AppendLine(spell.Name + " - " + spell.Level + "级");
+                            }
                         }
                     }
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
                     {
-                        try
+                        if (BaseData.Instance.texts != null)
                         {
-                            sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " - " + hero.Level + "级");
+                            sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " - " + hero.Level + "级");
                         }
-                        catch
+                        else
                         {
-                            sb.AppendLine(hero.Name + " - " + hero.Level + "级");
+                            try
+                            {
+                                sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " - " + hero.Level + "级");
+                            }
+                            catch
+                            {
+                                sb.AppendLine(hero.Name + " - " + hero.Level + "级");
+                            }
                         }
                     }
                     Common.CqApi.SendGroupMessage(e.FromGroup, "@发送者 您需要的玩家资料在下面：\n@PlayerAPI".Replace("@PlayerAPI", sb.ToString()).Replace("@发送者",  Common.CqApi.CqCode_At(e.FromQQ)));
@@ -90,6 +111,13 @@ namespace Native.Csharp.App.Bot
             {
                 //发送标签审核
                 id = e.Message.Replace("/审核 ", "").Replace(" ", "");
+                if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+                    return;
+                }
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                return;
             }
             else if (e.Message == "/审核")
             {
@@ -126,6 +154,7 @@ namespace Native.Csharp.App.Bot
                                 else
                                 {
                                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                    return;
                                 }
                             }
                             else
@@ -138,6 +167,7 @@ namespace Native.Csharp.App.Bot
                                 else
                                 {
                                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + name + " 不在部落里！请发送标签进行审核！");
+                                    return;
                                 }
                             }
                             //delay for a while
@@ -196,12 +226,6 @@ namespace Native.Csharp.App.Bot
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "无效的标签！");
                 return;
             }
-            if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
-            {
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
-                return;
-            }
-            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
         }
 
         private static string 审核(string id)
@@ -217,6 +241,7 @@ namespace Native.Csharp.App.Bot
                 sb.AppendLine("兵力：");
                 foreach (var troop in player.Troops)
                 {
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + troop.Name.Replace(" ", "_").ToUpper());
                     if (!troopsLV.Keys.Contains(troop.Name.Replace(" ", "_")))
                     {
                         for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -240,13 +265,20 @@ namespace Native.Csharp.App.Bot
                         if (troopsLV[troop.Name.Replace(" ", "_")] > troop.Level)
                         {
                             troopFull = false;
-                            try
+                            if (BaseData.Instance.texts != null)
                             {
-                                sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                             }
-                            catch
+                            else
                             {
-                                sb.AppendLine(troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                try
+                                {
+                                    sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                }
+                                catch
+                                {
+                                    sb.AppendLine(troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                }
                             }
                         }
                     }
@@ -258,6 +290,7 @@ namespace Native.Csharp.App.Bot
                 sb.AppendLine("药水：");
                 foreach (var spell in player.Spells)
                 {
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + spell.Name.Replace(" ", "_").ToUpper());
                     if (!troopsLV.Keys.Contains(spell.Name.Replace(" ", "_")))
                     {
                         for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -281,13 +314,20 @@ namespace Native.Csharp.App.Bot
                         if (troopsLV[spell.Name.Replace(" ", "_")] > spell.Level)
                         {
                             spellFull = false;
-                            try
+                            if (BaseData.Instance.texts != null)
                             {
-                                sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                             }
-                            catch
+                            else
                             {
-                                sb.AppendLine(spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                try
+                                {
+                                    sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                }
+                                catch
+                                {
+                                    sb.AppendLine(spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                }
                             }
                         }
                     }
@@ -301,6 +341,7 @@ namespace Native.Csharp.App.Bot
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
                     {
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + hero.Name.Replace(" ", "_").ToUpper());
                         if (!troopsLV.Keys.Contains(hero.Name.Replace(" ", "_")))
                         {
                             for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -324,13 +365,20 @@ namespace Native.Csharp.App.Bot
                             if (troopsLV[hero.Name.Replace(" ", "_")] > hero.Level)
                             {
                                 heroFull = false;
-                                try
+                                if (BaseData.Instance.texts != null)
                                 {
-                                    sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                 }
-                                catch
+                                else
                                 {
-                                    sb.AppendLine(hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    try
+                                    {
+                                        sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    }
+                                    catch
+                                    {
+                                        sb.AppendLine(hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    }
                                 }
                             }
                         }
