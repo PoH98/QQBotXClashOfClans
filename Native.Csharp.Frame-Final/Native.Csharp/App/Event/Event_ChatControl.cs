@@ -9,7 +9,6 @@ using Native.Csharp.App.Bot;
 using System.Net;
 using Native.Csharp.Sdk.Cqp.Enum;
 using System.Management;
-using Native.Csharp.Sdk.Cqp;
 
 namespace Native.Csharp.App.Event
 {
@@ -43,230 +42,219 @@ namespace Native.Csharp.App.Event
                         {
                             sb.AppendLine(line);
                         }
-                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString().Replace("@发送者",  Common.CqApi.CqCode_At(e.FromQQ)));
+                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString().Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
                     }
                 }
-                else
+                else if (e.Message.StartsWith("/"))
                 {
-                    if (e.Message.StartsWith("/PlayerAPI") && e.Message.Contains("#"))
+                    switch (e.Message)
                     {
-                        PlayerAPI.GetPlayer(e.Message.Split(' ')[1].Replace(" ", ""), e);
-                    }
-                    else if (e.Message.StartsWith("/ClanAPI") && e.Message.Contains("#"))
-                    {
-                        ClanAPI.GetClan(e.Message.Split(' ')[1].Replace(" ", ""), e);
-                    }
-                    else if (e.Message == "/部落战")
-                    {
-                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
-                        {
-                            ClanAPI.GetWar(e);
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
-                        }
-                    }
-                    else if (e.Message == "/部落成员")
-                    {
-                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
-                        {
-                            ClanAPI.GetMember(e);
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
-                        }
-                    }
-                    else if (e.Message == "/部落战剩余进攻")
-                    {
-                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
-                        {
-                            ClanAPI.GetWarLeft(e);
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
-                        }
-                    }
-                    else if (e.Message == "/清人")
-                    {
-                        if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
-                        {
-                            AdminAPI.CheckMember(e);
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
-                        }
-                    }
-                    else if (e.Message.StartsWith("/改名 "))
-                    {
-                        try
-                        {
-                            AdminAPI.ChangeName(e);
-                        }
-                        catch
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, "确保/改名格式为 /改名 @成员 新昵称 或者 /改名 @成员 #部落冲突玩家标签");
-                        }
-                    }
-                    else if (e.Message.StartsWith("/审核"))
-                    {
-                        PlayerAPI.CheckMember(e);
-                    }
-                    else if (e.Message.StartsWith("/联赛"))
-                    {
-                        ClanAPI.GetLeagueWar(e);
-                    }
-                    else if (e.Message.StartsWith("/下载 "))
-                    {
-                        string version = e.Message.Remove(0, 4);
-                        WebClient wc = new WebClient();
-                        var html = wc.DownloadString("http://leiren520.com/download/index.html");
-                        var cocdiv = html.Substring(html.IndexOf("COC下载"));
-                        cocdiv = cocdiv.Substring(0, cocdiv.IndexOf("多开器下载"));
-                        bool found = false;
-                        StringBuilder sb = new StringBuilder();
-                        foreach (LinkItem i in LinkFinder.Find(cocdiv))
-                        {
-                            sb.AppendLine(i.Text);
-                            if (i.Text.Contains(version) || version.Contains(i.Text))
+                        case "/部落战":
+                            if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
                             {
-                                found = true;
-                                Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + "你要的部落冲突下载链接：" + i.Href);
-                                break;
+                                ClanAPI.GetWar(e);
                             }
-                        }
-                        if (!found)
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString());
-                        }
-                        else
-                        {
-                            sb.Clear();
-                        }
-                    }
-                    else if (e.Message.StartsWith("/踢"))
-                    {
-                        AdminAPI.Kick(false,e);
-                    }
-                    else if (e.Message.StartsWith("/绑定群 #"))
-                    {
-                        if(Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ).PermitType != PermitType.None)
-                        {
-                            string clanID = e.Message.Split(' ').Where(x => x.Contains("#")).Last();
-                            SetClanID(e.FromGroup, clanID);
-                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已绑定" + e.FromGroup + "为部落ID" + clanID);
-                        }
-                        else
-                        {
-                            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
-                        }
-                    }
-                    else if (e.Message == "/服务器")
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: "+DateTime.Now.ToString()+"\n服务器CPU状态: ");
-                        ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
-                        foreach (ManagementObject obj in searcher.Get())
-                        {
-                            var name = obj["Name"];
-                            if (name.ToString() == "_Total")
+                            else
                             {
-                                var usage = obj["PercentProcessorTime"];
-                                sb.AppendLine(usage.ToString() + "%");
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
                             }
-                        }
-                        var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
-                        sb.Append("服务器内存使用: ");
-                        var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new {
-                            FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
-                            TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
-                        }).FirstOrDefault();
+                            break;
+                        case "/部落成员":
+                            if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
+                            {
+                                ClanAPI.GetMember(e);
+                            }
+                            else
+                            {
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
+                            }
+                            break;
+                        case "/部落战剩余进攻":
+                            if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
+                            {
+                                ClanAPI.GetWarLeft(e);
+                            }
+                            else
+                            {
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
+                            }
+                            break;
+                        case "/清人":
+                            if (Instance.config["部落冲突"].ContainsKey(e.FromGroup.ToString()))
+                            {
+                                AdminAPI.CheckMember(e);
+                            }
+                            else
+                            {
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "请在config.ini设置好Clan_ID后再继续使用此功能");
+                            }
+                            break;
+                        case "/服务器":
+                            StringBuilder sb = new StringBuilder();
+                            sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: " + DateTime.Now.ToString() + "\n服务器CPU状态: ");
+                            ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
+                            var cpu = searcher.Get().Cast<ManagementObject>().Where(x => x["Name"].ToString() == "_Total").First();
+                            sb.Append(cpu["PercentProcessorTime"].ToString() + "%");
+                            var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+                            sb.Append("服务器内存使用: ");
+                            var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new
+                            {
+                                FreePhysicalMemory = Double.Parse(mo["FreePhysicalMemory"].ToString()),
+                                TotalVisibleMemorySize = Double.Parse(mo["TotalVisibleMemorySize"].ToString())
+                            }).FirstOrDefault();
 
-                        if (memoryValues != null)
-                        {
-                            sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
-                        }
-                        Common.CqApi.SendGroupMessage(e.FromGroup,sb.ToString());
-                    }
-                    else if (e.Message.StartsWith("/拉黑"))
-                    {
-                        AdminAPI.Kick(true,e);
-                    }
-                    else
-                    {
-                        if (Instance.GameEnabled)
-                        {
-                            if (e.Message == "/拉霸")
+                            if (memoryValues != null)
                             {
-                                GameAPI.JackPot(e);
+                                sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
                             }
-                            else if (e.Message == "/寻宝")
+                            Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                            break;
+                        default:
+                            if (e.Message.StartsWith("/PlayerAPI") && e.Message.Contains("#"))
                             {
-                                GameAPI.FindTreasure(e);
+                                PlayerAPI.GetPlayer(e.Message.Split(' ')[1].Replace(" ", ""), e);
                             }
-                            else if (e.Message == "/帮助")
+                            else if (e.Message.StartsWith("/ClanAPI") && e.Message.Contains("#"))
                             {
-                                GameAPI.Help(e);
+                                ClanAPI.GetClan(e.Message.Split(' ')[1].Replace(" ", ""), e);
                             }
-                            else if (e.Message == "/工作")
+                            else if (e.Message.StartsWith("/改名 "))
                             {
-                                GameAPI.MemberWork(e);
-                            }
-                            else if (e.Message == "/我")
-                            {
-                                GameAPI.MemberCheck(e);
-                            }
-                            else if (e.Message == "/21点")
-                            {
-                                GameAPI.Member21Point(e);
-                            }
-                            else if (e.Message == "/排名")
-                            {
-                                GameAPI.GetRank(e);
-                            }
-                            else if (e.Message.StartsWith("/打劫"))
-                            {
-                                GameAPI.Robber(e);
-                            }
-                            else if (e.Message.StartsWith("/购买"))
-                            {
-                                GameAPI.Shop(e);
-                            }
-                        }
-                        GroupMemberInfo me = Common.CqApi.GetMemberInfo(e.FromGroup, Common.CqApi.GetLoginQQ());
-                        if (me.PermitType == PermitType.Holder || me.PermitType == PermitType.Manage)
-                        {
-                            try
-                            {
-                                GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-                                Common.CqApi.AddLoger(LogerLevel.Debug, "发消息成员资料", "已加群"+ (DateTime.Now - sendMember.JoiningTime).Days + "天");
-                                if (sendMember.PermitType != PermitType.Holder && sendMember.PermitType != PermitType.Manage && (DateTime.Now - sendMember.JoiningTime).Days < 15)
+                                try
                                 {
-                                    foreach (var keyvalue in valuePairs(configType.禁止词句))
+                                    AdminAPI.ChangeName(e);
+                                }
+                                catch
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, "确保/改名格式为 /改名 @成员 新昵称 或者 /改名 @成员 #部落冲突玩家标签");
+                                }
+                            }
+                            else if (e.Message.StartsWith("/审核"))
+                            {
+                                PlayerAPI.CheckMember(e);
+                            }
+                            else if (e.Message.StartsWith("/联赛"))
+                            {
+                                ClanAPI.GetLeagueWar(e);
+                            }
+                            else if (e.Message.StartsWith("/下载 "))
+                            {
+                                string version = e.Message.Remove(0, 4);
+                                WebClient wc = new WebClient();
+                                var html = wc.DownloadString("http://leiren520.com/download/index.html");
+                                var cocdiv = html.Substring(html.IndexOf("COC下载"));
+                                cocdiv = cocdiv.Substring(0, cocdiv.IndexOf("多开器下载"));
+                                bool found = false;
+                                sb = new StringBuilder();
+                                foreach (LinkItem i in LinkFinder.Find(cocdiv))
+                                {
+                                    sb.AppendLine(i.Text);
+                                    if (i.Text.Contains(version) || version.Contains(i.Text))
                                     {
-                                        if (e.Message.Contains(keyvalue.Key))
+                                        found = true;
+                                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你要的部落冲突下载链接：" + i.Href);
+                                        break;
+                                    }
+                                }
+                                if (!found)
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString());
+                                }
+                                else
+                                {
+                                    sb.Clear();
+                                }
+                            }
+                            else if (e.Message.StartsWith("/踢"))
+                            {
+                                AdminAPI.Kick(false, e);
+                            }
+                            else if (e.Message.StartsWith("/绑定群 #"))
+                            {
+                                if (Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ).PermitType != PermitType.None)
+                                {
+                                    string clanID = e.Message.Split(' ').Where(x => x.Contains("#")).Last();
+                                    SetClanID(e.FromGroup, clanID);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "已绑定" + e.FromGroup + "为部落ID" + clanID);
+                                }
+                                else
+                                {
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "我丢你蕾姆，你没权限用这个功能！");
+                                }
+                            }
+                            else if (e.Message.StartsWith("/拉黑"))
+                            {
+                                AdminAPI.Kick(true, e);
+                            }
+                            else if (Instance.GameEnabled)
+                            {
+                                switch (e.Message)
+                                {
+                                    case "/拉霸":
+                                        GameAPI.JackPot(e);
+                                        break;
+                                    case "/寻宝":
+                                        GameAPI.FindTreasure(e);
+                                        break;
+                                    case "/帮助":
+                                        GameAPI.Help(e);
+                                        break;
+                                    case "/工作":
+                                        GameAPI.MemberWork(e);
+                                        break;
+                                    case "/我":
+                                        GameAPI.MemberCheck(e);
+                                        break;
+                                    case "/21点":
+                                        GameAPI.Member21Point(e);
+                                        break;
+                                    case "/排名":
+                                        GameAPI.GetRank(e);
+                                        break;
+                                    default:
+                                        if (e.Message.StartsWith("/打劫"))
                                         {
-                                            Common.CqApi.RepealMessage(e.Id);
-                                            Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + " 你敢触发禁止词？你大爷的，草，跟我互喷啊！");
-                                            if (int.TryParse(keyvalue.Value, out int ticks))
-                                            {
-                                                if (ticks > 0)
-                                                {
-                                                    Common.CqApi.SetGroupBanSpeak(e.FromGroup, e.FromQQ, new TimeSpan(0, 0, ticks));
-                                                }
-                                            }
+                                            GameAPI.Robber(e);
+                                        }
+                                        else if (e.Message.StartsWith("/购买"))
+                                        {
+                                            GameAPI.Shop(e);
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                }
+                GroupMemberInfo me = Common.CqApi.GetMemberInfo(e.FromGroup, Common.CqApi.GetLoginQQ());
+                if (me.PermitType == PermitType.Holder || me.PermitType == PermitType.Manage)
+                {
+                    try
+                    {
+                        GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
+                        Common.CqApi.AddLoger(LogerLevel.Debug, "发消息成员资料", "已加群" + (DateTime.Now - sendMember.JoiningTime).Days + "天");
+                        if (sendMember.PermitType == PermitType.None && (DateTime.Now - sendMember.JoiningTime).Days < 15)
+                        {
+                            foreach (var keyvalue in valuePairs(configType.禁止词句))
+                            {
+                                if (e.Message.Contains(keyvalue.Key))
+                                {
+                                    Common.CqApi.RepealMessage(e.Id);
+                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + " 你敢触发禁止词？你大爷的，草，跟我互喷啊！");
+                                    if (int.TryParse(keyvalue.Value, out int ticks))
+                                    {
+                                        if (ticks > 0)
+                                        {
+                                            Common.CqApi.SetGroupBanSpeak(e.FromGroup, e.FromQQ, new TimeSpan(0, 0, ticks));
                                         }
                                     }
                                 }
                             }
-                            catch
-                            {
-
-                            }
                         }
+                    }
+                    catch
+                    {
+
                     }
                 }
             }

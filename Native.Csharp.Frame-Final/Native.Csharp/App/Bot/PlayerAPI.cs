@@ -128,7 +128,10 @@ namespace Native.Csharp.App.Bot
                     var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
                     var member = cplayer.Where(x => x.Name == gameName.Split('-').Last()).FirstOrDefault();
                     if(member != null)
+                    {
                         id = member.Tag;
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                    }
                     else
                     {
                         Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你不在部落里！请发送标签进行审核！");
