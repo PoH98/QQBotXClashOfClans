@@ -383,7 +383,7 @@ namespace Native.Csharp.App.Bot
                     if (me.Cash > 0)
                     {
                         var percent = rnd.Next(2, 6);
-                        var get = (prey.Cash / 100) * percent;
+                        var get = (me.Cash / 100) * percent;
                         prey.Cash += get;
                         me.Cash -= get;
                         Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(prey.Member.QQId) + "防御成功！还从打劫者身上获得了" + get + "金币！");
@@ -746,6 +746,17 @@ namespace Native.Csharp.App.Bot
                     if (mem.Cash >= selectedWeapon.Price)
                     {
                         mem.Cash -= selectedWeapon.Price;
+                        try
+                        {
+                            if (mem.weapon.Price > 0)
+                            {
+                                mem.Cash += mem.weapon.Price / 4;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
                         mem.weapon = selectedWeapon;
                         Common.CqApi.SendGroupMessage(e.FromGroup, "购买成功！");
                     }
@@ -796,7 +807,7 @@ namespace Native.Csharp.App.Bot
                     mem.PlayTime = DateTime.Now;
                     Random rnd = new Random();
                     int num1, num2, num3;
-                    if (DateTime.Now.Hour == 8)
+                    if (DateTime.Now.Hour == 8 || DateTime.Now.Hour == 16)
                     {
                         num1 = rnd.Next(0, 6);
                         num2 = rnd.Next(0, 6);

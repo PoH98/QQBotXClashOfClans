@@ -109,15 +109,16 @@ namespace Native.Csharp.App.Bot
             string id = string.Empty;
             if (e.Message.Contains("#"))
             {
-                //发送标签审核
-                id = e.Message.Replace("/审核 ", "").Replace(" ", "");
-                if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
-                {
-                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+
+                    //发送标签审核
+                    id = e.Message.Replace("/审核 ", "").Replace(" ", "");
+                    if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+                        return;
+                    }
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
                     return;
-                }
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
-                return;
             }
             else if (e.Message == "/审核")
             {
@@ -223,6 +224,19 @@ namespace Native.Csharp.App.Bot
                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "无效的标签！");
                     return;
                 }
+            }
+            else if (e.Message.Contains("https") && e.Message.Contains("tag="))
+            {
+                //发送链接审核
+                id = e.Message.Replace("/审核 ", "").Replace(" ", "");
+                id = "#"+ id.Remove(0, id.LastIndexOf('=') + 1);
+                if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
+                    return;
+                }
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                return;
             }
             else
             {
