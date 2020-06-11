@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp;
-using System.Reflection;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Text.RegularExpressions;

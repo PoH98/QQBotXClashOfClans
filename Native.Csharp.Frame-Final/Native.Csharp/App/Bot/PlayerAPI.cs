@@ -109,16 +109,15 @@ namespace Native.Csharp.App.Bot
             string id = string.Empty;
             if (e.Message.Contains("#"))
             {
-
-                    //发送标签审核
-                    id = e.Message.Replace("/审核 ", "").Replace(" ", "");
-                    if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
-                    {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
-                        return;
-                    }
-                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                //发送标签审核
+                id = e.Message.Replace("/审核", "").Replace(" ", "");
+                if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
+                {
+                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
                     return;
+                }
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                return;
             }
             else if (e.Message == "/审核")
             {
@@ -128,10 +127,11 @@ namespace Native.Csharp.App.Bot
                     ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
                     var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
                     var member = cplayer.Where(x => x.Name == gameName.Split('-').Last()).FirstOrDefault();
-                    if(member != null)
+                    if (member != null)
                     {
                         id = member.Tag;
                         Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + 审核(id));
+                        return;
                     }
                     else
                     {
@@ -229,7 +229,11 @@ namespace Native.Csharp.App.Bot
             {
                 //发送链接审核
                 id = e.Message.Replace("/审核 ", "").Replace(" ", "");
-                id = "#"+ id.Remove(0, id.LastIndexOf('=') + 1);
+                id = "#" + id.Remove(0, id.LastIndexOf("tag=") + 4);
+                if (id.Contains("&"))
+                {
+                    id = id.Remove(id.IndexOf('&'));
+                }
                 if (id == BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()])
                 {
                     Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的");
@@ -247,9 +251,10 @@ namespace Native.Csharp.App.Bot
 
         private static string 审核(string id)
         {
+            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落Debug", "判断的部落ID为" + id);
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             Player player = players.GetPlayer(id);
-            if (player != null)
+            if (player != null && string.IsNullOrEmpty(player.Reason))
             {
                 StringBuilder sb = new StringBuilder();
                 bool troopFull = true, spellFull = true, heroFull = true;
@@ -413,6 +418,10 @@ namespace Native.Csharp.App.Bot
             }
             else
             {
+                if (!string.IsNullOrEmpty(player.Reason))
+                {
+                    return "出现错误，请稍后再试！错误详情："+player.Reason;
+                }
                 return "未知的部落冲突ID，无法搜索该玩家资料！";
             }
         }

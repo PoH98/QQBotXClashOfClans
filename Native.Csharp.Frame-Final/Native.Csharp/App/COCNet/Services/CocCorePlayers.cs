@@ -1,6 +1,7 @@
 ﻿using CocNET.Interfaces;
 using CocNET.Methods;
 using CocNET.Types.Players;
+using Native.Csharp.App;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace CocNET.Services
         public Player GetPlayer(string playerTag)
         {
             var call = REQUEST.GetCall(API_URL_PLAYERS, HttpUtility.UrlEncode(playerTag));
-            return REQUEST.GetResponse<Player>(call);
+            var result = REQUEST.GetResponse<Player>(call);
+            return result;
         }
     }
 }
