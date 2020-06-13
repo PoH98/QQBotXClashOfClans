@@ -109,6 +109,24 @@ namespace Native.Csharp.App.Event
                             }
                             Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
                             break;
+                        case "/八本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: "+BaseLink.GetLink(8));
+                            break;
+                        case "/九本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: " + BaseLink.GetLink(9));
+                            break;
+                        case "/十本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: " + BaseLink.GetLink(10));
+                            break;
+                        case "/十一本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: " + BaseLink.GetLink(11));
+                            break;
+                        case "/十二本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: " + BaseLink.GetLink(12));
+                            break;
+                        case "/十三本阵型":
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "使用浏览器打开此链接: " + BaseLink.GetLink(13));
+                            break;
                         default:
                             if (e.Message.StartsWith("/PlayerAPI") && e.Message.Contains("#"))
                             {

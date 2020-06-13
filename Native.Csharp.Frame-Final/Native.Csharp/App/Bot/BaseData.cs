@@ -239,7 +239,7 @@ namespace Native.Csharp.App.Bot
                 }
                 return list;
             }
-        }   
+        }
     }
     public enum configType
     {

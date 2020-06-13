@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
+    <Compile Include="App\Bot\BaseLink.cs" />
     <Compile Include="App\Bot\ClanApi.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\PlayerAPI.cs" />
