@@ -61,7 +61,8 @@ namespace Native.Csharp.App.Bot
             }
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突阵型获取", "已获取" + TM的部落链接.Count + "阵型");
             Random rnd = new Random();
-            return TM的部落链接[rnd.Next(0, TM的部落链接.Count)];
+            int rndResult = rnd.Next(0, TM的部落链接.Count);
+            return "https://link.clashofclans.com/cn?" + TM的部落链接[rndResult].Remove(0, "https://link.clashofclans.com/cn?".Length);
         }
     }
 }
