@@ -1,16 +1,15 @@
 ﻿using Native.Csharp.App.Bot;
+using Native.Csharp.App.GameData;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SC_Compression;
 
 namespace Native.Csharp.App
 {
@@ -19,9 +18,12 @@ namespace Native.Csharp.App
         private ProcessStartInfo cmd = new ProcessStartInfo()
         {
             FileName = "cmd.exe",
-            Arguments = "/c bin\\node.exe .src/decompressApk.js i --loglevel error",
+            Arguments = "/c bin\\node.exe bin/src/decompressApk.js i --loglevel error",
             CreateNoWindow = true,
-            WindowStyle = ProcessWindowStyle.Hidden
+            WindowStyle = ProcessWindowStyle.Hidden,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
         };
         public Setting()
         {
@@ -103,7 +105,7 @@ namespace Native.Csharp.App
             GameAPI.ReadData();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private async void button5_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Apk")))
             {
@@ -112,18 +114,12 @@ namespace Native.Csharp.App
                 Process.Start("explorer.exe",Path.Combine(Environment.CurrentDirectory, "Apk"));
                 return;
             }
-            if (!Directory.Exists("bin\\src"))
-            {
-                File.WriteAllBytes("sc-compression.zip", Resource.sc_compression);
-                ZipFile.ExtractToDirectory("sc-compression.zip", "bin");
-                File.Delete("sc-compression.zip");
-            }
             var apks = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Apk"), "*.apk");
             if (apks.Length > 0)
             {
                 foreach(var apk in apks)
                 {
-                    textBox1.AppendText("Extracting files " + apk + Environment.NewLine);
+                    textBox1.AppendText("Extracting files " + apk + "\n");
                     File.Move(apk, apk.Replace(".apk", ".zip"));
                     try
                     {
@@ -134,25 +130,158 @@ namespace Native.Csharp.App
 
                     }
                     File.Move(apk.Replace(".apk", ".zip"), apk);
-                    Decompress(apk.Remove(apk.Length-4));
+                    Thread t = new Thread(()=>
+                    {
+                        Decompress(apk.Remove(apk.Length - 4));
+                    });
+                    t.IsBackground = true;
+                    t.Start();
+                    int waitTime = 0;
+                    do
+                    {
+                        await Task.Delay(1000);
+                        if(waitTime > 30)
+                        {
+                            textBox1.AppendText("\n============================\nFailed!\n============================\n");
+                            return;
+                        }
+                        waitTime++;
+                    }
+                    while (t.ThreadState == System.Threading.ThreadState.Running);
                 }
             }
             textBox1.AppendText("\n============================\nDone!\n============================\n");
         }
 
-        private void Decompress (string path)
+        private void Decompress(string path)
         {
-            if(Directory.GetDirectories(path).Length > 0)
+            if (!Directory.Exists(path))
             {
-                foreach(var subPath in Directory.GetDirectories(path))
+                path = "Apk";
+            }
+            if (Directory.GetDirectories(path).Length > 0)
+            {
+                foreach (var subPath in Directory.GetDirectories(path))
                 {
                     Decompress(subPath);
                 }
             }
-            textBox1.AppendText("Decompress " + path);
-            File.WriteAllText("bin\\src\\decompressApk.js", Resource.decompressApk.Replace("#PATH#", $"const anyPath = '{path.Replace("\\", "/")}'"));
-            Process.Start(cmd);
-            textBox1.AppendText("Decompress done!");
+            foreach(var file in Directory.GetFiles(path).Where(x => x.EndsWith(".csv") || x.EndsWith(".sc")))
+            {
+                textBox1.Invoke((MethodInvoker)delegate {
+                    textBox1.AppendText("Decompressing "+file+" !\n");
+                });
+                File.WriteAllBytes(file, scCompression.Decompress(file));
+                textBox1.Invoke((MethodInvoker)delegate {
+                    textBox1.AppendText("Decompress done!\n");
+                });
+            }
+        }
+
+        private void Compress(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                path = "Apk";
+            }
+            if (Directory.GetDirectories(path).Length > 0)
+            {
+                foreach (var subPath in Directory.GetDirectories(path))
+                {
+                    Compress(subPath);
+                }
+            }
+            foreach (var file in Directory.GetFiles(path, "*.csv"))
+            {
+                textBox1.Invoke((MethodInvoker)delegate {
+                    textBox1.AppendText("Compressing " + file + " !\n");
+                });
+                File.WriteAllBytes(file, scCompression.Compress(file));
+                textBox1.Invoke((MethodInvoker)delegate {
+                    textBox1.AppendText("Compress done!\n");
+                });
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex < 0)
+            {
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "强制召唤Boss", "必须选择群后才能召唤Boss!");
+                return;
+            }
+            if(!BossFight.Instance.boss.ContainsKey(Convert.ToInt64(comboBox1.SelectedItem.ToString())))
+            {
+                BossFight.Instance.boss.Add(Convert.ToInt64(comboBox1.SelectedItem.ToString()), new Boss(Convert.ToInt64(comboBox1.SelectedItem.ToString())));
+                Common.CqApi.SendGroupMessage(Convert.ToInt64(comboBox1.SelectedItem.ToString()), "Boss被Admin强制召唤到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].metTime.AddHours(3));
+            }
+            else if(BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].HP > 0)
+            {
+                BossFight.Instance.boss.Add(Convert.ToInt64(comboBox1.SelectedItem.ToString()), new Boss(Convert.ToInt64(comboBox1.SelectedItem.ToString())));
+                Common.CqApi.SendGroupMessage(Convert.ToInt64(comboBox1.SelectedItem.ToString()), "Boss被Admin强制召唤到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].metTime.AddHours(3));
+            }
+            else
+            {
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "强制召唤Boss", "Boss已经存在，无法再次召唤！");
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            textBox1.ScrollToCaret();
+        }
+
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "Apk")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "Apk"));
+                MessageBox.Show("请把要打包的文件丢到文件夹内");
+                Process.Start("explorer.exe", Path.Combine(Environment.CurrentDirectory, "Apk"));
+                return;
+            }
+            foreach(var apk in Directory.GetFiles("Apk", "*.apk"))
+            {
+                File.Move(apk, apk.Replace("\\Apk\\", "\\"));
+            }
+            Thread t = new Thread(() =>
+            {
+                Compress("Apk");
+            });
+            t.IsBackground = true;
+            t.Start();
+            int waitTime = 0;
+            do
+            {
+                await Task.Delay(1000);
+                if (waitTime > 30)
+                {
+                    textBox1.AppendText("\n============================\nFailed!\n============================\n");
+                    return;
+                }
+                waitTime++;
+            }
+            while (t.ThreadState == System.Threading.ThreadState.Running);
+            try
+            {
+                ZipFile.CreateFromDirectory("Apk", "ClashOfClans_MOD.apk");
+            }
+            catch
+            {
+
+            }
+            try
+            {
+                foreach (var apk in Directory.GetFiles(Environment.CurrentDirectory, "*.apk"))
+                {
+                    File.Move(apk, apk.Replace(Environment.CurrentDirectory, "\\Apk\\"));
+                }
+            }
+            catch
+            {
+
+            }
+            textBox1.AppendText("\n============================\nDone!\n============================\n");
         }
     }
 }

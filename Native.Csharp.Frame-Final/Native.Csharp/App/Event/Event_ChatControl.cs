@@ -229,6 +229,11 @@ namespace Native.Csharp.App.Event
                                     case "/排名":
                                         GameAPI.GetRank(e);
                                         break;
+                                    case "/打Boss":
+                                    case "/打boss":
+                                        BossFight.Fight(e);
+                                        break;
+
                                     default:
                                         if (e.Message.StartsWith("/打劫"))
                                         {

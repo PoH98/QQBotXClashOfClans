@@ -74,7 +74,12 @@ namespace Native.Csharp.App.Bot
             "你刚出门，邻居的老婆婆就把你叫住，她给了你个红苹果，你看过这个故事，便把老婆婆杀死，并且拿她的苹果卖给了路边戴红帽的小女孩，你获得了%G%金币！",
             "你到海上寻宝，路上看见了个举着个火炬的女性雕像，下船后你在路上捡到个黑色的小东西，里面塞满了大量印着某个人的纸张，上面全写了100$，你把这些破纸卖给了个捡破烂的，获得了%G%金币！",
             "你出门后发现今天在下雪，你门口站着个火柴在卖女孩，你跟她买了个女孩后把女孩拿去点燃了取暖，并且在融化的雪地里找到了个小宝箱，获得了%G%金币！",
-            "你在寻宝路上发现了地上充满了坑，你生气的破骂了一顿，这肯定又是某主播挖的坑！幸运的是，你在其中一个坑里挖到了些宝藏，你获得了%G%金币！"
+            "你在寻宝路上发现了地上充满了坑，你生气的破骂了一顿，这肯定又是某主播挖的坑！幸运的是，你在其中一个坑里挖到了些宝藏，你获得了%G%金币！",
+            "在雪花飘飘，你在北风萧萧里找到了一大箱的费玉(青)，你拿去卖掉后获得了%G%金币！",
+            "你到了祖安去寻宝，见到个白发男人在卖鱼，你跟他买了个内裤后转卖，获得了%G%金币！",
+            "在路上你遇见了贞子，你绑着贞子剪了头发后发现变成了美女就拿去卖给了奴隶商人，你获得了%G%金币！",
+            "你到了隔壁的游戏村庄，这里的村民都是用游戏进行的决斗，你决定在那边跟他们Van游戏，成功赚取了%G%的金币回家！",
+            "你:\n金币：突然多出了%G%金币！"
         };
 
         private string[] TreasureFindingFailed = 
@@ -84,12 +89,17 @@ namespace Native.Csharp.App.Bot
             "你在寻宝路上找到了个老旧的城堡，正当你想要进去的时候你看见了好几个天使在拉着个野蛮人往这里走来，你躲起来后看见天使把野蛮人拉进去城堡里，没多久就发出了惨叫，你吓得赶紧逃离了这个地方！",
             "你在路上看见了口井，你往下面丢了个金币希望可以在今天内寻到一些好的宝藏，井底回应了你的愿望，发出了呱呱呱的叫声！",
             "你在路上看见了个老巫师在点头，你跟他一起点头，到了傍晚后你觉得颈部酸痛就回家了",
-            "你找到了传说中的龙王之穴，里面的龙王告诉你他知道宝藏的地点，然而他一直滔滔不绝的一直在说他以前的辉煌事迹，你听不下去只好回家了！",
+            "你找到了传说中的龙王之穴，里面的龙王告诉你他知道宝藏的地点，然而他一直滔滔不绝的一直在说他以前的辉煌事迹说了9天9夜，你听不下去只好回家了！",
             "你在路上看见个帅气的男人在不停的抖动肩膀，他似乎放出了魔法控制了你的身体，你不由自主的跟他一起抖动肩膀，直到隔天你好不容易挣脱了魔法的控制后赶紧逃回了家！",
             "你在个美好的早晨突然看见个包着头巾的男人喊着去东北玩泥巴，还说什么他大连没有家，你觉得他是疯子就只好呆在家里的被窝里瑟瑟发抖！",
             "你躺在床上玩了一天的手机，并且在一个群聊里的机器人寻找到了大量宝藏！",
             "你走到了个名叫滑尾的奇怪村庄，发现这里正在与一名奇怪金发男人发生战争，金发男人疯狂的往村子里丢各种奇怪会爆炸的纸，而滑尾村庄则疯狂的在向金发男人使用会发光的小长方形玩意反击。你为了避免被战火烧及赶紧跑回了家！",
-            "你到了个小村庄，发现这里已经被强盗洗劫一空，而强盗似乎还在不远处在搬运窃取到的厕纸，你吓得赶紧跑回了家！"
+            "你到了个小村庄，发现这里已经被强盗洗劫一空，而强盗似乎还在不远处在搬运窃取到的厕纸，你吓得赶紧跑回了家！",
+            "在寻宝途中你看见了一群黑人穿着西装对着你笑，你不知道他们在干嘛走了过去，结果被他们一把抓进了棺材里，等你回过神来你已经被安葬在了老家！",
+            "你到了个古代遗迹，找到了一本古代的魔法卷抽，似乎是可以把全世界的男人变成女性，你学习后感觉奇怪的知识增加了！",
+            "在出门之前，你到了个餐馆吃了顿生鱼片当早餐，突然想到个问题，生鱼片为什么是生的？结果就这样你在餐馆里想了三天！",
+            "到了森林里，你发现了个淡黄的长裙，蓬松的头发的男人，他发现你后大声的喊I potato you，吓得你连滚带爬的跑回了家！",
+            "今天你觉得一点干劲都没有，还是明天再努力吧！"
         };
 
         private static GameAPI instance;
@@ -97,23 +107,23 @@ namespace Native.Csharp.App.Bot
         public static void FindTreasure(CqGroupMessageEventArgs e)
         {
             var member = getMember(e);
-            if (member.PlayTime == null)
+            if (member.TreasurePlayTime == null)
             {
-                member.PlayTime = DateTime.MinValue;
+                member.TreasurePlayTime = DateTime.MinValue;
             }
-            var nextPlay = member.PlayTime.AddMinutes(10);
+            var nextPlay = member.TreasurePlayTime.AddMinutes(20);
             if (DateTime.Now < nextPlay)
             {
                 var wait = nextPlay - DateTime.Now;
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "你才刚回到家又想出门，结果不小心被被窝缠住无法动弹。请在" + wait.Minutes + "分钟" + wait.Seconds + "秒后尝试！");
                 return;
             }
-            member.PlayTime = DateTime.Now;
+            member.TreasurePlayTime = DateTime.Now;
             Random rnd = new Random();
-            var result = rnd.Next(0, 19);
-            if (result >= 10)
+            var result = rnd.Next(0, (Instance.TreasureFindingSuccess.Length + Instance.TreasureFindingFailed.Length)-1);
+            if (result >= Instance.TreasureFindingSuccess.Length)
             {
-                result -= 10;
+                result -= Instance.TreasureFindingSuccess.Length;
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + Instance.TreasureFindingFailed[result]);
             }
             else
@@ -121,6 +131,25 @@ namespace Native.Csharp.App.Bot
                 var coin = rnd.Next(10, 50);
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + Instance.TreasureFindingSuccess[result].Replace("%G%", coin.ToString()));
                 member.Cash += coin;
+            }
+            if(!BossFight.Instance.boss.ContainsKey(e.FromGroup))
+            {
+                var metBoss = rnd.Next(0, 100);
+                if (metBoss == 66 || metBoss == 33)
+                {
+                    BossFight.Instance.boss.Add(e.FromGroup, new Boss(e.FromGroup));
+                    Common.CqApi.SendGroupMessage(e.FromGroup, "Boss跟随" + Common.CqApi.CqCode_At(e.FromQQ) + "回到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[e.FromGroup].metTime.AddHours(6));
+                }
+            }
+            else if(BossFight.Instance.boss[e.FromGroup].HP < 1)
+            {
+                var metBoss = rnd.Next(0, 100);
+                if (metBoss == 66 || metBoss == 33)
+                {
+                    BossFight.Instance.boss.Remove(e.FromGroup);
+                    BossFight.Instance.boss.Add(e.FromGroup, new Boss(e.FromGroup));
+                    Common.CqApi.SendGroupMessage(e.FromGroup, "Boss跟随" + Common.CqApi.CqCode_At(e.FromQQ) + "回到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[e.FromGroup].metTime.AddHours(6));
+                }
             }
         }
         public static void GetGroupMembers(long GroupID)
@@ -299,7 +328,10 @@ namespace Native.Csharp.App.Bot
 
         public static void Help(CqGroupMessageEventArgs e)
         {
-            Common.CqApi.SendGroupMessage(e.FromGroup, "群里小游戏帮助：\n每日可/工作一次，超过一次将会进院治疗！(扣工资)\n每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要10分钟后才可继续进行！\n/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以半价出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot哦！\n/寻宝或许可以获得意外惊喜？");
+            Common.CqApi.SendGroupMessage(e.FromGroup, "群里小游戏帮助：\n每日可/工作一次，超过一次将会进院治疗！(扣工资)\n" +
+                "每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要15分钟后才可继续进行！\n" +
+                "/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以1/4价格出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot，15分钟一次！\n/寻宝或许可以获得意外惊喜？20分钟一次！\n" +
+                "寻宝有机会遇见Boss,还请遇见后群里的大家一起打败Boss获得丰厚的奖励！/击杀Boss就能对Boss进行伤害，然而注意：如果没能力在6小时内打死Boss，Boss将会一次性打劫全群人！");
         }
 
         public static void Robber(CqGroupMessageEventArgs e)
@@ -354,6 +386,11 @@ namespace Native.Csharp.App.Bot
                 prey.Cash -= reduce;
                 return;
             }
+            if ((DateTime.Now - prey.LastRobbed) < new TimeSpan(8,0,0))
+            {
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "看见那已经被洗劫剩下个内裤的家伙，你放弃了打劫的想法");
+                return;
+            }
             if (prey.Cash > 0)
             {
                 Random rnd = new Random();
@@ -371,6 +408,7 @@ namespace Native.Csharp.App.Bot
                     var get = (prey.Cash / 100) * percent;
                     prey.Cash -= get;
                     me.Cash += get;
+                    prey.LastRobbed = DateTime.Now;
                     Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(e.FromQQ) + "打劫成功！获得了" + get + "金币！");
                 }
                 else if (me.CurrentHP <= 0 && prey.CurrentHP <= 0)
@@ -413,6 +451,7 @@ namespace Native.Csharp.App.Bot
                 Instance.weapon.Add(new Knive());
                 Instance.weapon.Add(new XBow());
                 Instance.weapon.Add(new Inferno());
+                Instance.weapon.Add(new MDSmartStick());
                 Instance.weapon.Add(new UltraWeapon1());
                 Instance.weapon.Add(new UltraWeapon2());
                 if (!Directory.Exists("com.coc.groupadmin"))
@@ -589,7 +628,7 @@ namespace Native.Csharp.App.Bot
                 {
                     mem.PlayTime = DateTime.MinValue;
                 }
-                var nextPlay = mem.PlayTime.AddMinutes(10);
+                var nextPlay = mem.PlayTime.AddMinutes(15);
                 if (DateTime.Now < nextPlay)
                 {
                     var wait = nextPlay - DateTime.Now;
@@ -794,7 +833,7 @@ namespace Native.Csharp.App.Bot
                 {
                     mem.PlayTime = DateTime.MinValue;
                 }
-                var nextPlay = mem.PlayTime.AddMinutes(10);
+                var nextPlay = mem.PlayTime.AddMinutes(15);
                 if (DateTime.Now < nextPlay)
                 {
                     var wait = nextPlay - DateTime.Now;

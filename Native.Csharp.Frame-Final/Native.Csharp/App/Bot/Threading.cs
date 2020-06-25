@@ -35,6 +35,7 @@ namespace Native.Csharp.App.Bot
                                     {
                                         File.Copy(file, file.Replace("com.coc.groupadmin\\", "com.coc.groupadmin\\BackUp\\"));
                                     }
+
                                 }
                                 try
                                 {

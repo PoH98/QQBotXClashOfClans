@@ -77,6 +77,9 @@
     <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="SC-Compression">
+      <HintPath>..\..\..\SC-Compression\SC-Compression\bin\Debug\SC-Compression.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -122,6 +125,7 @@
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
     <Compile Include="App\Bot\BaseLink.cs" />
+    <Compile Include="App\Bot\BossFight.cs" />
     <Compile Include="App\Bot\ClanApi.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\PlayerAPI.cs" />
@@ -202,6 +206,7 @@
     <Compile Include="App\Event\Event_MemberAddGroup.cs" />
     <Compile Include="App\Event\Event_MemberLeave.cs" />
     <Compile Include="App\Event\Event_UI.cs" />
+    <Compile Include="App\GameData\Boss.cs" />
     <Compile Include="App\GameData\Enums.cs" />
     <Compile Include="App\GameData\GameMember.cs" />
     <Compile Include="App\GameData\Weapon.cs" />
@@ -217,11 +222,6 @@
     <Compile Include="Repair\Helper\AssemblyHelper.cs" />
     <Compile Include="Repair\Helper\ReflectionHelper.cs" />
     <Compile Include="Repair\ModuleInitializer.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="com.coc.groupadmin.json">
@@ -260,10 +260,6 @@
   <ItemGroup>
     <EmbeddedResource Include="App\Setting.resx">
       <DependentUpon>Setting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

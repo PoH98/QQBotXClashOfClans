@@ -88,7 +88,16 @@ namespace Native.Csharp.App.Bot
                     {
                         if (!Clanmember.Any(x => x.Contains(mem)))
                         {
-                            reportMember.Add("不在部落：" + mem);
+                            var _member = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.Card.Contains(mem));
+                            if(_member != null && _member.Count() > 0)
+                            {
+                                var member = _member.First();
+                                if (member.LastSeenInClan == null)
+                                {
+                                    member.LastSeenInClan = member.Member.JoiningTime;
+                                }
+                                reportMember.Add("不在部落：" + mem + "(最后记录在部落内" + Math.Round((DateTime.Now.Date - member.LastSeenInClan.Value).TotalDays).ToString("### ##0") + "天前)");
+                            }
                         }
                     }
                     StringBuilder sb = new StringBuilder();
@@ -362,6 +371,70 @@ namespace Native.Csharp.App.Bot
                     }
                 }
                 return true;
+            }
+        }
+
+        public static void UpdateMembersInClanStatus(ICocCoreClans clan, long groupID, string clanID)
+        {
+            var clanMembers = clan.GetClansMembers(clanID);
+            var gameMembers = GameAPI.Instance.gameMembers[groupID];
+            if(clanMembers == null || gameMembers == null)
+            {
+                return;
+            }
+            List<string> namelist = new List<string>();
+            foreach (var member in gameMembers)
+            {
+                var me = Common.CqApi.GetLoginQQ();
+                if (member.Member.QQId != me)
+                {
+                    if (member.Member.Card.Contains(","))
+                    {
+                        var splitted = member.Member.Card.Split(',');
+                        foreach (var split in splitted)
+                        {
+                            if (split.StartsWith(" "))
+                            {
+                                namelist.Add(split.Remove(0, 1));
+                            }
+                            else
+                            {
+                                namelist.Add(split);
+                            }
+                        }
+                    }
+                    else if (member.Member.Card.Contains("，"))
+                    {
+                        var splitted = member.Member.Card.Split('，');
+                        foreach (var split in splitted)
+                        {
+                            if (split.StartsWith(" "))
+                            {
+                                namelist.Add(split.Remove(0, 1));
+                            }
+                            else
+                            {
+                                namelist.Add(split);
+                            }
+                        }
+                    }
+                    else if (member.Member.Card.Contains("-"))
+                    {
+                        namelist.Add(member.Member.Card.Split('-')[1]);
+                    }
+                    else
+                    {
+                        namelist.Add(member.Member.Card);
+                    }
+                }
+            }
+            foreach (var mem in namelist)
+            {
+                if (clanMembers.Any(x => x.Name.Contains(mem)))
+                {
+                    var member = gameMembers.Where(x => x.Member.Card.Contains(mem)).First();
+                    member.LastSeenInClan = DateTime.Now.Date;
+                }
             }
         }
 
