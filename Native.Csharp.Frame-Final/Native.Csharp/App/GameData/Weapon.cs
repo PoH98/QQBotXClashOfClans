@@ -14,8 +14,11 @@ namespace Native.Csharp.App.GameData
     [XmlInclude(typeof(Knive))]
     [XmlInclude(typeof(XBow))]
     [XmlInclude(typeof(Inferno))]
+    [XmlInclude(typeof(MDSmartStick))]
     [XmlInclude(typeof(UltraWeapon1))]
     [XmlInclude(typeof(UltraWeapon2))]
+    [XmlInclude(typeof(Killer))]
+    [XmlInclude(typeof(BDrag))]
     [Serializable]
     public abstract class Weapon
     {
@@ -27,21 +30,20 @@ namespace Native.Csharp.App.GameData
         public abstract TimeSpan GetAwaitTime { get; }
     }
 
-
     [Serializable]
     public class None : Weapon
     {
-        public override int minDamage => 10;
+        public override int minDamage => 54;
 
-        public override int maxDamage => 38;
+        public override int maxDamage => 88;
 
         public override string Name => "小拳拳";
 
-        public override int maxHP => 230;
+        public override int maxHP => 440;
 
         public override int Price => 0;
 
-        public override TimeSpan GetAwaitTime => new TimeSpan(0, 7, 0);
+        public override TimeSpan GetAwaitTime => new TimeSpan(0, 9, 0);
     }
 
     [Serializable]
@@ -75,7 +77,21 @@ namespace Native.Csharp.App.GameData
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 35, 0);
     }
+    [Serializable]
+    public class BDrag : Weapon
+    {
+        public override int minDamage => 200;
 
+        public override int maxDamage => 280;
+
+        public override int maxHP => 3000;
+
+        public override string Name => "飞龙宝宝";
+
+        public override int Price => 20000;
+
+        public override TimeSpan GetAwaitTime => new TimeSpan(0, 55, 0);
+    }
     [Serializable]
     public class Pekka : Weapon
     {
@@ -90,6 +106,22 @@ namespace Native.Csharp.App.GameData
         public override int Price => 20000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 55, 0);
+    }
+
+    [Serializable]
+    public class Killer : Weapon
+    {
+        public override int minDamage => 950;
+
+        public override int maxDamage => 1200;
+
+        public override int maxHP => 800;
+
+        public override string Name => "超级杀手";
+
+        public override int Price => 35000;
+
+        public override TimeSpan GetAwaitTime => new TimeSpan(1, 35, 0);
     }
 
     [Serializable]
@@ -119,7 +151,7 @@ namespace Native.Csharp.App.GameData
 
         public override int maxHP => 2500;
 
-        public override int Price => 30000;
+        public override int Price => 35000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(2, 0, 0);
     }

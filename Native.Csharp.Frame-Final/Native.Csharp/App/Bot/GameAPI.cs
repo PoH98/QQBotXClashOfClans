@@ -444,16 +444,16 @@ namespace Native.Csharp.App.Bot
             try
             {
                 Instance.weapon.Clear();
-                Instance.weapon.Add(new None());
-                Instance.weapon.Add(new Lighting());
-                Instance.weapon.Add(new Magic());
-                Instance.weapon.Add(new Pekka());
-                Instance.weapon.Add(new Knive());
-                Instance.weapon.Add(new XBow());
-                Instance.weapon.Add(new Inferno());
-                Instance.weapon.Add(new MDSmartStick());
-                Instance.weapon.Add(new UltraWeapon1());
-                Instance.weapon.Add(new UltraWeapon2());
+                foreach(var types in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()))
+                {
+                    if (types.IsSubclassOf(typeof(Weapon)))
+                    {
+                        var weapon = (Weapon)Activator.CreateInstance(types);
+                        Instance.weapon.Add(weapon);
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "游戏加载", "成功检测武器" + weapon.Name);
+                    }
+                }
+                Instance.weapon = Instance.weapon.OrderBy(x => x.Price).ToList();
                 if (!Directory.Exists("com.coc.groupadmin"))
                 {
                     Directory.CreateDirectory("com.coc.groupadmin");

@@ -124,11 +124,15 @@
   <ItemGroup>
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
-    <Compile Include="App\Bot\BaseLink.cs" />
     <Compile Include="App\Bot\BossFight.cs" />
-    <Compile Include="App\Bot\ClanApi.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\踢人.cs" />
+    <Compile Include="App\Bot\ChatCheck\BaseAPI\BaseLink.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
+    <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
-    <Compile Include="App\Bot\PlayerAPI.cs" />
+    <Compile Include="App\Bot\LinkFinder.cs" />
     <Compile Include="App\Bot\Threading.cs" />
     <Compile Include="App\COCNet\CocCore.cs" />
     <Compile Include="App\COCNet\Includes\Locations.cs" />
@@ -181,6 +185,17 @@
     <Compile Include="App\COCNet\Types\Players\Player.cs" />
     <Compile Include="App\COCNet\Types\Players\PlayerRanking.cs" />
     <Compile Include="App\Common.cs" />
+    <Compile Include="App\Bot\Abstract\ChatCheckChain.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\改名.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\清人.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\clanapi.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\部落成员.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战剩余进攻.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\联赛.cs" />
+    <Compile Include="App\Bot\ChatCheck\PlayerAPI\playerapi.cs" />
+    <Compile Include="App\Bot\ChatCheck\PlayerAPI\审核.cs" />
+    <Compile Include="App\Bot\Interface\IChain.cs" />
     <Compile Include="App\Core\LibExport.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

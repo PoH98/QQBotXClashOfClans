@@ -7,6 +7,7 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,167 +17,6 @@ namespace Native.Csharp.App.Bot
 {
     public class AdminAPI
     {
-        public static void CheckMember(CqGroupMessageEventArgs e)
-        {
-            Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到检查指令");
-            Common.CqApi.SendGroupMessage(e.FromGroup, "处理中...");
-            var Groupmember = Common.CqApi.GetMemberList(e.FromGroup);
-            var me = Common.CqApi.GetLoginQQ();
-            ICocCoreClans players = BaseData.Instance.container.Resolve<ICocCoreClans>();
-            var clanmembers = players.GetClansMembers(BaseData.Instance.config["部落冲突"][e.FromGroup.ToString()]);
-            if(clanmembers != null)
-            {
-                var Clanmember = clanmembers.Select(x => x.Name).ToList();
-                if (Clanmember != null)
-                {
-                    List<string> namelist = new List<string>();
-                    foreach (var member in Groupmember)
-                    {
-                        if (member.QQId != me)
-                        {
-                            if (member.Card.Contains(","))
-                            {
-                                var splitted = member.Card.Split(',');
-                                foreach (var split in splitted)
-                                {
-                                    if (split.StartsWith(" "))
-                                    {
-                                        namelist.Add(split.Remove(0, 1));
-                                    }
-                                    else
-                                    {
-                                        namelist.Add(split);
-                                    }
-                                }
-                            }
-                            else if (member.Card.Contains("，"))
-                            {
-                                var splitted = member.Card.Split('，');
-                                foreach (var split in splitted)
-                                {
-                                    if (split.StartsWith(" "))
-                                    {
-                                        namelist.Add(split.Remove(0, 1));
-                                    }
-                                    else
-                                    {
-                                        namelist.Add(split);
-                                    }
-                                }
-                            }
-                            else if (member.Card.Contains("-"))
-                            {
-                                namelist.Add(member.Card.Split('-')[1]);
-                            }
-                            else
-                            {
-                                namelist.Add(member.Card);
-                            }
-                        }
-
-                    }
-                    var reportMember = new List<string>();
-                    foreach (var mem in Clanmember)
-                    {
-                        //If not any group member name contains the clan member's name
-                        if (!namelist.Any(x => mem.Contains(x)))
-                        {
-                            reportMember.Add("不在群：" + mem);
-                        }
-                    }
-                    foreach (var mem in namelist)
-                    {
-                        if (!Clanmember.Any(x => x.Contains(mem)))
-                        {
-                            var _member = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.Card.Contains(mem));
-                            if(_member != null && _member.Count() > 0)
-                            {
-                                var member = _member.First();
-                                if (member.LastSeenInClan == null)
-                                {
-                                    member.LastSeenInClan = member.Member.JoiningTime;
-                                }
-                                reportMember.Add("不在部落：" + mem + "(最后记录在部落内" + Math.Round((DateTime.Now.Date - member.LastSeenInClan.Value).TotalDays).ToString("### ##0") + "天前)");
-                            }
-                        }
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var leftmember in reportMember)
-                    {
-                        sb.AppendLine(leftmember);
-                    }
-                    Common.CqApi.SendGroupMessage(e.FromGroup, "需要被清成员名单:\n" + sb.ToString());
-                }
-                else
-                {
-                    Common.CqApi.SendGroupMessage(e.FromGroup, "请确保config.ini里的设置是正确的！");
-                }
-            }
-            else
-            {
-                Common.CqApi.SendGroupMessage(e.FromGroup, "请确保config.ini里的设置是正确的！");
-            }
-        }
-
-        public static void ChangeName(CqGroupMessageEventArgs e)
-        {
-            Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到改名指令");
-            GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-            string qq = "", newname = e.Message.Split(' ').Where(x => x.Contains("#")).Last();
-            foreach (var cqCode in CqMsg.Parse(e.Message).Contents)
-            {
-                qq = cqCode.Dictionary["qq"];
-                break;
-            }
-            if (!long.TryParse(qq, out long tag))
-            {
-                return;
-            }
-            if (tag == e.FromQQ)
-            {
-                if (newname.Contains('#'))
-                {
-                    ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
-                    var player = players.GetPlayer(newname);
-                    if (!string.IsNullOrEmpty(player.Reason))
-                    {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, "找不到玩家资料或者玩家标签错误: " + player.Reason);
-                        return;
-                    }
-                    newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
-                }
-                else
-                {
-                    throw new Exception();
-                }
-                Common.CqApi.SetGroupMemberNewCard(e.FromGroup, tag, newname);
-                Common.CqApi.SendGroupMessage(e.FromGroup, "搞定！已改称为" + newname);
-            }
-            else if (sendMember.PermitType == PermitType.Holder || sendMember.PermitType == PermitType.Manage)
-            {
-                if (newname.Contains('#'))
-                {
-                    ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
-                    var player = players.GetPlayer(newname);
-                    if (!string.IsNullOrEmpty(player.Reason))
-                    {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, "找不到玩家资料或者玩家标签错误: " + player.Reason);
-                        return;
-                    }
-                    newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
-                }
-                else
-                {
-                    throw new Exception();
-                }
-                Common.CqApi.SetGroupMemberNewCard(e.FromGroup, tag, newname);
-                Common.CqApi.SendGroupMessage(e.FromGroup, "搞定！已改称为" + newname);
-            }
-            else
-            {
-                Common.CqApi.SendGroupMessage(e.FromGroup,  Common.CqApi.CqCode_At(e.FromQQ) + "你没权限，别把我当脑残！");
-            }
-        }
 
         public static void ChangeNewMemberName(string id, CqAddGroupRequestEventArgs e)
         {
@@ -185,6 +25,7 @@ namespace Native.Csharp.App.Bot
             var newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
             Common.CqApi.SetGroupMemberNewCard(e.FromGroup, e.FromQQ, newname);
             Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "新人看群文件部落规则，违反任何一条都将会被机票！群昵称已自动改为" + newname);
+            Common.CqApi.SendGroupMessage(e.FromGroup, id);
         }
 
         public static bool NewMember(string id, CqAddGroupRequestEventArgs e)
@@ -434,48 +275,6 @@ namespace Native.Csharp.App.Bot
                 {
                     var member = gameMembers.Where(x => x.Member.Card.Contains(mem)).First();
                     member.LastSeenInClan = DateTime.Now.Date;
-                }
-            }
-        }
-
-        public static void Kick(bool BlackList, CqGroupMessageEventArgs e)
-        {
-            Common.CqApi.AddLoger(LogerLevel.Info_Receive,"部落冲突群管", "接受到踢人指令");
-            var sender = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-            if(sender.PermitType == PermitType.None)
-            {
-                Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + sender.Card + "踢出群聊！他娘的没权限还想踢人？");
-                return;
-            }
-            string qq = "";
-            var cqcontent = CqMsg.Parse(e.Message).Contents;
-            if (!cqcontent.Any(x => x.Dictionary.ContainsKey("qq")))
-            {
-                Common.CqApi.AddLoger(LogerLevel.Info_Receive,"部落冲突群管", "没有检测到QQ");
-                return;
-            }
-            foreach (var cqCode in cqcontent)
-            {
-                qq = cqCode.Dictionary["qq"];
-                break;
-            }
-            Common.CqApi.AddLoger(LogerLevel.Debug, "部落冲突内测", "已检测到QQ号" + qq);
-            if (!long.TryParse(qq, out long tag))
-            {
-                return;
-            }
-            else
-            {
-                var member = Common.CqApi.GetMemberInfo(e.FromGroup, tag);
-                Common.CqApi.SendGroupMessage(e.FromGroup, "已把" + member.Nick + "|" + member.Card + "踢出群聊！");
-                Common.CqApi.SetGroupMemberRemove(e.FromGroup, member.QQId);
-                if (BlackList)
-                {
-                    if (!Directory.Exists("com.coc.groupadmin\\Blacklist"))
-                    {
-                        Directory.CreateDirectory("com.coc.groupadmin\\Blacklist");
-                    }
-                    File.WriteAllText("com.coc.groupadmin\\Blacklist\\" + member.QQId, "");
                 }
             }
         }

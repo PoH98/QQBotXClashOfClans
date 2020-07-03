@@ -1,18 +1,33 @@
-﻿using System;
+﻿using Native.Csharp.Sdk.Cqp.EventArgs;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using static Native.Csharp.App.Bot.BaseData;
 
-namespace Native.Csharp.App.Bot
+namespace Native.Csharp.App.Bot.ChatCheck
 {
-    public class BaseLink
+    public class BaseLink:ChatCheckChain
     {
-        public static string GetLink(int 大本等级)
+        public override string GetReply(CqGroupMessageEventArgs chat)
+        {
+            switch (chat.Message)
+            {
+                case "/八本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(8);
+                case "/九本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(9);
+                case "/十本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(10);
+                case "/十一本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(11);
+                case "/十二本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(12);
+                case "/十三本阵型":
+                    return "使用浏览器打开此链接: " + GetLink(13);
+            }
+            return base.GetReply(chat);
+        }
+        private string GetLink(int 大本等级)
         {
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突阵型DEBUG", "正在获取" + 大本等级 + "本的阵型");
             string 网页 = string.Empty;
@@ -44,12 +59,11 @@ namespace Native.Csharp.App.Bot
                             break;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error,"链接获取出现错误", ex.ToString());
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "链接获取出现错误", ex.ToString());
                 }
             }
-            File.WriteAllText("result.html", 网页, Encoding.UTF8);
             var 链接 = LinkFinder.Find(网页);
             List<string> TM的部落链接 = new List<string>();
             foreach (var 阵型链接 in 链接)
