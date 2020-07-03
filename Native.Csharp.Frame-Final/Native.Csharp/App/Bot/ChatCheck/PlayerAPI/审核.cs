@@ -19,14 +19,14 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 if (chat.Message.Contains("#"))
                 {
                     //发送标签checkMember
-                    id = chat.Message.Replace("/checkMember", "").Replace(" ", "");
+                    id = chat.Message.Replace("/审核", "").Replace(" ", "");
                     if (id == BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()])
                     {
                         return Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的";
                     }
                     return Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id);
                 }
-                else if (chat.Message == "/checkMember")
+                else if (chat.Message == "/审核")
                 {
                     var gameName = Common.CqApi.GetMemberInfo(chat.FromGroup, chat.FromQQ).Card;
                     if (gameName.Contains("-"))
@@ -319,11 +319,15 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
             }
             else
             {
-                if (!string.IsNullOrEmpty(player.Reason))
+                if(player == null)
+                {
+                    return "未知的部落冲突ID，无法搜索该玩家资料！";
+                }
+                else
                 {
                     return "出现错误，请稍后再试！错误详情：" + player.Reason;
                 }
-                return "未知的部落冲突ID，无法搜索该玩家资料！";
+
             }
         }
     }
