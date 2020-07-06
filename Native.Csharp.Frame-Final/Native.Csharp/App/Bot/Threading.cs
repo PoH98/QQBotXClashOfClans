@@ -1,5 +1,6 @@
 ﻿using CocNET.Interfaces;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -35,7 +36,6 @@ namespace Native.Csharp.App.Bot
                                     {
                                         File.Copy(file, file.Replace("com.coc.groupadmin\\", "com.coc.groupadmin\\BackUp\\"));
                                     }
-
                                 }
                                 try
                                 {
@@ -83,6 +83,7 @@ namespace Native.Csharp.App.Bot
 
                     }
                 }
+                BaseData.Instance.onlineTime += Process.GetCurrentProcess().UserProcessorTime;
             }
             while (Common.IsRunning);
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");

@@ -41,6 +41,8 @@ namespace Native.Csharp.App.Bot
         public MutableDataTable texts;
 
         public readonly List<IChain> chains = new List<IChain>();
+
+        public TimeSpan onlineTime = new TimeSpan(0,0,0);
         public static BaseData Instance
         {
             get

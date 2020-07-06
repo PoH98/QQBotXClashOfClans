@@ -41,7 +41,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         }
                         else
                         {
-                            return Common.CqApi.CqCode_At(chat.FromQQ) + "你不在部落里！请发送标签进行checkMember！";
+                            return Common.CqApi.CqCode_At(chat.FromQQ) + "你不在部落里！请发送标签进行审核！";
                         }
                     }
                     else if (gameName.Contains(","))
@@ -62,7 +62,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     }
                                     else
                                     {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行checkMember！";
+                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
                                     }
                                 }
                                 else
@@ -74,7 +74,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     }
                                     else
                                     {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行checkMember！";
+                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
                                     }
                                 }
                                 //delay for a while
@@ -101,7 +101,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     }
                                     else
                                     {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行checkMember！";
+                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
                                     }
                                 }
                                 else
@@ -113,7 +113,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     }
                                     else
                                     {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行checkMember！";
+                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
                                     }
                                 }
                                 //delay for a while
@@ -315,7 +315,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 {
                     sb.AppendLine("注意：严禁升本！否则将会被机票！");
                 }
-                return " 您要的checkMember资料如下：\n" + sb.ToString();
+                return " 您要的审核资料如下：\n" + sb.ToString();
             }
             else
             {

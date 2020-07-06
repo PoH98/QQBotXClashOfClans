@@ -129,8 +129,10 @@
     <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\踢人.cs" />
     <Compile Include="App\Bot\ChatCheck\BaseAPI\BaseLink.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\当前联赛.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
+    <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
     <Compile Include="App\Bot\Threading.cs" />

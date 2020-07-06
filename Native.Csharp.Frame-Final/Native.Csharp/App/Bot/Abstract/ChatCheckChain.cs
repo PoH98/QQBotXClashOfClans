@@ -15,7 +15,16 @@ namespace Native.Csharp.App.Bot
         {
             if(nextChain != null)
             {
-                return nextChain.GetReply(chat);
+                try
+                {
+                    return nextChain.GetReply(chat);
+                }
+                catch(Exception ex)
+                {
+                    var name = nextChain.GetType().Name;
+                    return "处理指令时发生错误！" + name + ".GetReply()" + "! 错误详情: " + ex.Message;
+                }
+
             }
             else
             {

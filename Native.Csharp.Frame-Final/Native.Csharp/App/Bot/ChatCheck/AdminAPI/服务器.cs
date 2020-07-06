@@ -29,11 +29,11 @@ namespace Native.Csharp.App.Bot
                     FreePhysicalMemory = double.Parse(mo["FreePhysicalMemory"].ToString()),
                     TotalVisibleMemorySize = double.Parse(mo["TotalVisibleMemorySize"].ToString())
                 }).FirstOrDefault();
-
                 if (memoryValues != null)
                 {
                     sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
                 }
+                sb.Append("\n本大爷已经使用了: "+BaseData.Instance.onlineTime.TotalSeconds.ToString("N0") + "秒");
                 return sb.ToString();
             }
             return base.GetReply(chat);
