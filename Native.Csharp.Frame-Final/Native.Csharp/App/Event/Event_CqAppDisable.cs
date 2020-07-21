@@ -26,13 +26,21 @@ namespace Native.Csharp.App.Event
             // 无论本应用是否被启用，酷Q关闭前本方法都【不会】被调用。
 
             Common.IsRunning = false;
-            if(BaseData.Instance.checkClanWar != null)
+            try
             {
-                BaseData.Instance.checkClanWar.Abort();
-                BaseData.Instance.checkClanWar = null;
-                GameAPI.SaveData();
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");
+                if (BaseData.Instance.checkClanWar != null)
+                {
+                    BaseData.Instance.checkClanWar.Abort();
+                    BaseData.Instance.checkClanWar = null;
+                    GameAPI.SaveData();
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");
+                }
             }
+            catch
+            {
+
+            }
+
         }
     }
 }

@@ -28,11 +28,25 @@ namespace Native.Csharp.App.GameData
                 while (DateTime.Now < metTime.AddHours(6));
                 Common.CqApi.SendGroupMessage(groupID, "Boss掠夺了村庄，造成了无数的损失！大家都损失了大量金钱！");
                 Random rnd = new Random();
-                foreach (var member in GameAPI.Instance.gameMembers[groupID])
+                try
                 {
-                    var percent = rnd.Next(3, 6);
-                    var lost = (member.Cash / 100) * percent;
-                    member.Cash -= lost;
+                    foreach (var member in GameAPI.Instance.gameMembers[groupID])
+                    {
+                        try
+                        {
+                            var percent = rnd.Next(3, 6);
+                            var lost = (member.Cash / 100) * percent;
+                            member.Cash -= lost;
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                }
+                catch
+                {
+
                 }
                 HP = 0;
                 return;
@@ -51,9 +65,16 @@ namespace Native.Csharp.App.GameData
             var memberHP = member.weapon.maxHP;
             do
             {
-                var damage = rnd.Next(member.weapon.minDamage, member.weapon.maxDamage);
-                HP -= damage;
-                memberHP -= rnd.Next(66, 666);
+                try
+                {
+                    var damage = rnd.Next(member.weapon.minDamage, member.weapon.maxDamage);
+                    HP -= damage;
+                    memberHP -= rnd.Next(66, 666);
+                }
+                catch
+                {
+
+                }
             }
             while (memberHP > 0 && HP > 0);
             if(HP > 0)

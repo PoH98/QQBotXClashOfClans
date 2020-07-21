@@ -127,8 +127,10 @@
     <Compile Include="App\Bot\BossFight.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\游戏解除.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\踢人.cs" />
     <Compile Include="App\Bot\ChatCheck\BaseAPI\BaseLink.cs" />
+    <Compile Include="App\Bot\ChatCheck\CalculatorAPI\计算.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\当前联赛.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
@@ -219,7 +221,6 @@
     <Compile Include="App\Event\Event_AppMain.cs" />
     <Compile Include="App\Event\Event_CqExit.cs" />
     <Compile Include="App\Event\Event_CqStartup.cs" />
-    <Compile Include="App\Event\Event_MemberAdded.cs" />
     <Compile Include="App\Event\Event_MemberAddGroup.cs" />
     <Compile Include="App\Event\Event_MemberLeave.cs" />
     <Compile Include="App\Event\Event_UI.cs" />
@@ -234,6 +235,11 @@
       <DependentUpon>Setting.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Repair\Core\Kernel32.cs" />
     <Compile Include="Repair\Enum\LoadLibraryFlags.cs" />
     <Compile Include="Repair\Helper\AssemblyHelper.cs" />
@@ -245,7 +251,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Resources\sc-compression.zip" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -272,11 +277,15 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StatusExport.cs</LastGenOutput>
     </Content>
-    <None Include="Resources\decompressApk.js" />
+    <None Include="Resources\Calculate.exe" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App\Setting.resx">
       <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

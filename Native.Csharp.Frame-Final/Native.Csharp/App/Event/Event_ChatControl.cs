@@ -50,7 +50,7 @@ namespace Native.Csharp.App.Event
                         Common.CqApi.SendGroupMessage(e.FromGroup, result);
                         return;
                     }
-                    else if (Instance.GameEnabled)
+                    else if (!Instance.GameEnabled.Any(x => x == e.FromGroup))
                     {
                         switch (e.Message)
                         {

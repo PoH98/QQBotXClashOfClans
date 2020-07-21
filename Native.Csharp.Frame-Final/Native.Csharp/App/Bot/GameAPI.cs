@@ -135,7 +135,7 @@ namespace Native.Csharp.App.Bot
             if(!BossFight.Instance.boss.ContainsKey(e.FromGroup))
             {
                 var metBoss = rnd.Next(0, 100);
-                if (metBoss == 66 || metBoss == 33)
+                if (metBoss == 66)
                 {
                     BossFight.Instance.boss.Add(e.FromGroup, new Boss(e.FromGroup));
                     Common.CqApi.SendGroupMessage(e.FromGroup, "Boss跟随" + Common.CqApi.CqCode_At(e.FromQQ) + "回到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[e.FromGroup].metTime.AddHours(6));

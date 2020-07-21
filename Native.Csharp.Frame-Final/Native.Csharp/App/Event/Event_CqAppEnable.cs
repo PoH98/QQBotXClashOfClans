@@ -28,28 +28,35 @@ namespace Native.Csharp.App.Event
             // 如非必要，不建议在这里加载窗口。（可以添加菜单，让用户手动打开窗口）
 
             Common.IsRunning = true;
-            FileIniDataParser parse = new FileIniDataParser();
-            if (!File.Exists("config.ini"))
+            try
             {
-                BaseData.Instance.config = new IniData();
-                foreach(var section in (configType[])Enum.GetValues(typeof(configType)))
+                FileIniDataParser parse = new FileIniDataParser();
+                if (!File.Exists("config.ini"))
                 {
-                    BaseData.Instance.config.Sections.AddSection(section.ToString());
+                    BaseData.Instance.config = new IniData();
+                    foreach (var section in (configType[])Enum.GetValues(typeof(configType)))
+                    {
+                        BaseData.Instance.config.Sections.AddSection(section.ToString());
+                    }
+                    BaseData.InitFirstUse();
+                    parse.WriteFile("config.ini", BaseData.Instance.config, Encoding.Unicode);
                 }
-                BaseData.InitFirstUse();
-                parse.WriteFile("config.ini", BaseData.Instance.config, Encoding.Unicode);
+                BaseData.LoadCOCData();
+                Common.CqApi.AddLoger(LogerLevel.Info, "部落冲突加载", "已加载" + BaseData.Instance.config.Sections.Count + "区域");
+                if (BaseData.Instance.checkClanWar != null)
+                {
+                    BaseData.Instance.checkClanWar.Abort();
+                    BaseData.Instance.checkClanWar = null;
+                }
+                BaseData.ReadGameData();
+                BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);
+                BaseData.Instance.checkClanWar.IsBackground = true;
+                BaseData.Instance.checkClanWar.Start();
             }
-            BaseData.LoadCOCData();
-            Common.CqApi.AddLoger(LogerLevel.Info, "部落冲突加载", "已加载" + BaseData.Instance.config.Sections.Count + "区域");
-            if (BaseData.Instance.checkClanWar != null)
+            catch
             {
-                BaseData.Instance.checkClanWar.Abort();
-                BaseData.Instance.checkClanWar = null;
+
             }
-            GameAPI.ReadData();
-            BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);
-            BaseData.Instance.checkClanWar.IsBackground = true;
-            BaseData.Instance.checkClanWar.Start();
         }
     }
 }

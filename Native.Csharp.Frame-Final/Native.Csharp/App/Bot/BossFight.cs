@@ -25,6 +25,7 @@ namespace Native.Csharp.App.Bot
         public Dictionary<long, Boss> boss = new Dictionary<long, Boss>();
         public static void Fight(CqGroupMessageEventArgs e)
         {
+            Random rnd = new Random();
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "打Boss", "当前已储存的Boss数量(包括已经打死)"+Instance.boss.Keys.Count);
             if (Instance.boss.ContainsKey(e.FromGroup))
             {
@@ -48,16 +49,14 @@ namespace Native.Csharp.App.Bot
                 }
                 if (Instance.boss[e.FromGroup].Damage(member))
                 {
-                    Random rnd = new Random();
-                    var gain = rnd.Next(500, 600) + (lastBossHP - Instance.boss[e.FromGroup].HP);
+                    var gain = rnd.Next(500, 600) + ((rnd.Next(5, 10) / 100) * (lastBossHP - Instance.boss[e.FromGroup].HP));
                     Common.CqApi.SendGroupMessage(e.FromGroup, "你对Boss造成了" + (Instance.boss[e.FromGroup].HP - lastBossHP) + "点伤害，成功击败Boss! 获得了" + gain + "经验值和金币！");
-                    Instance.boss.Remove(e.FromGroup);
                     member.Cash += gain;
                     member.Exp += gain;
                 }
                 else
                 {
-                    var gain = lastBossHP - Instance.boss[e.FromGroup].HP;
+                    var gain = (rnd.Next(5, 10) / 100) * lastBossHP - Instance.boss[e.FromGroup].HP;
                     Common.CqApi.SendGroupMessage(e.FromGroup, "你对Boss造成了" + (Instance.boss[e.FromGroup].HP - lastBossHP) + "点伤害, 获得了" + gain + "金币！Boss剩余血量: " + Instance.boss[e.FromGroup].HP + "\n复活时间为: " + (DateTime.Now + member.weapon.GetAwaitTime));
                     member.Cash += gain;
                 }

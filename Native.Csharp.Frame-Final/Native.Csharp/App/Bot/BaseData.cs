@@ -36,7 +36,7 @@ namespace Native.Csharp.App.Bot
 
         public string LastClanWarStatus;
 
-        public bool GameEnabled = true;
+        public List<long> GameEnabled = new List<long>();
 
         public MutableDataTable texts;
 
@@ -78,10 +78,6 @@ namespace Native.Csharp.App.Bot
 
         public static void LoadCOCData()
         {
-            if (File.Exists("XGame.txt"))
-            {
-                Instance.GameEnabled = false;
-            }
             FileIniDataParser parse = new FileIniDataParser();
             Instance.config = parse.ReadFile("config.ini", Encoding.Unicode);
             if (Instance.config != null)
@@ -142,6 +138,22 @@ namespace Native.Csharp.App.Bot
                 Instance.chains[x].SetNext(Instance.chains[x + 1]);
             }
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "锁链加载", "已经加载"+ Instance.chains.Count + "锁链");
+        }
+
+        public static void ReadGameData()
+        {
+            if (File.Exists("XGame.txt"))
+            {
+                var lines = File.ReadAllLines("XGame.txt");
+                foreach (var line in lines)
+                {
+                    if (long.TryParse(line, out long groupNum))
+                    {
+                        Instance.GameEnabled.Add(groupNum);
+                    }
+                }
+            }
+            GameAPI.ReadData();
         }
 
         public static void SetClanID(long GroupID, string ClanID)

@@ -1,6 +1,7 @@
 ﻿using Native.Csharp.App.Bot;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
+using System;
 using System.Linq;
 
 namespace Native.Csharp.App.Event
@@ -24,9 +25,9 @@ namespace Native.Csharp.App.Event
                 if(member != null)
                     GameAPI.Instance.gameMembers[e.FromGroup].Remove(member);
             }
-            catch
+            catch(Exception ex)
             {
-
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "退群处理错误", ex.ToString());
             }
         }
     }

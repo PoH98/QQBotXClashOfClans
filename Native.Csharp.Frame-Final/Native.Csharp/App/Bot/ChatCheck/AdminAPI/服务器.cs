@@ -33,7 +33,19 @@ namespace Native.Csharp.App.Bot
                 {
                     sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
                 }
-                sb.Append("\n本大爷已经使用了: "+BaseData.Instance.onlineTime.TotalSeconds.ToString("N0") + "秒");
+                if(BaseData.Instance.checkClanWar == null)
+                {
+                    BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);
+                    BaseData.Instance.checkClanWar.IsBackground = true;
+                    BaseData.Instance.checkClanWar.Start();
+                }
+                sb.AppendLine("部落战检测线程运行状态:" + (BaseData.Instance.checkClanWar.IsAlive?"正在在线":"已断开链接，自动重启线程中..."));
+                if (!BaseData.Instance.checkClanWar.IsAlive)
+                {
+                    BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);
+                    BaseData.Instance.checkClanWar.IsBackground = true;
+                    BaseData.Instance.checkClanWar.Start();
+                }
                 return sb.ToString();
             }
             return base.GetReply(chat);
