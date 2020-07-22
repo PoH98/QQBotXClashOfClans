@@ -129,8 +129,8 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 }
                 else if (chat.Message.Contains("https") && chat.Message.Contains("tag="))
                 {
-                    //发送链接checkMember
-                    id = chat.Message.Replace("/checkMember ", "").Replace(" ", "");
+                    //发送链接审核
+                    id = chat.Message.Replace("/审核 ", "").Replace(" ", "");
                     id = "#" + id.Remove(0, id.LastIndexOf("tag=") + 4);
                     if (id.Contains("&"))
                     {

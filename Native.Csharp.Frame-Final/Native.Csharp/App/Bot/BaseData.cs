@@ -34,7 +34,7 @@ namespace Native.Csharp.App.Bot
 
         public Thread checkClanWar;
 
-        public string LastClanWarStatus;
+        public Dictionary<long, string> LastClanWarStatus = new Dictionary<long, string>();
 
         public List<long> GameEnabled = new List<long>();
 

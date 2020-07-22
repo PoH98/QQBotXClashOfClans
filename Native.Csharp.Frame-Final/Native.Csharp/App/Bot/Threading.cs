@@ -58,10 +58,14 @@ namespace Native.Csharp.App.Bot
                                             var members = clan.GetClansMembers(clanID.Value);
                                             if (string.IsNullOrEmpty(clanData.Message))
                                             {
+                                                string status = "";
                                                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落战检测", clanData.State);
-                                                if (BaseData.Instance.LastClanWarStatus != clanData.State)
+                                                if (!BaseData.Instance.LastClanWarStatus.ContainsKey(value))
                                                 {
-                                                    string status = "";
+                                                    BaseData.Instance.LastClanWarStatus.Add(value, string.Empty);
+                                                }
+                                                if (BaseData.Instance.LastClanWarStatus[value] != clanData.State)
+                                                {
                                                     switch (clanData.State)
                                                     {
                                                         case "inWar":
@@ -78,7 +82,7 @@ namespace Native.Csharp.App.Bot
                                                     {
                                                         Common.CqApi.SendGroupMessage(Convert.ToInt64(clanID.KeyName), Common.CqApi.CqCode_At(-1) + "部落战" + status);
                                                     }
-                                                    BaseData.Instance.LastClanWarStatus = clanData.State;
+                                                    BaseData.Instance.LastClanWarStatus[value] = clanData.State;
                                                 }
                                             }
                                             else

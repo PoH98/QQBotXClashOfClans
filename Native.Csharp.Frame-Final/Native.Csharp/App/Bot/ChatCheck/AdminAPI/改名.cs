@@ -29,6 +29,10 @@ namespace Native.Csharp.App.Bot
                 {
                     return string.Empty;
                 }
+                if (newname.Contains(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]))
+                {
+                    return Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的";
+                }
                 if (tag == chat.FromQQ)
                 {
                     if (newname.Contains('#'))
@@ -52,6 +56,22 @@ namespace Native.Csharp.App.Bot
                 {
                     if (newname.Contains('#'))
                     {
+                        ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
+                        var player = players.GetPlayer(newname);
+                        if (!string.IsNullOrEmpty(player.Reason))
+                        {
+                            return "找不到玩家资料或者玩家标签错误: " + player.Reason;
+                        }
+                        newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
+                    }
+                    else if (newname.Contains("http"))
+                    {
+                        newname = chat.Message.Replace("/审核 ", "").Replace(" ", "");
+                        newname = "#" + newname.Remove(0, newname.LastIndexOf("tag=") + 4);
+                        if (newname.Contains("&"))
+                        {
+                            newname = newname.Remove(newname.IndexOf('&'));
+                        }
                         ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
