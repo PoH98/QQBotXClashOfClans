@@ -153,7 +153,6 @@ namespace Native.Csharp.App.Bot
                     }
                 }
             }
-            GameAPI.ReadData();
         }
 
         public static void SetClanID(long GroupID, string ClanID)

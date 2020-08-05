@@ -2,6 +2,7 @@
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Native.Csharp.App.Event
@@ -12,18 +13,11 @@ namespace Native.Csharp.App.Event
         {
             try
             {
-                var exit = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.BeingOperateQQ);
-                if (exit.Count() > 0)
+                Common.CqApi.SendGroupMessage(e.FromGroup, e.BeingOperateQQ + " 已退群！");
+                if (File.Exists("com.coc.groupadmin\\" + e.FromGroup + "\\" + e.BeingOperateQQ + ".bin"))
                 {
-                    Common.CqApi.SendGroupMessage(e.FromGroup, exit.ToArray()[0].Member.Card + " 已退群！");
+                    File.Delete("com.coc.groupadmin\\" + e.FromGroup + "\\" + e.BeingOperateQQ + ".bin");
                 }
-                else
-                {
-                    Common.CqApi.SendGroupMessage(e.FromGroup, e.BeingOperateQQ + " 已退群！");
-                }
-                var member = GameAPI.Instance.gameMembers[e.FromGroup].Where(x => x.Member.QQId == e.BeingOperateQQ).FirstOrDefault();
-                if(member != null)
-                    GameAPI.Instance.gameMembers[e.FromGroup].Remove(member);
             }
             catch(Exception ex)
             {

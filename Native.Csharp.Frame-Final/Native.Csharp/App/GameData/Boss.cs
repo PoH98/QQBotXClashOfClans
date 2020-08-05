@@ -2,7 +2,10 @@
 using Native.Csharp.App.Bot;
 using Native.Csharp.Sdk.Cqp;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace Native.Csharp.App.GameData
 {
@@ -30,7 +33,17 @@ namespace Native.Csharp.App.GameData
                 Random rnd = new Random();
                 try
                 {
-                    foreach (var member in GameAPI.Instance.gameMembers[groupID])
+                    List<GameMember> gameMembers = new List<GameMember>();
+                    XmlSerializer reader = new XmlSerializer(typeof(GameMember));
+                    var files = Directory.GetFiles("com.coc.groupadmin\\" + groupID);
+                    foreach (var file in files)
+                    {
+                        using (FileStream stream = new FileStream(file, FileMode.Open))
+                        {
+                            gameMembers.Add((GameMember)reader.Deserialize(stream));
+                        }
+                    }
+                    foreach (var member in gameMembers)
                     {
                         try
                         {
@@ -41,6 +54,13 @@ namespace Native.Csharp.App.GameData
                         catch
                         {
 
+                        }
+                    }
+                    for (var x = 0; x < files.Length; x++)
+                    {
+                        using (FileStream stream = new FileStream(files[x], FileMode.Open))
+                        {
+                            reader.Serialize(stream, gameMembers[x]);
                         }
                     }
                 }

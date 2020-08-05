@@ -1,10 +1,13 @@
 ﻿using CocNET.Interfaces;
+using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Native.Csharp.App.Bot
 {
@@ -38,7 +41,21 @@ namespace Native.Csharp.App.Bot
                         {
                             if (!Clanmember.Any(x => x.Contains(mem)))
                             {
-                                var _member = GameAPI.Instance.gameMembers[chat.FromGroup].Where(x => x.Member.Card.Contains(mem));
+                                List<GameMember> gameMembers = new List<GameMember>();
+                                XmlSerializer reader = new XmlSerializer(typeof(GameMember));
+                                if (!Directory.Exists("com.coc.groupadmin\\" + chat.FromGroup))
+                                {
+                                    return null;
+                                }
+                                var files = Directory.GetFiles("com.coc.groupadmin\\" + chat.FromGroup);
+                                foreach (var file in files)
+                                {
+                                    using (FileStream stream = new FileStream(file, FileMode.Open))
+                                    {
+                                        gameMembers.Add((GameMember)reader.Deserialize(stream));
+                                    }
+                                }
+                                var _member = gameMembers.Where(x => x.Member.Card.Contains(mem));
                                 if (_member != null && _member.Count() > 0)
                                 {
                                     var member = _member.First();

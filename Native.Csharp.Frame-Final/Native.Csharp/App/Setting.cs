@@ -10,6 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SC_Compression;
+using Unity.Interception.Utilities;
+using Native.Csharp.App.Bot.Game;
+using CocNET.Interfaces;
 
 namespace Native.Csharp.App
 {
@@ -30,79 +33,39 @@ namespace Native.Csharp.App
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            GameAPI.SaveData();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            GameAPI.ReadData();
-        }
-
         private void Setting_Load(object sender, EventArgs e)
         {
-            comboBox1.Items.AddRange(GameAPI.Instance.gameMembers.Keys.Select(x => x.ToString()).ToArray());
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            foreach (var clanID in BaseData.Instance.config["部落冲突"])
-            {
-                if (clanID.KeyName.All(char.IsDigit))
-                {
-                    try
-                    {
-                        GameAPI.GetGroupMembers(Convert.ToInt64(clanID.KeyName));
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "群组加载", clanID.KeyName + "加载完毕！");
-                    }
-                    catch(Exception exception)
-                    {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "群组加载失败", clanID.KeyName + "Exception: " + exception.ToString());
-                        continue;
-                    }
-                }
-            }
+            Directory.GetDirectories("com.coc.groupadmin").ForEach(x => comboBox1.Items.Add(x.Remove(0, x.LastIndexOf('\\') + 1)));
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox2.Items.AddRange(GameAPI.Instance.gameMembers[Convert.ToInt64(comboBox1.SelectedItem.ToString())].Select(x => x.Member.QQId.ToString() + "|" + x.Member.Card).ToArray());
+            Directory.GetFiles("com.coc.groupadmin\\" + comboBox1.SelectedItem.ToString()).ForEach(x => comboBox2.Items.Add(x.Remove(0, x.LastIndexOf('\\') + 1).Replace(".bin", "")));
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var member = GameAPI.Instance.gameMembers[Convert.ToInt64(comboBox1.SelectedItem.ToString())].Where(x => x.Member.QQId.ToString() == comboBox2.SelectedItem.ToString().Split('|')[0]).FirstOrDefault();
-            if(member != null)
+            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                numericUpDown1.Value = member.Exp;
-                numericUpDown2.Value = member.Cash;
+                numericUpDown1.Value = member.member.Exp;
+                numericUpDown2.Value = member.member.Cash;
             }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            var member = GameAPI.Instance.gameMembers[Convert.ToInt64(comboBox1.SelectedItem.ToString())].Where(x => x.Member.QQId.ToString() == comboBox2.SelectedItem.ToString().Split('|')[0]).FirstOrDefault();
-            if (member != null)
+            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                member.Exp = Convert.ToInt32(numericUpDown1.Value);
+                member.member.Exp = Convert.ToInt32(numericUpDown1.Value);
             }
-            GameAPI.SaveData();
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            var member = GameAPI.Instance.gameMembers[Convert.ToInt64(comboBox1.SelectedItem.ToString())].Where(x => x.Member.QQId.ToString() == comboBox2.SelectedItem.ToString().Split('|')[0]).FirstOrDefault();
-            if (member != null)
+            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                member.Cash = Convert.ToInt32(numericUpDown2.Value);
+                member.member.Cash = Convert.ToInt32(numericUpDown2.Value);
             }
-            GameAPI.SaveData();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            GameAPI.ReadData();
         }
 
         private async void button5_Click(object sender, EventArgs e)
@@ -282,6 +245,17 @@ namespace Native.Csharp.App
 
             }
             textBox1.AppendText("\n============================\nDone!\n============================\n");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(comboBox1.SelectedIndex > -1)
+            {
+                ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                var members = clan.GetClansMembers(BaseData.valuePairs(configType.部落冲突)[comboBox1.SelectedItem.ToString()]);
+                Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), members);
+            }
+
         }
     }
 }

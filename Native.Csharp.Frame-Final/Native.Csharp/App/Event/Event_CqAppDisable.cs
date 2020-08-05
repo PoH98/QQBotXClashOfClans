@@ -32,7 +32,6 @@ namespace Native.Csharp.App.Event
                 {
                     BaseData.Instance.checkClanWar.Abort();
                     BaseData.Instance.checkClanWar = null;
-                    GameAPI.SaveData();
                     Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");
                 }
             }

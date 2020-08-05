@@ -7,6 +7,7 @@ using static Native.Csharp.App.Bot.BaseData;
 using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using Native.Csharp.Sdk.Cqp.Enum;
+using Native.Csharp.App.Bot.Game;
 
 namespace Native.Csharp.App.Event
 {
@@ -55,39 +56,38 @@ namespace Native.Csharp.App.Event
                         switch (e.Message)
                         {
                             case "/拉霸":
-                                GameAPI.JackPot(e);
+                                new GameAPI(e).JackPot().Dispose();
                                 break;
                             case "/寻宝":
-                                GameAPI.FindTreasure(e);
+                                new GameAPI(e).FindTreasure().Dispose();
                                 break;
                             case "/帮助":
-                                GameAPI.Help(e);
+                                new GameAPI(e).Help().Dispose();
                                 break;
                             case "/工作":
-                                GameAPI.MemberWork(e);
+                                new GameAPI(e).MemberWork().Dispose();
                                 break;
                             case "/我":
-                                GameAPI.MemberCheck(e);
+                                new GameAPI(e).MemberCheck().Dispose();
                                 break;
                             case "/21点":
-                                GameAPI.Member21Point(e);
+                                new GameAPI(e).Member21Point().Dispose();
                                 break;
                             case "/排名":
-                                GameAPI.GetRank(e);
+                                new GameAPI(e).GetRank().Dispose();
                                 break;
                             case "/打Boss":
                             case "/打boss":
                                 BossFight.Fight(e);
                                 break;
-
                             default:
                                 if (e.Message.StartsWith("/打劫"))
                                 {
-                                    GameAPI.Robber(e);
+                                    new GameAPI(e).Robber(e).Dispose();
                                 }
                                 else if (e.Message.StartsWith("/购买"))
                                 {
-                                    GameAPI.Shop(e);
+                                    new GameAPI(e).Shop(e).Dispose();
                                 }
                                 break;
                         }
