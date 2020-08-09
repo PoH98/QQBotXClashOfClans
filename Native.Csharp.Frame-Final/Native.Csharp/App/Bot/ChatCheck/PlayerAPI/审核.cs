@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Unity.Interception.Utilities;
 
 namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 {
@@ -33,7 +34,8 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     {
                         ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
                         var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
-                        var member = cplayer.Where(x => x.Name == gameName.Split('-').Last()).FirstOrDefault();
+                        var playername = gameName.Split('-').Skip(1).JoinStrings("-");
+                        var member = cplayer.Where(x => x.Name == playername).FirstOrDefault();
                         if (member != null)
                         {
                             id = member.Tag;
