@@ -39,7 +39,7 @@ namespace Native.Csharp.App.Bot
                     BaseData.Instance.checkClanWar.IsBackground = true;
                     BaseData.Instance.checkClanWar.Start();
                 }
-                sb.AppendLine("部落战检测线程运行状态:" + (BaseData.Instance.checkClanWar.IsAlive?"正在在线":"已断开链接，自动重启线程中..."));
+                sb.AppendLine("\n部落战检测线程运行状态:" + (BaseData.Instance.checkClanWar.IsAlive?"正在在线":"已断开链接，自动重启线程中..."));
                 if (!BaseData.Instance.checkClanWar.IsAlive)
                 {
                     BaseData.Instance.checkClanWar = new Thread(Threading.CheckClanWar);

@@ -8,6 +8,10 @@ using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.App.Bot.Game;
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Native.Csharp.App.Event
 {
@@ -30,7 +34,12 @@ namespace Native.Csharp.App.Event
                         {
                             sb.AppendLine(line);
                         }
-                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString().Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
+                        foreach(var message in SplitLongMessage(sb.ToString()))
+                        {
+                            Thread.Sleep(rnd.Next(500, 3000));
+                            Common.CqApi.SendGroupMessage(e.FromGroup, message.Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
+                        }
+                            
                     }
                     else
                     {
@@ -40,7 +49,12 @@ namespace Native.Csharp.App.Event
                         {
                             sb.AppendLine(line);
                         }
-                        Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString().Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
+                        Random rnd = new Random();
+                        foreach (var message in SplitLongMessage(sb.ToString()))
+                        {
+                            Thread.Sleep(rnd.Next(500, 3000));
+                            Common.CqApi.SendGroupMessage(e.FromGroup, message.Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
+                        }
                     }
                 }
                 else if (e.Message.StartsWith("/"))
@@ -48,8 +62,12 @@ namespace Native.Csharp.App.Event
                     var result = Instance.chains[0].GetReply(e);
                     if (!string.IsNullOrEmpty(result))
                     {
-                        Common.CqApi.SendGroupMessage(e.FromGroup, result);
-                        return;
+                        Random rnd = new Random();
+                        foreach (var message in SplitLongMessage(result))
+                        {
+                            Thread.Sleep(rnd.Next(500, 3000));
+                            Common.CqApi.SendGroupMessage(e.FromGroup, message);
+                        }
                     }
                     else if (!Instance.GameEnabled.Any(x => x == e.FromGroup))
                     {
@@ -78,6 +96,7 @@ namespace Native.Csharp.App.Event
                                 break;
                             case "/打Boss":
                             case "/打boss":
+                            case "/打BOSS":
                                 BossFight.Fight(e);
                                 break;
                             default:
@@ -129,6 +148,30 @@ namespace Native.Csharp.App.Event
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, "出现错误，请稍后再试！错误详情：" + ex.ToString());
             }
+        }
+
+        private string[] SplitLongMessage(string originalMessage)
+        {
+            var arr = originalMessage.Split('\n');
+            int writtenchar = 0;
+            List<string> buffer = new List<string>();
+            StringBuilder sb = new StringBuilder();
+            foreach(var line in arr)
+            {
+                if(line.Length > 0)
+                {
+                    if (writtenchar > 200)
+                    {
+                        buffer.Add(sb.ToString());
+                        writtenchar = 0;
+                        sb.Clear();
+                    }
+                    writtenchar += line.Length + 1;
+                    sb.Append(line + "\n");
+                }
+            }
+            buffer.Add(sb.ToString());
+            return buffer.ToArray();
         }
     }
 }
