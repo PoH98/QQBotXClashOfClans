@@ -173,20 +173,6 @@ namespace Native.Csharp.App
                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "强制召唤Boss", "必须选择群后才能召唤Boss!");
                 return;
             }
-            if(!BossFight.Instance.boss.ContainsKey(Convert.ToInt64(comboBox1.SelectedItem.ToString())))
-            {
-                BossFight.Instance.boss.Add(Convert.ToInt64(comboBox1.SelectedItem.ToString()), new Boss(Convert.ToInt64(comboBox1.SelectedItem.ToString())));
-                Common.CqApi.SendGroupMessage(Convert.ToInt64(comboBox1.SelectedItem.ToString()), "Boss被Admin强制召唤到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].metTime.AddHours(3));
-            }
-            else if(BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].HP > 0)
-            {
-                BossFight.Instance.boss.Add(Convert.ToInt64(comboBox1.SelectedItem.ToString()), new Boss(Convert.ToInt64(comboBox1.SelectedItem.ToString())));
-                Common.CqApi.SendGroupMessage(Convert.ToInt64(comboBox1.SelectedItem.ToString()), "Boss被Admin强制召唤到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[Convert.ToInt64(comboBox1.SelectedItem.ToString())].metTime.AddHours(3));
-            }
-            else
-            {
-                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "强制召唤Boss", "Boss已经存在，无法再次召唤！");
-            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

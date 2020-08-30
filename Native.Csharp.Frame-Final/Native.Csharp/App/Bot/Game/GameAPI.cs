@@ -237,24 +237,6 @@ namespace Native.Csharp.App.Bot.Game
                 Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + SharedData.Instance.TreasureFindingSuccess[result].Replace("%G%", coin.ToString()));
                 member.Cash += coin;
             }
-            if (!BossFight.Instance.boss.ContainsKey(member.Member.GroupId))
-            {
-                var metBoss = rnd.Next(0, 100);
-                if (metBoss == 66)
-                {
-                    BossFight.Instance.boss.Add(member.Member.GroupId, new Boss(member.Member.GroupId));
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, "Boss跟随" + Common.CqApi.CqCode_At(member.Member.QQId) + "回到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[member.Member.GroupId].metTime.AddHours(6));
-                }
-            }
-            else if (BossFight.Instance.boss[member.Member.GroupId].HP < 1)
-            {
-                var metBoss = rnd.Next(0, 100);
-                if (metBoss == 66)
-                {
-                    BossFight.Instance.boss[member.Member.GroupId] = new Boss(member.Member.GroupId);
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, "Boss跟随" + Common.CqApi.CqCode_At(member.Member.QQId) + "回到了村庄！召集勇士一起打败Boss吧！Boss逃离时间: " + BossFight.Instance.boss[member.Member.GroupId].metTime.AddHours(6));
-                }
-            }
             return this;
         }
 

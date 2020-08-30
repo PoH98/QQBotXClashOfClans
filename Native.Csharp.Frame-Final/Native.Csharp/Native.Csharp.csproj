@@ -127,7 +127,6 @@
   <ItemGroup>
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
-    <Compile Include="App\Bot\BossFight.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\游戏解除.cs" />
@@ -228,7 +227,6 @@
     <Compile Include="App\Event\Event_MemberAddGroup.cs" />
     <Compile Include="App\Event\Event_MemberLeave.cs" />
     <Compile Include="App\Event\Event_UI.cs" />
-    <Compile Include="App\GameData\Boss.cs" />
     <Compile Include="App\GameData\Enums.cs" />
     <Compile Include="App\GameData\GameMember.cs" />
     <Compile Include="App\GameData\SharedData.cs" />
