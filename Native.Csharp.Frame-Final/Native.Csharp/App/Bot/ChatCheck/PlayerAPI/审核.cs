@@ -1,10 +1,14 @@
 ﻿using CocNET.Interfaces;
 using CocNET.Types.Players;
 using IniParser;
+using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Unity.Interception.Utilities;
 
@@ -60,7 +64,20 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
                                     if (p != null)
                                     {
-                                        Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(p.Tag));
+                                        var result = checkMember(p.Tag);
+                                        if (result.Contains(" [bmp:"))
+                                        {
+                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
+                                            var match = regex.Match(result);
+                                            var fileName = match.Groups[1].Value;
+                                            result = result.Replace(match.Groups[0].Value, "");
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
+                                            
+                                        }
+                                        else
+                                        {
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                        }
                                     }
                                     else
                                     {
@@ -72,7 +89,20 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
                                     if (p != null)
                                     {
-                                        Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(p.Tag));
+                                        var result = checkMember(p.Tag);
+                                        if (result.Contains(" [bmp:"))
+                                        {
+                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
+                                            var match = regex.Match(result);
+                                            var fileName = match.Groups[1].Value;
+                                            result = result.Replace(match.Groups[0].Value, "");
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
+                                            
+                                        }
+                                        else
+                                        {
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                        }
                                     }
                                     else
                                     {
@@ -99,7 +129,20 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
                                     if (p != null)
                                     {
-                                        Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(p.Tag));
+                                        var result = checkMember(p.Tag);
+                                        if (result.Contains(" [bmp:"))
+                                        {
+                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
+                                            var match = regex.Match(result);
+                                            var fileName = match.Groups[1].Value;
+                                            result = result.Replace(match.Groups[0].Value, "");
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
+                                            
+                                        }
+                                        else
+                                        {
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                        }
                                     }
                                     else
                                     {
@@ -111,7 +154,20 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                     var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
                                     if (p != null)
                                     {
-                                        Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(p.Tag));
+                                        var result = checkMember(p.Tag);
+                                        if (result.Contains(" [bmp:"))
+                                        {
+                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
+                                            var match = regex.Match(result);
+                                            var fileName = match.Groups[1].Value;
+                                            result = result.Replace(match.Groups[0].Value, "");
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
+                                            
+                                        }
+                                        else
+                                        {
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                        }
                                     }
                                     else
                                     {
@@ -166,7 +222,6 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 sb.AppendLine("兵力：");
                 foreach (var troop in player.Troops)
                 {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + troop.Name.Replace(" ", "_").ToUpper());
                     if (!troopsLV.Keys.Contains(troop.Name.Replace(" ", "_")))
                     {
                         for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -192,17 +247,17 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                             troopFull = false;
                             if (BaseData.Instance.texts != null)
                             {
-                                sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                             }
                             else
                             {
                                 try
                                 {
-                                    sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                    sb.AppendLine("* " + BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                                 }
                                 catch
                                 {
-                                    sb.AppendLine(troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                    sb.AppendLine("* " + troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                                 }
                             }
                         }
@@ -212,10 +267,10 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 {
                     sb.AppendLine("已满级");
                 }
+                sb.AppendLine("==================================");
                 sb.AppendLine("药水：");
                 foreach (var spell in player.Spells)
                 {
-                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + spell.Name.Replace(" ", "_").ToUpper());
                     if (!troopsLV.Keys.Contains(spell.Name.Replace(" ", "_")))
                     {
                         for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -241,17 +296,17 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                             spellFull = false;
                             if (BaseData.Instance.texts != null)
                             {
-                                sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                             }
                             else
                             {
                                 try
                                 {
-                                    sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                    sb.AppendLine("* " + BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                                 }
                                 catch
                                 {
-                                    sb.AppendLine(spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                    sb.AppendLine("* " + spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                                 }
                             }
                         }
@@ -263,10 +318,10 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 }
                 if (player.Heroes.Count > 0)
                 {
+                    sb.AppendLine("==================================");
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
                     {
-                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "查询TID", "TID_" + hero.Name.Replace(" ", "_").ToUpper());
                         if (!troopsLV.Keys.Contains(hero.Name.Replace(" ", "_")))
                         {
                             for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -292,17 +347,17 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                 heroFull = false;
                                 if (BaseData.Instance.texts != null)
                                 {
-                                    sb.AppendLine(BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    sb.AppendLine("* "+BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                 }
                                 else
                                 {
                                     try
                                     {
-                                        sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                        sb.AppendLine("* " + BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                     }
                                     catch
                                     {
-                                        sb.AppendLine(hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                        sb.AppendLine("* " + hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                     }
                                 }
                             }
@@ -315,9 +370,14 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 }
                 if (sb.ToString().Split('\n').Length > 13)
                 {
+                    sb.AppendLine("==================================");
                     sb.AppendLine("注意：严禁升本！否则将会被机票！");
                 }
-                return " 您要的审核资料如下：\n" + sb.ToString();
+                if (!Directory.Exists("Buffer"))
+                {
+                    Directory.CreateDirectory("Buffer");
+                }
+                return sb.ToString();
             }
             else
             {

@@ -200,7 +200,7 @@
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战剩余进攻.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\联赛.cs" />
-    <Compile Include="App\Bot\ChatCheck\PlayerAPI\playerapi.cs" />
+    <Compile Include="App\Bot\ChatCheck\PlayerAPI\玩家资料.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\审核.cs" />
     <Compile Include="App\Bot\Interface\IChain.cs" />
     <Compile Include="App\Core\LibExport.cs">
