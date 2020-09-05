@@ -76,7 +76,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                         }
                                         else
                                         {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
                                         }
                                     }
                                     else
@@ -101,7 +101,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                         }
                                         else
                                         {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
                                         }
                                     }
                                     else
@@ -141,7 +141,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                         }
                                         else
                                         {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
                                         }
                                     }
                                     else
@@ -166,7 +166,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                                         }
                                         else
                                         {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, Common.CqApi.CqCode_At(chat.FromQQ) + result);
+                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
                                         }
                                     }
                                     else
@@ -210,7 +210,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 
         private static string checkMember(string id)
         {
-            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落Debug", "判断的部落ID为" + id);
+            Common.CqApi.AddLoger(LogerLevel.Debug, "部落Debug", "判断的部落ID为" + id);
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             Player player = players.GetPlayer(id);
             if (player != null && string.IsNullOrEmpty(player.Reason))
