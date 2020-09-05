@@ -377,7 +377,14 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 {
                     Directory.CreateDirectory("Buffer");
                 }
-                return sb.ToString();
+                string result = sb.ToString();
+                if(result.Length > 200)
+                {
+                    var rndname = "Buffer\\" + Path.GetRandomFileName();
+                    Convert_Text_to_Image(result.ToString(), "Times New Roman", 13).Save(rndname);
+                    result = " [bmp:" + rndname + "] ";
+                }
+                return result;
             }
             else
             {
@@ -391,6 +398,32 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 }
 
             }
+        }
+
+        private static Bitmap Convert_Text_to_Image(string txt, string fontname, int fontsize)
+        {
+            //creating bitmap image
+            Bitmap bmp = new Bitmap(1, 1);
+
+            //FromImage method creates a new Graphics from the specified Image.
+            Graphics graphics = Graphics.FromImage(bmp);
+            // Create the Font object for the image text drawing.
+            Font font = new Font(fontname, fontsize);
+            // Instantiating object of Bitmap image again with the correct size for the text and font.
+            SizeF stringSize = graphics.MeasureString(txt, font);
+            bmp = new Bitmap(bmp, (int)stringSize.Width, (int)stringSize.Height);
+            graphics = Graphics.FromImage(bmp);
+
+            /* It can also be a way
+           bmp = new Bitmap(bmp, new Size((int)graphics.MeasureString(txt, font).Width, (int)graphics.MeasureString(txt, font).Height));*/
+
+            //Draw Specified text with specified format 
+            graphics.FillRectangle(new SolidBrush(Color.Black), new RectangleF(0, 0, (float)stringSize.Width, (float)stringSize.Height));
+            graphics.DrawString(txt, font, Brushes.White, 0, 0);
+            font.Dispose();
+            graphics.Flush();
+            graphics.Dispose();
+            return bmp;     //return Bitmap Image 
         }
     }
 }
