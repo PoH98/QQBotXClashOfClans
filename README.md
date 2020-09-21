@@ -18,7 +18,7 @@ QQ群管理连接部落冲突API进行各种群里管理操作
 * 下载[MiraiOK](http://t.imlxy.net:64724/mirai/MiraiOK/miraiOK_windows_386.exe)
 * 打开MiraiOK后等待下载相关资料完成
 * 关闭MiraiOK
-* 下载[Mirai.Native](https://github.com/iTXTech/mirai-native/releases/download/v1.8.2/mirai-native-1.8.2.jar)
+* 下载[Mirai.Native](https://github.com/iTXTech/mirai-native/releases/latest)
 * 把Mirai.Native丢到Plugin文件夹内
 * 打开Mirai.OK，让Native创建好所需文件夹和文件
 * 到本插件Release页面下载dll和json
