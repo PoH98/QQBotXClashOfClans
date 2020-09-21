@@ -15,10 +15,10 @@ QQ群管理连接部落冲突API进行各种群里管理操作
 
 # 由于酷Q的跑路，目前本插件将公开dll和json下载，以便可使用[mirai.native](https://github.com/iTXTech/mirai-native)进行继续运行
 ## 使用方式: 
-* 下载[MiraiOK](http://t.imlxy.net:64724/mirai/MiraiOK/miraiOK_windows_386.exe)
+* 下载[MiraiOK](http://t.imlxy.net:64724/mirai/MiraiOK/miraiOK_windows-386.exe)
 * 打开MiraiOK后等待下载相关资料完成
 * 关闭MiraiOK
-* 下载[Mirai.Native](https://github.com/iTXTech/mirai-native/releases/latest)
+* 下载[Mirai.Native](https://github.com/iTXTech/mirai-native/releases/tag/v1.8.6)
 * 把Mirai.Native丢到Plugin文件夹内
 * 打开Mirai.OK，让Native创建好所需文件夹和文件
 * 到本插件Release页面下载dll和json
