@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\切换发字模式.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\游戏解除.cs" />
@@ -137,6 +138,8 @@
     <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
+    <Compile Include="App\Bot\ChatCheck\Scrapper\更新部落阵型.cs" />
+    <Compile Include="App\Bot\ChatCheck\Scrapper\来个图.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
@@ -195,7 +198,7 @@
     <Compile Include="App\Bot\Abstract\ChatCheckChain.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\改名.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\清人.cs" />
-    <Compile Include="App\Bot\ChatCheck\ClanAPI\clanapi.cs" />
+    <Compile Include="App\Bot\ChatCheck\ClanAPI\部落资料.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落成员.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落战剩余进攻.cs" />
@@ -308,17 +311,17 @@
   </Target>
   <PropertyGroup>
     <PreBuildEvent>if exist "$(TargetDir)$(TargetName)" (echo 文件夹已存在) else (md "$(TargetDir)$(TargetName)") 
-if exist "$(TargetDir)$(TargetName)\app.dll" (del /F /A /Q "$(TargetDir)$(TargetName)\app.dll") 
+if exist "$(TargetDir)$(TargetName)\app.dll" (del /F /A /Q "$(TargetDir)$(TargetName)\$(TargetName)") 
 if exist "$(TargetDir)$(TargetName)\app.json" (del /F /A /Q "$(TargetDir)$(TargetName)\app.json")</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
 move "$(TargetDir)$(TargetName).dll" "$(TargetDir)$(TargetName)" 
-rename "$(TargetDir)$(TargetName)\$(TargetName).dll" "app.dll" 
+rename "$(TargetDir)$(TargetName)\$(TargetName).dll" "$(TargetName).dll" 
 ) 
 if exist "$(TargetDir)$(TargetName).json" (
 move "$(TargetDir)$(TargetName).json" "$(TargetDir)$(TargetName)" 
-rename "$(TargetDir)$(TargetName)\$(TargetName).json" "app.json" 
+rename "$(TargetDir)$(TargetName)\$(TargetName).json" "$(TargetName).json" 
 )</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

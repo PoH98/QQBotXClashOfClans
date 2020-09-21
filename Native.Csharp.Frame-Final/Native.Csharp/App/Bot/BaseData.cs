@@ -12,7 +12,6 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Threading;
 using DataAccess;
 using Native.Csharp.App.Bot.Interface;
-using System.Reflection;
 using System.Linq;
 
 namespace Native.Csharp.App.Bot
@@ -43,6 +42,8 @@ namespace Native.Csharp.App.Bot
         public readonly List<IChain> chains = new List<IChain>();
 
         public TimeSpan onlineTime = new TimeSpan(0,0,0);
+
+        public bool SplitLongText = false;
         public static BaseData Instance
         {
             get
@@ -66,7 +67,7 @@ namespace Native.Csharp.App.Bot
         public static void InitFirstUse()
         {
             string[] key = { "查看指令" };
-            string[] val = { "@发送者\\/PlayerAPI (玩家ID) = 查询玩家资料\\/ClanAPI (部落ID) = 查询部落成员名单\\/清人 = 检查部落与群里成员谁不在部落里\\/改名 @用户 (游戏ID) = 自动获取游戏内昵称并且修改成员昵称\\/审核 (玩家ID) = 自动检查玩家科技图与已设置要求是否相符" };
+            string[] val = { "@发送者\\/玩家资料 (玩家ID) = 查询玩家资料\\/部落资料 (部落ID) = 查询部落成员名单\\/清人 = 检查部落与群里成员谁不在部落里\\/改名 @用户 (游戏ID) = 自动获取游戏内昵称并且修改成员昵称\\/审核 (玩家ID) = 自动检查玩家科技图与已设置要求是否相符" };
             for(int x  = 0; x < key.Length; x++)
             {
                 Instance.config.Sections.GetSectionData("自动回复").Keys.AddKey(key[x], val[x]);
@@ -74,6 +75,7 @@ namespace Native.Csharp.App.Bot
             Instance.config.Sections.GetSectionData("部落冲突").Keys.AddKey("Token","");
             Instance.config.Sections.GetSectionData("部落冲突").Keys.AddKey("Api邮箱", "");
             Instance.config.Sections.GetSectionData("部落冲突").Keys.AddKey("Api密码", "");
+            Instance.config.Sections.GetSectionData("部落冲突").Keys.AddKey("长字分段", "true");
         }
 
         public static void LoadCOCData()
@@ -86,22 +88,47 @@ namespace Native.Csharp.App.Bot
                 Instance.core = new CocCore(Instance.config["部落冲突"]["Token"]);
                 Instance.container = Instance.core.Container;
             }
+            if (valuePairs(configType.部落冲突).ContainsKey("长字分段"))
+            {
+                bool.TryParse(valuePairs(configType.部落冲突)["长字分段"].ToLower(), out Instance.SplitLongText);
+            }
             if (File.Exists("Townhall.ini"))
             {
                 Instance.thConfig = parse.ReadFile("Townhall.ini");
             }
             else
             {
-                Instance.thConfig = new IniData();
-                for(int x = 1; x < Instance.THLevels.Length; x++)
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突设置", "正在下载必要资料！");
+                try
                 {
-                    Instance.thConfig.Sections.AddSection(x.ToString()+"本");
-                    foreach(var key in Instance.translation.Keys)
+                    ServicePointManager.Expect100Continue = true;
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    WebClient wc = new WebClient();
+                    wc.DownloadProgressChanged += (s, ev) =>
                     {
-                        Instance.thConfig[x.ToString()+"本"].AddKey(key, "99");
-                    }
+                        Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突设置", "正在下载必要资料！" + ev.ProgressPercentage + "%");
+                    };
+                    wc.DownloadFile("https://github.com/PoH98/QQBotXClashOfClans/releases/download/v1.0.3/Townhall.ini", "Townhall.ini");
+                    wc.Dispose();
                 }
-                parse.WriteFile("Townhall.ini", Instance.thConfig,Encoding.Unicode);
+                catch(Exception ex)
+                {
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突设置", "资料下载失败！请自行手动设置Townhall.ini!" + ex.ToString());
+                    Instance.thConfig = new IniData();
+                    for (int x = 1; x < Instance.THLevels.Length; x++)
+                    {
+                        Instance.thConfig.Sections.AddSection(x.ToString() + "本");
+                        foreach (var key in Instance.translation.Keys)
+                        {
+                            Instance.thConfig[x.ToString() + "本"].AddKey(key, "99");
+                        }
+                    }
+                    parse.WriteFile("Townhall.ini", Instance.thConfig, Encoding.Unicode);
+                }
+                finally
+                {
+                    Instance.thConfig = parse.ReadFile("Townhall.ini");
+                }
             }
             try 
             {

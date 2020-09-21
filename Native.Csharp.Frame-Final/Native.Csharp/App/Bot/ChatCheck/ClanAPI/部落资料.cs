@@ -12,7 +12,7 @@ namespace Native.Csharp.App.Bot
     {
         public override string GetReply(CqGroupMessageEventArgs chat)
         {
-            if (chat.Message.ToLower().StartsWith("/clanapi #"))
+            if (chat.Message.ToLower().StartsWith("/部落资料 #"))
             {
                 try
                 {

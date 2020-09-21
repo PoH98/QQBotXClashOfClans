@@ -185,6 +185,10 @@ namespace Native.Csharp.App.Event
 
         private string[] SplitLongMessage(string originalMessage)
         {
+            if (!Instance.SplitLongText)
+            {
+                return new string[]{ originalMessage };
+            }
             var arr = originalMessage.Split('\n');
             int writtenchar = 0;
             List<string> buffer = new List<string>();
