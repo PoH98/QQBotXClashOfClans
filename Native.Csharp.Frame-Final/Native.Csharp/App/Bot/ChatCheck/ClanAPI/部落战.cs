@@ -1,10 +1,7 @@
 ﻿using CocNET.Interfaces;
 using Native.Csharp.Sdk.Cqp.EventArgs;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot
 {
@@ -25,7 +22,7 @@ namespace Native.Csharp.App.Bot
                     if (clanData.State == "inWar")
                     {
                         StringBuilder sb = new StringBuilder();
-                        sb.Append(Common.CqApi.CqCode_At(chat.FromQQ) + "\n你要的部落战资料：\n");
+                        sb.Append("当前的部落战资料：\n");
                         sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                         sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                         sb.AppendLine();
@@ -61,7 +58,7 @@ namespace Native.Csharp.App.Bot
                     else if (clanData.State == "warEnded")
                     {
                         StringBuilder sb = new StringBuilder();
-                        sb.Append(Common.CqApi.CqCode_At(chat.FromQQ) + "\n你要的部落战资料：\n");
+                        sb.Append("当前部落战资料：\n");
                         sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                         sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                         sb.AppendLine();
@@ -97,7 +94,7 @@ namespace Native.Csharp.App.Bot
                     else if (clanData.State == "preparation")
                     {
                         StringBuilder sb = new StringBuilder();
-                        sb.Append(Common.CqApi.CqCode_At(chat.FromQQ) + "\n你要的部落战资料：\n");
+                        sb.Append("当前部落战资料：\n");
                         int x = 1;
                         foreach (var member in clanData.Clan.Members.OrderBy(y => y.MapPosition))
                         {

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using Unity;
+﻿using Unity;
 using Native.Csharp.Sdk.Cqp.Interface;
-using Native.Csharp.Sdk.Cqp.EventArgs;
-using Native.Csharp.Sdk.Cqp;
-using Unity.RegistrationByConvention;
 
 namespace Native.Csharp.App.Event
 {

@@ -1,23 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.GameData
 {
-    [Serializable]
-    public enum Location
-    {
-        森林,
-        箭塔,
-        加农炮,
-        圣水瓶,
-        金罐,
-        迫击炮,
-        法师塔,
-        大本营
-    }
     [Serializable]
     public enum Work
     {
@@ -32,6 +16,7 @@ namespace Native.Csharp.App.GameData
         给皮卡擦盔甲,
         给矿工点蜡烛,
         给雷龙充电,
-        给大雪怪带孩子
+        给大雪怪带孩子,
+        帮村妇藏宝石在树上
     }
 }

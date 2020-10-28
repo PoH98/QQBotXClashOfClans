@@ -76,8 +76,7 @@ namespace Native.Csharp.App.Event
                         {
                             if (result.Length > 200 && !result.Contains("CQ"))
                             {
-                                string rndName = Path.Combine("Buffer\\" + Path.GetRandomFileName());
-                                Convert_Text_to_Image(result, "Times New Roman", 13).Save(rndName);
+                                var rndName = BaseData.TextToImg(result);
                                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(rndName));
                             }
                             else if(result.Length > 200)
@@ -169,7 +168,7 @@ namespace Native.Csharp.App.Event
                     foreach (var file in Directory.GetFiles("Buffer"))
                     {
                         FileInfo info = new FileInfo(file);
-                        if((DateTime.Now - info.CreationTime).Seconds > 30)
+                        if((DateTime.Now - info.CreationTime).TotalDays > 1)
                         {
                             info.Delete();
                         }
@@ -209,32 +208,6 @@ namespace Native.Csharp.App.Event
             }
             buffer.Add(sb.ToString());
             return buffer.ToArray();
-        }
-
-        private static Bitmap Convert_Text_to_Image(string txt, string fontname, int fontsize)
-        {
-            //creating bitmap image
-            Bitmap bmp = new Bitmap(1, 1);
-
-            //FromImage method creates a new Graphics from the specified Image.
-            Graphics graphics = Graphics.FromImage(bmp);
-            // Create the Font object for the image text drawing.
-            Font font = new Font(fontname, fontsize);
-            // Instantiating object of Bitmap image again with the correct size for the text and font.
-            SizeF stringSize = graphics.MeasureString(txt, font);
-            bmp = new Bitmap(bmp, (int)stringSize.Width, (int)stringSize.Height);
-            graphics = Graphics.FromImage(bmp);
-
-            /* It can also be a way
-           bmp = new Bitmap(bmp, new Size((int)graphics.MeasureString(txt, font).Width, (int)graphics.MeasureString(txt, font).Height));*/
-
-            //Draw Specified text with specified format 
-            graphics.FillRectangle(new SolidBrush(Color.Black), new RectangleF(0, 0, (float)stringSize.Width, (float)stringSize.Height));
-            graphics.DrawString(txt, font, Brushes.White, 0, 0);
-            font.Dispose();
-            graphics.Flush();
-            graphics.Dispose();
-            return bmp;     //return Bitmap Image 
         }
     }
 }

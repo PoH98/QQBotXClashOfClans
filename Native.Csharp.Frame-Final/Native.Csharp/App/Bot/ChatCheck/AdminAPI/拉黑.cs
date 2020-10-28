@@ -38,6 +38,11 @@ namespace Native.Csharp.App.Bot
                 else
                 {
                     var member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
+                    foreach(var group in Common.CqApi.GetGroupList())
+                    {
+                        Common.CqApi.SetGroupMemberRemove(group.Id, member.QQId);
+                        Common.CqApi.SendGroupMessage(group.Id, "检测到已被拉黑的人存在群里，自动踢出群！");
+                    }
                     Common.CqApi.SetGroupMemberRemove(chat.FromGroup, member.QQId);
                     if (!Directory.Exists("com.coc.groupadmin\\Blacklist"))
                     {

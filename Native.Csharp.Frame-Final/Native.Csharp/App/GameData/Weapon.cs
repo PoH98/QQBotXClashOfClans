@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 namespace Native.Csharp.App.GameData
 {
     [XmlInclude(typeof(None))]
+    [XmlInclude(typeof(Stick))]
     [XmlInclude(typeof(Lighting))]
     [XmlInclude(typeof(Magic))]
     [XmlInclude(typeof(Pekka))]
@@ -40,6 +41,22 @@ namespace Native.Csharp.App.GameData
         public override int Price => 0;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 10, 0);
+    }
+
+    [Serializable]
+    public class Stick : Weapon
+    {
+        public override int minDamage => 77;
+
+        public override int maxDamage => 93;
+
+        public override string Name => "小树枝";
+
+        public override int maxHP => 600;
+
+        public override int Price => 5000;
+
+        public override TimeSpan GetAwaitTime => new TimeSpan(0, 15, 0);
     }
 
     [Serializable]

@@ -449,9 +449,27 @@ namespace Native.Csharp.App.Bot.Game
             {
                 return this;
             }
-            foreach (Type type in Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Weapon))))
+            if(SharedData.Instance.weapon.Count < 1)
             {
-                SharedData.Instance.weapon.Add((Weapon)Activator.CreateInstance(type));
+                foreach (Type type in Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Weapon))))
+                {
+                    SharedData.Instance.weapon.Add((Weapon)Activator.CreateInstance(type));
+                }
+                SharedData.Instance.weapon.Sort((x,y) =>
+                {
+                    if(x.Price > y.Price)
+                    {
+                        return 1;
+                    }
+                    else if(x.Price < y.Price)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                });
             }
             if (SharedData.Instance.weapon.Any(x => e.Message.Contains(x.Name)))
             {
@@ -496,7 +514,7 @@ namespace Native.Csharp.App.Bot.Game
                         sb.AppendLine(w.Name + " 伤害：" + w.minDamage + "-" + w.maxDamage + " 血量：" + w.maxHP + " 价格：" + w.Price);
                     }
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup, sb.ToString());
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(BaseData.TextToImg(sb.ToString())));
             }
             SharedData.Instance.weapon.Clear();
             return this;
@@ -519,7 +537,7 @@ namespace Native.Csharp.App.Bot.Game
                 Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "由于你过于积极的想要赌博，被保安抓了出去，请在" + wait.Minutes + "分钟" + wait.Seconds + "秒后尝试！");
                 return this;
             }
-            if (member.Cash >= 100)
+            if (member.Cash >= 150)
             {
                 member.PlayTime = DateTime.Now;
                 Random rnd = new Random();
@@ -539,24 +557,25 @@ namespace Native.Csharp.App.Bot.Game
                 if (num1 == num2 && num2 == num3)
                 {
                     //Jackpot!
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "恭喜获得了Jackpot!!获得了3000金币！！");
-                    member.Cash += 3000;
+                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "恭喜获得了Jackpot!!获得了5000金币！！");
+                    member.Cash += 5000;
                 }
                 else if (num1 == num2)
                 {
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了50金币奖励！");
+                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了100金币奖励！");
                     member.Cash += 50;
                 }
                 else if (num2 == num3 || num3 == num1)
                 {
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|");
+                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|\n获取了50金币奖励！");
                     member.Cash -= 50;
                 }
                 else
                 {
                     Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "得到了数字|" + num1 + "|" + num2 + "|" + num3 + "|");
-                    member.Cash -= 100;
+                    member.Cash -= 150;
                 }
+                member.Exp += 10;
             }
             else
             {
@@ -635,8 +654,7 @@ namespace Native.Csharp.App.Bot.Game
             }
             Common.CqApi.SendGroupMessage(member.Member.GroupId, "群里小游戏帮助：\n每日可/工作一次，超过一次将会进院治疗！(扣工资)\n" +
                 "每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要15分钟后才可继续进行！\n" +
-                "/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以1/4价格出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot，15分钟一次！\n/寻宝或许可以获得意外惊喜？20分钟一次！\n" +
-                "寻宝有机会遇见Boss,还请遇见后群里的大家一起打败Boss获得丰厚的奖励！/击杀Boss就能对Boss进行伤害，然而注意：如果没能力在6小时内打死Boss，Boss将会一次性打劫全群人！");
+                "/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以1/4价格出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot，15分钟一次！\n/寻宝或许可以获得意外惊喜？20分钟一次！");
             return this;
         }
 

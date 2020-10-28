@@ -24,18 +24,20 @@ namespace Native.Csharp.App.GameData
         internal Dictionary<long, List<GameMember>> gameMembers = new Dictionary<long, List<GameMember>>();
 
         internal Dictionary<Work, int> 工资 = new Dictionary<Work, int> {
-            { Work.给野蛮人刷背, 100 },
-            { Work.给弓箭手洗脚, 120 },
-            { Work.给哥布林偷金币, 150 },
-            { Work.给巨人当沙包, 180 },
-            { Work.给炸弹人重组骨架, 200 },
-            { Work.给法师搞爆炸头, 220 } ,
-            { Work.给天使配眼镜, 250 },
-            { Work.给龙灭火, 280 },
-            { Work.给皮卡擦盔甲, 300 },
-            { Work.给矿工点蜡烛, 320 },
-            { Work.给雷龙充电, 350 },
-            { Work.给大雪怪带孩子, 380 }
+            { Work.给野蛮人刷背, 200 },
+            { Work.给弓箭手洗脚, 240 },
+            { Work.给哥布林偷金币, 300 },
+            { Work.给巨人当沙包, 360 },
+            { Work.给炸弹人重组骨架, 400 },
+            { Work.给法师搞爆炸头, 440 } ,
+            { Work.给天使配眼镜, 500 },
+            { Work.给龙灭火, 560 },
+            { Work.给皮卡擦盔甲, 600 },
+            { Work.给矿工点蜡烛, 640 },
+            { Work.给雷龙充电, 700 },
+            { Work.给大雪怪带孩子, 860 },
+            { Work.帮村妇藏宝石在树上, 900 }
+
         };
 
         internal Dictionary<Work, int> 需要经验值 = new Dictionary<Work, int> {
@@ -50,7 +52,8 @@ namespace Native.Csharp.App.GameData
             { Work.给皮卡擦盔甲, 23000 },
             { Work.给矿工点蜡烛, 30000 },
             { Work.给雷龙充电, 36500 },
-            { Work.给大雪怪带孩子, 50000 }
+            { Work.给大雪怪带孩子, 50000 },
+            { Work.帮村妇藏宝石在树上, 65000 }
         };
 
         internal string[] TreasureFindingSuccess =
