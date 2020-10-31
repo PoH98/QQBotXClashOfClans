@@ -3,6 +3,7 @@ using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Native.Csharp.App.Bot
 {
@@ -40,8 +41,11 @@ namespace Native.Csharp.App.Bot
                     var member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
                     foreach(var group in Common.CqApi.GetGroupList())
                     {
-                        Common.CqApi.SetGroupMemberRemove(group.Id, member.QQId);
-                        Common.CqApi.SendGroupMessage(group.Id, "检测到已被拉黑的人存在群里，自动踢出群！");
+                        if (Common.CqApi.GetMemberList(group.Id).Any(x => x.QQId == member.QQId))
+                        {
+                            Common.CqApi.SetGroupMemberRemove(group.Id, member.QQId);
+                            Common.CqApi.SendGroupMessage(group.Id, "检测到已被拉黑的人存在群里，自动踢出群！");
+                        }
                     }
                     Common.CqApi.SetGroupMemberRemove(chat.FromGroup, member.QQId);
                     if (!Directory.Exists("com.coc.groupadmin\\Blacklist"))
