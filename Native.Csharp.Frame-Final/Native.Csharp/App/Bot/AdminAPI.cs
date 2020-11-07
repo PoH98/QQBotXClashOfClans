@@ -38,6 +38,7 @@ namespace Native.Csharp.App.Bot
             Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到新人申请");
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             List<int> levels = new List<int>();
+            int heroLvNeed = 0;
             Player player = players.GetPlayer(id);
             if (player != null)
             {
@@ -160,6 +161,7 @@ namespace Native.Csharp.App.Bot
                             if (troopsLV[hero.Name.Replace(" ", "_")] > hero.Level)
                             {
                                 heroFull = false;
+                                heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
                                 try
                                 {
                                     sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
@@ -177,7 +179,7 @@ namespace Native.Csharp.App.Bot
                     }
                 }
                 bool allow;
-                if (levels.Count(x => x > 1) > 6)
+                if (levels.Count(x => x > 1) > 6 || heroLvNeed >= 40)
                 {
                     sb.AppendLine("不批准！科技不足！");
                     allow = false;

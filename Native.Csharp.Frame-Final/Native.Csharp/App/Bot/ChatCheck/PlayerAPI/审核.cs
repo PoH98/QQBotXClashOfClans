@@ -217,6 +217,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
             {
                 StringBuilder sb = new StringBuilder();
                 bool troopFull = true, spellFull = true, heroFull = true;
+                int heroLvNeed = 0;
                 var troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
                 sb.AppendLine("大本营等级：" + player.TownHallLevel + "，名字：" + player.Name);
                 sb.AppendLine("兵力：");
@@ -232,7 +233,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         FileIniDataParser parser = new FileIniDataParser();
                         parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
                         parser.WriteFile("config.ini", BaseData.Instance.config);
-                        sb.AppendLine(troop.Name + " Townhall.ini 设置有错误，已自动生成");
+                        sb.AppendLine("* "+troop.Name + " 还缺" + (troop.MaxLevel - troop.Level) + "级 (Townhall.ini设置丢失，自动生成)");
                     }
                     else
                     {
@@ -281,7 +282,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         FileIniDataParser parser = new FileIniDataParser();
                         parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
                         parser.WriteFile("config.ini", BaseData.Instance.config);
-                        sb.AppendLine(spell.Name + " Townhall.ini 设置有错误，已自动生成");
+                        sb.AppendLine("* " + spell.Name + " 还缺" + (spell.MaxLevel - spell.Level) + "级 (Townhall.ini设置丢失，自动生成)");
                     }
                     else
                     {
@@ -332,7 +333,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                             FileIniDataParser parser = new FileIniDataParser();
                             parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
                             parser.WriteFile("config.ini", BaseData.Instance.config);
-                            sb.AppendLine(hero.Name + " Townhall.ini 设置有错误，已自动生成");
+                            sb.AppendLine("* " + hero.Name + " 还缺" + (hero.MaxLevel - hero.Level) + "级 (Townhall.ini设置丢失，自动生成)");
                         }
                         else
                         {
@@ -344,6 +345,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                             }
                             if (troopsLV[hero.Name.Replace(" ", "_")] > hero.Level)
                             {
+                                heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
                                 heroFull = false;
                                 if (BaseData.Instance.texts != null)
                                 {
@@ -368,7 +370,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         sb.AppendLine("已满级");
                     }
                 }
-                if (sb.ToString().Split('\n').Length > 13)
+                if (sb.ToString().Split('\n').Length > 13 || heroLvNeed >= 10)
                 {
                     sb.AppendLine("==================================");
                     sb.AppendLine("注意：严禁升本！否则将会被机票！");
