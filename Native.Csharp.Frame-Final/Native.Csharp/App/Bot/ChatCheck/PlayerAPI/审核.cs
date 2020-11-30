@@ -246,20 +246,13 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         if (troopsLV[troop.Name.Replace(" ", "_")] > troop.Level)
                         {
                             troopFull = false;
-                            if (BaseData.Instance.texts != null)
+                            try
                             {
-                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                             }
-                            else
+                            catch
                             {
-                                try
-                                {
-                                    sb.AppendLine("* " + BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("* " + troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
-                                }
+                                sb.AppendLine("* " + troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                             }
                         }
                     }
@@ -295,20 +288,13 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         if (troopsLV[spell.Name.Replace(" ", "_")] > spell.Level)
                         {
                             spellFull = false;
-                            if (BaseData.Instance.texts != null)
+                            try
                             {
-                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                             }
-                            else
+                            catch
                             {
-                                try
-                                {
-                                    sb.AppendLine("* " + BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("* " + spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
-                                }
+                                sb.AppendLine("* " + spell.Name + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                             }
                         }
                     }
@@ -347,20 +333,13 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                             {
                                 heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
                                 heroFull = false;
-                                if (BaseData.Instance.texts != null)
+                                try
                                 {
-                                    sb.AppendLine("* "+BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                 }
-                                else
+                                catch
                                 {
-                                    try
-                                    {
-                                        sb.AppendLine("* " + BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
-                                    }
-                                    catch
-                                    {
-                                        sb.AppendLine("* " + hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
-                                    }
+                                    sb.AppendLine("* " + hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                 }
                             }
                         }

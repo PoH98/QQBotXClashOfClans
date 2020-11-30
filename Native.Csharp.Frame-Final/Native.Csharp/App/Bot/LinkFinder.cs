@@ -18,7 +18,7 @@ namespace Native.Csharp.App.Bot
         }
     }
 
-    public static class LinkFinder
+    public class LinkFinder
     {
         public static List<LinkItem> Find(string file)
         {

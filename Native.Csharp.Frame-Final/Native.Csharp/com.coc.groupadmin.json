@@ -5,7 +5,7 @@
 {
   "ret": 1, // 返回码，固定为1
   "apiver": 9, // Api版本，本SDK为9
-  "name": "部落冲突xQQ群管理", // 应用名称
+  "name": "COCxQQBot", // 应用名称
   "version": "1.0.9", // 应用版本
   "version_id": 1, // 应用顺序版本（每次发布时至少+1）
   "author": "PoH98", // 应用作者
@@ -49,7 +49,7 @@
   ],
   "menu": [ // 设置菜单（发布前请删除无用菜单，如果无需设置菜单请全部删除）
     {
-      "name": "打开设置", //菜单名称
+      "name": "Open Settings", //菜单名称
       "function": "_eventOpenMenu" //菜单对应函数
     }
   ],

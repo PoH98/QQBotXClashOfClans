@@ -77,9 +77,19 @@ namespace Native.Csharp.App.GameData
         [OptionalField(VersionAdded = 3)]
         public List<double> MessageRangeRecords = new List<double>();
         /// <summary>
-        /// 上次发指令时间，用于抓机器人用
+        /// 最后一次被打劫时间
         /// </summary>
         [OptionalField(VersionAdded = 4)]
         public DateTime LastRobbed;
+        /// <summary>
+        /// 个人技能
+        /// </summary>
+        [OptionalField(VersionAdded = 5)]
+        public Skill Skill;
+        /// <summary>
+        /// 个人技能等级
+        /// </summary>
+        [OptionalField(VersionAdded = 5)]
+        public int SkillLevel = -1;
     }
 }

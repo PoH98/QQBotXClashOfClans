@@ -355,6 +355,7 @@ namespace Native.Csharp.App.Bot.Game
                     prey.member.weapon = weapon;
                 }
                 Common.CqApi.SendGroupMessage(e.FromGroup, "你尝试打劫" + prey.member.Member.Nick + "然而对方直接掏出了" + prey.member.weapon.Name + "(伤害: 3000-3600, 血量: 无限大)直接把你打成了灰，你没有损失任何金钱并且从训练营复活了，你还可以再选一次打劫对象！");
+                prey.Dispose();
                 return this;
             }
             else if (prey.member.Member.QQId == e.FromQQ)
@@ -363,11 +364,13 @@ namespace Native.Csharp.App.Bot.Game
                 var reduce = rnd.Next(100, 300);
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "把自己打了一顿，进了大本营医院，付" + reduce + "金币医药费！");
                 prey.member.Cash -= reduce;
+                prey.Dispose();
                 return this;
             }
             if ((DateTime.Now - prey.member.LastRobbed) < new TimeSpan(8, 0, 0))
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "看见那已经被洗劫剩下个内裤的家伙，你放弃了打劫的想法");
+                prey.Dispose();
                 return this;
             }
             if (prey.member.Cash > 0)
@@ -377,8 +380,18 @@ namespace Native.Csharp.App.Bot.Game
                 prey.member.CurrentHP = prey.member.weapon.maxHP;
                 do
                 {
-                    member.CurrentHP -= rnd.Next(prey.member.weapon.minDamage, prey.member.weapon.maxDamage);
-                    prey.member.CurrentHP -= rnd.Next(member.weapon.minDamage, member.weapon.maxDamage);
+                    var memberDamage = rnd.Next(member.weapon.minDamage, member.weapon.maxDamage);
+                    var preyDamage = rnd.Next(prey.member.weapon.minDamage, prey.member.weapon.maxDamage);
+                    member.CurrentHP -= preyDamage;
+                    prey.member.CurrentHP -= memberDamage;
+                    if(member.Skill != null)
+                    {
+                        CalculateSkill(this, prey, memberDamage);
+                    }
+                    if(prey.member.Skill != null)
+                    {
+                        CalculateSkill(prey, this, preyDamage);
+                    }
                 }
                 while (member.CurrentHP > 0 && prey.member.CurrentHP > 0);
                 if (member.CurrentHP > 0)
@@ -430,7 +443,7 @@ namespace Native.Csharp.App.Bot.Game
             {
                 member.weapon = new None();
             }
-            string check;
+            string check, skill;
             if (member.Checked.Date == DateTime.Today)
             {
                 check = "已工作！";
@@ -439,7 +452,15 @@ namespace Native.Csharp.App.Bot.Game
             {
                 check = "还没工作！";
             }
-            Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "的钱包现在有" + member.Cash + "金币！\n经验值为" + member.Exp + "点！手里的武器是" + member.weapon.Name + "\n今天" + check);
+            if(member.Skill != null)
+            {
+                skill = member.Skill.Name + member.SkillLevel +  "级";
+            }
+            else
+            {
+                skill = "无";
+            }
+            Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "的钱包现在有" + member.Cash + "金币！\n经验值为" + member.Exp + "点！手里的武器是" + member.weapon.Name + "\n当前技能: " + skill + "\n今天" + check);
             return this;
         }
 
@@ -449,31 +470,29 @@ namespace Native.Csharp.App.Bot.Game
             {
                 return this;
             }
-            if(SharedData.Instance.weapon.Count < 1)
+            var weaponList = new List<Weapon>();
+            foreach (Type type in Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Weapon))))
             {
-                foreach (Type type in Assembly.GetAssembly(typeof(Weapon)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Weapon))))
-                {
-                    SharedData.Instance.weapon.Add((Weapon)Activator.CreateInstance(type));
-                }
-                SharedData.Instance.weapon.Sort((x,y) =>
-                {
-                    if(x.Price > y.Price)
-                    {
-                        return 1;
-                    }
-                    else if(x.Price < y.Price)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                });
+                weaponList.Add((Weapon)Activator.CreateInstance(type));
             }
-            if (SharedData.Instance.weapon.Any(x => e.Message.Contains(x.Name)))
+            weaponList.Sort((x, y) =>
             {
-                var selectedWeapon = SharedData.Instance.weapon.Where(x => e.Message.Contains(x.Name)).FirstOrDefault();
+                if (x.Price > y.Price)
+                {
+                    return 1;
+                }
+                else if (x.Price < y.Price)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
+            if (weaponList.Any(x => e.Message.Contains(x.Name)))
+            {
+                var selectedWeapon = weaponList.Where(x => e.Message.Contains(x.Name)).FirstOrDefault();
                 if (selectedWeapon.Price > -1)
                 {
                     if (member.Cash >= selectedWeapon.Price)
@@ -507,7 +526,7 @@ namespace Native.Csharp.App.Bot.Game
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("请发送 /购买 武器名字 进行购买！");
-                foreach (var w in SharedData.Instance.weapon)
+                foreach (var w in weaponList)
                 {
                     if (w.Price > -1)
                     {
@@ -516,7 +535,7 @@ namespace Native.Csharp.App.Bot.Game
                 }
                 Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(BaseData.TextToImg(sb.ToString())));
             }
-            SharedData.Instance.weapon.Clear();
+            weaponList.Clear();
             return this;
         }
 
@@ -646,6 +665,118 @@ namespace Native.Csharp.App.Bot.Game
             return this;
         }
 
+        internal GameAPI SkillShop(CqGroupMessageEventArgs e)
+        {
+            if (member == null)
+            {
+                return this;
+            }
+            var skillList = new List<Skill>();
+            foreach (Type type in Assembly.GetAssembly(typeof(Skill)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Skill))))
+            {
+                skillList.Add((Skill)Activator.CreateInstance(type));
+            }
+            if(skillList.Any(x => e.Message.Contains(x.Name))) 
+            {
+                var selectedSkill = skillList.Where(x => e.Message.Contains(x.Name)).FirstOrDefault();
+                if (member.Skill == null)
+                {
+                    //购买技能
+                    var price = selectedSkill.Price[0];
+                    if(member.Cash >= price)
+                    {
+                        member.Cash -= price;
+                        member.Skill = selectedSkill;
+                        member.SkillLevel = 1;
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "购买技能成功！");
+                    }
+                    else
+                    {
+                        Common.CqApi.SendGroupMessage(e.FromGroup, "你没有钱购买这个玩意！");
+                    }
+                }
+                else
+                {
+                    //升级或者切换技能
+                    if(selectedSkill.Name == member.Skill.Name)
+                    {
+                        if(member.SkillLevel == selectedSkill.Price.Length)
+                        {
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "当前技能等级已经是最高级！");
+                        }
+                        else
+                        {
+                            var upgradePrice = member.Skill.Price[member.SkillLevel];
+                            if (member.Cash >= upgradePrice)
+                            {
+                                member.SkillLevel++;
+                                member.Cash -= upgradePrice;
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "技能等级已提升！现在等级为" + member.SkillLevel);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var upgradePrice = selectedSkill.Price[member.SkillLevel - 1];
+                        if (member.Cash >= upgradePrice)
+                        {
+                            if(member.SkillLevel > 1)
+                            {
+                                member.SkillLevel--;
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "技能更换成功！由于不熟悉新技能，自动降1级！");
+                            }
+                            else
+                            {
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "技能更换成功！");
+                            }
+                            member.Cash -= upgradePrice;
+                            member.Skill = selectedSkill;
+  
+                        }
+                    }
+                }
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("请发送 /技能 技能名字 进行购买或升级 (升级无需写等级)！");
+                foreach (var s in skillList)
+                {
+                    for(int x = 0; x < s.Amount.Length; x++)
+                    {
+                        sb.AppendLine(s.Name + " 等级:"+ (x + 1) + " 武器伤害倍数：" + s.Amount[x] + " 触发几率：" + (s.TriggerPercentage[x] * 100) + "% 价格：" + s.Price[x]);
+                    }
+                    sb.AppendLine("=========================");
+                }
+                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(BaseData.TextToImg(sb.ToString())));
+            }
+            skillList.Clear();
+            return this;
+        }
+
+        internal void CalculateSkill(GameAPI member, GameAPI prey, int memberDamage)
+        {
+            Random rnd = new Random();
+            var index = member.member.SkillLevel - 1;
+            var percentage = member.member.Skill.TriggerPercentage[index];
+            var trigger = rnd.NextDouble();
+            if (trigger <= percentage)
+            {
+                switch (member.member.Skill.SkillType)
+                {
+                    case SkillType.DoubleHit:
+                    case SkillType.Critical:
+                        var extradamage = (int)Math.Round(memberDamage * (member.member.Skill.Amount[index] - 1));
+                        prey.member.CurrentHP -= extradamage;
+                        break;
+                    case SkillType.Heal:
+                        var heal = (int)Math.Round(memberDamage * (member.member.Skill.Amount[index]));
+                        member.member.CurrentHP += heal;
+                        break;
+                }
+            }
+        }
+
         internal GameAPI Help()
         {
             if (member == null)
@@ -656,8 +787,6 @@ namespace Native.Csharp.App.Bot.Game
                 "每日可/打劫一个群成员，只需要/打劫 @群成员 即可，不过需要注意，对方如果拥有到武器比你厉害，你可能会被反抢劫哦！\n每日可以无限/21点进行赌博，只要玩家的点数低于或等于21，并且比庄家的多就可以获胜！然而每次21点需要15分钟后才可继续进行！\n" +
                 "/购买可以获得更强力武器以及预防其他人打劫你！不过注意：每次购买了新武器后旧武器将会自动以1/4价格出售哦！\n/拉霸可拼一拼看看运气，每天早上8点与晚上8点可以更高机会获得Jackpot，15分钟一次！\n/寻宝或许可以获得意外惊喜？20分钟一次！");
             return this;
-        }
-
-        
+        }        
     }
 }

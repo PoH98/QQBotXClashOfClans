@@ -139,7 +139,6 @@
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
     <Compile Include="App\Bot\ChatCheck\Scrapper\更新部落阵型.cs" />
-    <Compile Include="App\Bot\ChatCheck\Scrapper\来个图.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
@@ -233,6 +232,7 @@
     <Compile Include="App\GameData\Enums.cs" />
     <Compile Include="App\GameData\GameMember.cs" />
     <Compile Include="App\GameData\SharedData.cs" />
+    <Compile Include="App\GameData\Skill.cs" />
     <Compile Include="App\GameData\Weapon.cs" />
     <Compile Include="App\Setting.cs">
       <SubType>Form</SubType>

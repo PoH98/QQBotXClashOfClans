@@ -13,6 +13,7 @@ using SC_Compression;
 using Unity.Interception.Utilities;
 using Native.Csharp.App.Bot.Game;
 using CocNET.Interfaces;
+using IniParser;
 
 namespace Native.Csharp.App
 {
@@ -35,7 +36,8 @@ namespace Native.Csharp.App
 
         private void Setting_Load(object sender, EventArgs e)
         {
-            Directory.GetDirectories("com.coc.groupadmin").ForEach(x => comboBox1.Items.Add(x.Remove(0, x.LastIndexOf('\\') + 1)));
+            if(Directory.Exists("com.coc.groupadmin"))
+                Directory.GetDirectories("com.coc.groupadmin").ForEach(x => comboBox1.Items.Add(x.Remove(0, x.LastIndexOf('\\') + 1)));
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -241,7 +243,9 @@ namespace Native.Csharp.App
                 var members = clan.GetClansMembers(BaseData.valuePairs(configType.部落冲突)[comboBox1.SelectedItem.ToString()]);
                 Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), members);
             }
-
+            FileIniDataParser parse = new FileIniDataParser();
+            BaseData.UpdateTranslate(parse);
+            BaseData.UpdateTownhallINI(parse);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.IO;
 using System;
 using System.Text;
 using System.Net;
-using System.Text.RegularExpressions;
 using Funq;
 using CocNET;
 using Native.Csharp.Sdk.Cqp.EventArgs;
@@ -14,7 +13,6 @@ using DataAccess;
 using Native.Csharp.App.Bot.Interface;
 using System.Linq;
 using System.Drawing;
-using System.Windows.Controls;
 using System.Security.Cryptography;
 
 namespace Native.Csharp.App.Bot
@@ -24,7 +22,6 @@ namespace Native.Csharp.App.Bot
         public IniData config, thConfig;
 
         public readonly string[] THLevels = { "开挂玩家", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四" };
-        public  Dictionary<string, string> translation { get; private set; }
 
         private string IPAddress;
         public long Group { get; private set; }
@@ -40,15 +37,9 @@ namespace Native.Csharp.App.Bot
 
         public List<long> GameEnabled = new List<long>();
 
-        public MutableDataTable texts;
-
         public readonly List<IChain> chains = new List<IChain>();
 
-        public TimeSpan onlineTime = new TimeSpan(0,0,0);
-
         public bool SplitLongText = false;
-
-        public Dictionary<long, List<string>> SendedImage = new Dictionary<long, List<string>>();
 
         public static BaseData Instance
         {
@@ -90,13 +81,16 @@ namespace Native.Csharp.App.Bot
             Instance.config = parse.ReadFile("config.ini", Encoding.Unicode);
             if (Instance.config != null)
             {
-                Instance.translation = valuePairs(configType.兵种翻译);
                 Instance.core = new CocCore(Instance.config["部落冲突"]["Token"]);
                 Instance.container = Instance.core.Container;
             }
             if (valuePairs(configType.部落冲突).ContainsKey("长字分段"))
             {
                 bool.TryParse(valuePairs(configType.部落冲突)["长字分段"].ToLower(), out Instance.SplitLongText);
+            }
+            if(!Instance.config.Sections.Any(x => x.SectionName == "兵种TID"))
+            {
+                Instance.config.Sections.Add(new SectionData("兵种TID"));
             }
             if (File.Exists("Townhall.ini"))
             {
@@ -124,9 +118,9 @@ namespace Native.Csharp.App.Bot
                     for (int x = 1; x < Instance.THLevels.Length; x++)
                     {
                         Instance.thConfig.Sections.AddSection(x.ToString() + "本");
-                        foreach (var key in Instance.translation.Keys)
+                        foreach (var key in Instance.config["兵种翻译"])
                         {
-                            Instance.thConfig[x.ToString() + "本"].AddKey(key, "99");
+                            Instance.thConfig[x.ToString() + "本"].AddKey(key.KeyName, "99");
                         }
                     }
                     parse.WriteFile("Townhall.ini", Instance.thConfig, Encoding.Unicode);
@@ -149,20 +143,7 @@ namespace Native.Csharp.App.Bot
                 Instance.IPAddress = "0.0.0.0";
                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Warning, "部落冲突错误", "无法获取当前IP, 将会稍后再试！");
             }
-            //Coc decrypted texts.csv
-            if (File.Exists("texts.csv"))
-            {
-                try
-                {
-                    Instance.texts = DataTable.New.ReadCsv("texts.csv");
-                }
-                catch
-                {
-                    Instance.texts = null;
-                }
-            }
-
-            foreach(var chain in AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(ChatCheckChain).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface))
+            foreach (var chain in AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(ChatCheckChain).IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface))
             {
                 Instance.chains.Add((IChain)Activator.CreateInstance(chain));
             }
@@ -171,6 +152,213 @@ namespace Native.Csharp.App.Bot
                 Instance.chains[x].SetNext(Instance.chains[x + 1]);
             }
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "锁链加载", "已经加载"+ Instance.chains.Count + "锁链");
+        }
+
+        public static void UpdateTranslate(FileIniDataParser parse)
+        {
+            //Coc decrypted texts.csv
+            if (File.Exists("texts.csv"))
+            {
+                try
+                {
+                    var buffer = DataTable.New.ReadCsv("texts.csv");
+                    foreach (var keyval in Instance.config["兵种翻译"])
+                    {
+                        var translate = buffer.Rows.Where(x => x["EN"].ToString().Replace(" ","_") == keyval.KeyName);
+                        if (translate.Count() > 0)
+                        {
+                            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "翻译加载", "加载成功" + keyval.KeyName + "=" + translate.First()["CN"]);
+                            Instance.config["兵种翻译"][keyval.KeyName] = translate.First()["CN"];
+                            if (!Instance.config["兵种TID"].ContainsKey(translate.First()["TID"]))
+                                Instance.config["兵种TID"].AddKey(translate.First()["TID"]);
+                            Instance.config["兵种TID"][translate.First()["TID"]] = translate.First()["EN"].Replace(" ", "_");
+                        }
+                    }
+                    Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "翻译加载", "已成功覆盖config.ini翻译");
+                    parse.WriteFile("config.ini", Instance.config, Encoding.Unicode);
+                    buffer.KeepColumns(false,"");
+                    GC.Collect();
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        public static void UpdateTownhallINI(FileIniDataParser parse)
+        {
+            if(File.Exists("characters.csv") && File.Exists("buildings.csv") && File.Exists("spells.csv") && File.Exists("heroes.csv"))
+            {
+                var iniConfig = new IniData();
+                for(int x = 0; x < 15; x++)
+                {
+                    iniConfig.Sections.Add(new SectionData(x + "本"));
+                }
+                var characters = DataTable.New.ReadCsv("characters.csv");
+                characters.KeepColumns("Name", "TroopLevel", "LaboratoryLevel", "TID", "ProductionBuilding", "BarrackLevel");
+                var buildings = DataTable.New.ReadCsv("buildings.csv");
+                buildings.KeepColumns("Name", "TownHallLevel");
+                var heroes = DataTable.New.ReadCsv("heroes.csv");
+                heroes.KeepColumns("Name","TID", "UpgradeResource", "RequiredTownHallLevel");
+                var spells = DataTable.New.ReadCsv("spells.csv");
+                List<int> LabTHLvl = new List<int>();
+                string Name = null, barrack =  null;
+                foreach (var build in buildings.Rows)
+                {
+                    if (build["Name"] == "Laboratory")
+                    {
+                        //lab starts
+                        Name = "Laboratory";
+                        LabTHLvl.Add(Convert.ToInt32(build["TownHallLevel"]));
+                    }
+                    else if (Name == "Laboratory" && string.IsNullOrEmpty(build["Name"]))
+                    {
+                        //lab level
+                        LabTHLvl.Add(Convert.ToInt32(build["TownHallLevel"]));
+                    }
+                    else if(Name != null && !string.IsNullOrEmpty(build["Name"]))
+                    {
+                        //not flag anymore
+                        Name = null;
+                        break;
+                    }
+                }
+                buildings.KeepColumns(false, "");
+                foreach(var row in characters.Rows)
+                {
+                    if(row["Name"] == "String")
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrEmpty(row["Name"]))
+                    {
+                        Name = row["TID"];
+                        barrack = row["ProductionBuilding"];
+                    }
+                    try
+                    {
+                        if(barrack != "Barrack" && barrack != "Dark Elixir Barrack" && barrack != "SiegeWorkshop")
+                        {
+                            continue;
+                        }
+                        var tlevel = row["TroopLevel"];
+                        var llevel = Convert.ToInt32(row["LaboratoryLevel"]);
+                        var thlevel = LabTHLvl[llevel - 1];
+                        var key = Instance.config["兵种TID"][Name];
+                        for(int x = 0; x < 15; x++)
+                        {
+                            if(!iniConfig[x + "本"].ContainsKey(key))
+                            {
+                                iniConfig[x + "本"].AddKey(key);
+                                iniConfig[x + "本"][key] = "0";
+                            }
+                        }
+                        for(int x = thlevel; x < 15; x++)
+                        {
+                            var lv = Convert.ToInt32(iniConfig[x + "本"][key]);
+                            var newlv = Convert.ToInt32(tlevel);
+                            if (newlv > lv)
+                                iniConfig[x + "本"][key] = tlevel;
+                            else
+                                break;
+                        }
+                    }
+                    catch
+                    {
+                        
+                    }
+
+                }
+                characters.KeepColumns(false, "");
+                int lvloop = 1;
+                foreach(var row in heroes.Rows)
+                {
+                    if (row["Name"] == "String")
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrEmpty(row["Name"]))
+                    {
+                        Name = row["TID"];
+                        barrack = row["UpgradeResource"];
+                        lvloop = 1;
+                    }
+                    if (barrack == "Elixir2")
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var key = Instance.config["兵种TID"][Name];
+                        var tlevel = Convert.ToInt32(row["RequiredTownHallLevel"]);
+                        for (int x = 0; x < 15; x++)
+                        {
+                            if (!iniConfig[x + "本"].ContainsKey(key))
+                            {
+                                iniConfig[x + "本"].AddKey(key);
+                                iniConfig[x + "本"][key] = "0";
+                            }
+                        }
+                        iniConfig[tlevel + "本"][key] = lvloop.ToString();
+                        lvloop++;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                heroes.KeepColumns(false, "");
+                foreach(var row in spells.Rows)
+                {
+                    if (row["Name"] == "String")
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrEmpty(row["Name"]))
+                    {
+                        Name = row["TID"];
+                        lvloop = 1;
+                    }
+                    try
+                    {
+                        var llevel = Convert.ToInt32(row["LaboratoryLevel"]);
+                        var thlevel = LabTHLvl[llevel - 1];
+                        var key = Instance.config["兵种TID"][Name];
+                        for (int x = 0; x < 15; x++)
+                        {
+                            if (!iniConfig[x + "本"].ContainsKey(key))
+                            {
+                                iniConfig[x + "本"].AddKey(key);
+                                iniConfig[x + "本"][key] = "0";
+                            }
+                        }
+                        for (int x = thlevel; x < 15; x++)
+                        {
+                            var lv = Convert.ToInt32(iniConfig[x + "本"][key]);
+                            var newlv = lvloop;
+                            if (newlv > lv)
+                                iniConfig[x + "本"][key] = lvloop.ToString();
+                            else
+                                break;
+                        }
+                        lvloop++;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                spells.KeepColumns(false, "");
+                if (File.Exists("Townhall.ini"))
+                {
+                    File.Delete("Townhall.ini");
+                }
+                Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "等级加载", "已成功覆盖Townhall.ini设置");
+                parse.WriteFile("Townhall.ini", iniConfig, Encoding.Unicode);
+                GC.Collect();
+            }
         }
 
         public static void ReadGameData()
@@ -314,6 +502,7 @@ namespace Native.Csharp.App.Bot
         自动回复,
         部落冲突,
         禁止词句,
-        兵种翻译
+        兵种翻译,
+        兵种TID
     }
 }

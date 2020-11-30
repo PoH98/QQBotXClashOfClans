@@ -75,7 +75,7 @@ namespace Native.Csharp.App.Bot
                             troopFull = false;
                             try
                             {
-                                sb.AppendLine(BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                sb.AppendLine(BaseData.Instance.config["兵种翻译"][troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
                                 levels.Add(troopsLV[troop.Name.Replace(" ", "_")] - troop.Level);
                             }
                             catch
@@ -118,7 +118,7 @@ namespace Native.Csharp.App.Bot
                             spellFull = false;
                             try
                             {
-                                sb.AppendLine(BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
+                                sb.AppendLine(BaseData.Instance.config["兵种翻译"][spell.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[spell.Name.Replace(" ", "_")] - spell.Level) + "级");
                                 levels.Add(troopsLV[spell.Name.Replace(" ", "_")] - spell.Level);
                             }
                             catch
@@ -164,7 +164,7 @@ namespace Native.Csharp.App.Bot
                                 heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
                                 try
                                 {
-                                    sb.AppendLine(BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    sb.AppendLine(BaseData.Instance.config["兵种翻译"][hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
                                 }
                                 catch
                                 {

@@ -4,7 +4,6 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 using System.Text;
 using static Native.Csharp.App.Bot.BaseData;
-using Native.Csharp.Sdk.Cqp.Model;
 using Native.Csharp.App.Bot;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.App.Bot.Game;
@@ -12,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
-using System.Drawing;
+using System.Diagnostics;
 
 namespace Native.Csharp.App.Event
 {
@@ -20,11 +19,13 @@ namespace Native.Csharp.App.Event
     {
         public void ReceiveGroupMessage(object sender, CqGroupMessageEventArgs e)
         {
+            Stopwatch sw = Stopwatch.StartNew();
             try
             {
                 var data = valuePairs(configType.自动回复);
                 if (data.Keys.Contains(e.Message))
                 {
+                    
                     if (data[e.Message].Contains('|'))
                     {
                         var messages = data[e.Message].Split('|');
@@ -44,6 +45,7 @@ namespace Native.Csharp.App.Event
                     }
                     else
                     {
+                        
                         StringBuilder sb = new StringBuilder();
                         var lines = data[e.Message].Split('\\');
                         foreach (var line in lines)
@@ -63,6 +65,7 @@ namespace Native.Csharp.App.Event
                     var result = Instance.chains[0].GetReply(e);
                     if (!string.IsNullOrEmpty(result))
                     {
+                        
                         if (result.Contains(" [bmp:"))
                         {
                             Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
@@ -128,41 +131,16 @@ namespace Native.Csharp.App.Event
                                 {
                                     new GameAPI(e).Shop(e).Dispose();
                                 }
+                                else if (e.Message.StartsWith("/技能"))
+                                {
+                                    new GameAPI(e).SkillShop(e).Dispose();
+                                }
                                 break;
                         }
                     }
                 }
-                GroupMemberInfo me = Common.CqApi.GetMemberInfo(e.FromGroup, Common.CqApi.GetLoginQQ());
-                if (me.PermitType == PermitType.Holder || me.PermitType == PermitType.Manage)
-                {
-                    try
-                    {
-                        GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
-                        Common.CqApi.AddLoger(LogerLevel.Debug, "发消息成员资料", "已加群" + (DateTime.Now - sendMember.JoiningTime).Days + "天");
-                        if (sendMember.PermitType == PermitType.None && (DateTime.Now - sendMember.JoiningTime).Days < 15)
-                        {
-                            foreach (var keyvalue in valuePairs(configType.禁止词句))
-                            {
-                                if (e.Message.Contains(keyvalue.Key))
-                                {
-                                    Common.CqApi.RepealMessage(e.Id);
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + " 你敢触发禁止词？你大爷的，草，跟我互喷啊！");
-                                    if (int.TryParse(keyvalue.Value, out int ticks))
-                                    {
-                                        if (ticks > 0)
-                                        {
-                                            Common.CqApi.SetGroupBanSpeak(e.FromGroup, e.FromQQ, new TimeSpan(0, 0, ticks));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
+                sw.Start();
+                Common.CqApi.AddLoger(LogerLevel.Debug, "部落冲突群管", "指令处理完毕！已使用" + sw.ElapsedMilliseconds + "毫秒");
                 if (Directory.Exists("Buffer"))
                 {
                     foreach (var file in Directory.GetFiles("Buffer"))

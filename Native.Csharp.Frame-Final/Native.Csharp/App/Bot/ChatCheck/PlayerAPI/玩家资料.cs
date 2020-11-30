@@ -37,60 +37,39 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         sb.AppendLine("兵力：");
                         foreach (var troop in player.Troops)
                         {
-                            if (BaseData.Instance.texts != null)
+                            try
                             {
-                                sb.AppendLine("* "+BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == troop.Name).First()["CN"].ToString() + " - " + troop.Level + "级");
+                                sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][troop.Name.Replace(" ", "_")] + " - " + troop.Level + "级");
                             }
-                            else
+                            catch
                             {
-                                try
-                                {
-                                    sb.AppendLine("* " + BaseData.Instance.translation[troop.Name.Replace(" ", "_")] + " - " + troop.Level + "级");
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("* " + troop.Name + " - " + troop.Level + "级");
-                                }
+                                sb.AppendLine("* " + troop.Name + " - " + troop.Level + "级");
                             }
                         }
                         sb.AppendLine("==================================");
                         sb.AppendLine("药水：");
                         foreach (var spell in player.Spells)
                         {
-                            if (BaseData.Instance.texts != null)
+                            try
                             {
-                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == spell.Name).First()["CN"].ToString() + " - " + spell.Level + "级");
+                                sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][spell.Name.Replace(" ", "_")] + " - " + spell.Level + "级");
                             }
-                            else
+                            catch
                             {
-                                try
-                                {
-                                    sb.AppendLine("* " + BaseData.Instance.translation[spell.Name.Replace(" ", "_")] + " - " + spell.Level + "级");
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("* " + spell.Name + " - " + spell.Level + "级");
-                                }
+                                sb.AppendLine("* " + spell.Name + " - " + spell.Level + "级");
                             }
                         }
                         sb.AppendLine("==================================");
                         sb.AppendLine("英雄：");
                         foreach (var hero in player.Heroes)
                         {
-                            if (BaseData.Instance.texts != null)
+                            try
                             {
-                                sb.AppendLine("* " + BaseData.Instance.texts.Rows.Where(x => x["EN"].ToString() == hero.Name).First()["CN"].ToString() + " - " + hero.Level + "级");
+                                sb.AppendLine("* " + BaseData.Instance.config["兵种翻译"][hero.Name.Replace(" ", "_")] + " - " + hero.Level + "级");
                             }
-                            else
+                            catch
                             {
-                                try
-                                {
-                                    sb.AppendLine("* " + BaseData.Instance.translation[hero.Name.Replace(" ", "_")] + " - " + hero.Level + "级");
-                                }
-                                catch
-                                {
-                                    sb.AppendLine("* " + hero.Name + " - " + hero.Level + "级");
-                                }
+                                sb.AppendLine("* " + hero.Name + " - " + hero.Level + "级");
                             }
                         }
                         string rndName = Path.Combine("Buffer\\" + Path.GetRandomFileName());

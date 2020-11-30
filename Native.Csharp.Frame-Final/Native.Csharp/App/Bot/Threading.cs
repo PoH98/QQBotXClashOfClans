@@ -81,7 +81,7 @@ namespace Native.Csharp.App.Bot
                                                             status = "已进入准备日！";
                                                             break;
                                                     }
-                                                    if (!string.IsNullOrEmpty(status))
+                                                    if (!string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(BaseData.Instance.LastClanWarStatus[value]))
                                                     {
                                                         Common.CqApi.SendGroupMessage(Convert.ToInt64(clanID.KeyName), Common.CqApi.CqCode_At(-1) + "部落战" + status);
                                                     }

@@ -19,9 +19,6 @@ namespace Native.Csharp.App.GameData
                 return instance;
             }
         }
-        internal List<Weapon> weapon = new List<Weapon>();
-
-        internal Dictionary<long, List<GameMember>> gameMembers = new Dictionary<long, List<GameMember>>();
 
         internal Dictionary<Work, int> 工资 = new Dictionary<Work, int> {
             { Work.给野蛮人刷背, 200 },

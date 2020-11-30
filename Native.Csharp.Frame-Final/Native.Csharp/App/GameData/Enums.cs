@@ -19,4 +19,11 @@ namespace Native.Csharp.App.GameData
         给大雪怪带孩子,
         帮村妇藏宝石在树上
     }
+
+    public enum SkillType
+    {
+        Critical,
+        Heal,
+        DoubleHit
+    }
 }
