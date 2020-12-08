@@ -223,6 +223,10 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 sb.AppendLine("兵力：");
                 foreach (var troop in player.Troops)
                 {
+                    if(troop.Village != "home")
+                    {
+                        continue;
+                    }
                     if (!troopsLV.Keys.Contains(troop.Name.Replace(" ", "_")))
                     {
                         for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
@@ -309,6 +313,10 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
                     {
+                        if (hero.Village != "home")
+                        {
+                            continue;
+                        }
                         if (!troopsLV.Keys.Contains(hero.Name.Replace(" ", "_")))
                         {
                             for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)

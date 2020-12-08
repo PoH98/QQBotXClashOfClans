@@ -1,13 +1,9 @@
 ﻿using CocNET.Interfaces;
 using CocNET.Types.Players;
 using IniParser;
-using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
-using Native.Csharp.Sdk.Cqp.Model;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -49,38 +45,41 @@ namespace Native.Csharp.App.Bot
                 sb.AppendLine("兵力：");
                 foreach (var troop in player.Troops)
                 {
-                    if (!troopsLV.Keys.Contains(troop.Name.Replace(" ", "_")))
+                    if(troop.Village == "home")
                     {
-                        for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
+                        if (!troopsLV.Keys.Contains(troop.Name.Replace(" ", "_")))
                         {
-                            BaseData.Instance.thConfig[x.ToString() + "本"].AddKey(troop.Name.Replace(" ", "_"), troop.MaxLevel.ToString());
-                        }
-                        BaseData.Instance.config["兵种翻译"].AddKey(troop.Name.Replace(" ", "_"), troop.Name);
-                        FileIniDataParser parser = new FileIniDataParser();
-                        parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
-                        parser.WriteFile("config.ini", BaseData.Instance.config);
-                        sb.AppendLine(troop.Name + " Townhall.ini 设置有错误，已自动生成");
-                    }
-                    else
-                    {
-                        if (troopsLV[troop.Name.Replace(" ", "_")] == 99)
-                        {
-                            BaseData.Instance.thConfig[player.TownHallLevel.ToString() + "本"][troop.Name.Replace(" ", "_")] = troop.MaxLevel.ToString();
+                            for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
+                            {
+                                BaseData.Instance.thConfig[x.ToString() + "本"].AddKey(troop.Name.Replace(" ", "_"), troop.MaxLevel.ToString());
+                            }
+                            BaseData.Instance.config["兵种翻译"].AddKey(troop.Name.Replace(" ", "_"), troop.Name);
                             FileIniDataParser parser = new FileIniDataParser();
                             parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
-                            troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
+                            parser.WriteFile("config.ini", BaseData.Instance.config);
+                            sb.AppendLine(troop.Name + " Townhall.ini 设置有错误，已自动生成");
                         }
-                        if (troopsLV[troop.Name.Replace(" ", "_")] > troop.Level)
+                        else
                         {
-                            troopFull = false;
-                            try
+                            if (troopsLV[troop.Name.Replace(" ", "_")] == 99)
                             {
-                                sb.AppendLine(BaseData.Instance.config["兵种翻译"][troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
-                                levels.Add(troopsLV[troop.Name.Replace(" ", "_")] - troop.Level);
+                                BaseData.Instance.thConfig[player.TownHallLevel.ToString() + "本"][troop.Name.Replace(" ", "_")] = troop.MaxLevel.ToString();
+                                FileIniDataParser parser = new FileIniDataParser();
+                                parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
+                                troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
                             }
-                            catch
+                            if (troopsLV[troop.Name.Replace(" ", "_")] > troop.Level)
                             {
-                                sb.AppendLine(troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                troopFull = false;
+                                try
+                                {
+                                    sb.AppendLine(BaseData.Instance.config["兵种翻译"][troop.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                    levels.Add(troopsLV[troop.Name.Replace(" ", "_")] - troop.Level);
+                                }
+                                catch
+                                {
+                                    sb.AppendLine(troop.Name + " 还缺" + (troopsLV[troop.Name.Replace(" ", "_")] - troop.Level) + "级");
+                                }
                             }
                         }
                     }
@@ -137,38 +136,41 @@ namespace Native.Csharp.App.Bot
                     sb.AppendLine("英雄：");
                     foreach (var hero in player.Heroes)
                     {
-                        if (!troopsLV.Keys.Contains(hero.Name.Replace(" ", "_")))
+                        if (hero.Village == "home")
                         {
-                            for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
+                            if (!troopsLV.Keys.Contains(hero.Name.Replace(" ", "_")))
                             {
-                                BaseData.Instance.thConfig[x.ToString() + "本"].AddKey(hero.Name.Replace(" ", "_"), hero.MaxLevel.ToString());
-                            }
-                            BaseData.Instance.config["兵种翻译"].AddKey(hero.Name.Replace(" ", "_"), hero.Name);
-                            FileIniDataParser parser = new FileIniDataParser();
-                            parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
-                            parser.WriteFile("config.ini", BaseData.Instance.config);
-                            sb.AppendLine(hero.Name + " Townhall.ini 设置有错误，已自动生成");
-                        }
-                        else
-                        {
-                            if (troopsLV[hero.Name.Replace(" ", "_")] == 99)
-                            {
-                                BaseData.Instance.thConfig[player.TownHallLevel + "本"][hero.Name.Replace(" ", "_")] = hero.MaxLevel.ToString();
+                                for (int x = 1; x < BaseData.Instance.THLevels.Length; x++)
+                                {
+                                    BaseData.Instance.thConfig[x.ToString() + "本"].AddKey(hero.Name.Replace(" ", "_"), hero.MaxLevel.ToString());
+                                }
+                                BaseData.Instance.config["兵种翻译"].AddKey(hero.Name.Replace(" ", "_"), hero.Name);
                                 FileIniDataParser parser = new FileIniDataParser();
                                 parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
-                                troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
+                                parser.WriteFile("config.ini", BaseData.Instance.config);
+                                sb.AppendLine(hero.Name + " Townhall.ini 设置有错误，已自动生成");
                             }
-                            if (troopsLV[hero.Name.Replace(" ", "_")] > hero.Level)
+                            else
                             {
-                                heroFull = false;
-                                heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
-                                try
+                                if (troopsLV[hero.Name.Replace(" ", "_")] == 99)
                                 {
-                                    sb.AppendLine(BaseData.Instance.config["兵种翻译"][hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    BaseData.Instance.thConfig[player.TownHallLevel + "本"][hero.Name.Replace(" ", "_")] = hero.MaxLevel.ToString();
+                                    FileIniDataParser parser = new FileIniDataParser();
+                                    parser.WriteFile("Townhall.ini", BaseData.Instance.thConfig);
+                                    troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
                                 }
-                                catch
+                                if (troopsLV[hero.Name.Replace(" ", "_")] > hero.Level)
                                 {
-                                    sb.AppendLine(hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    heroFull = false;
+                                    heroLvNeed += (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level);
+                                    try
+                                    {
+                                        sb.AppendLine(BaseData.Instance.config["兵种翻译"][hero.Name.Replace(" ", "_")] + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    }
+                                    catch
+                                    {
+                                        sb.AppendLine(hero.Name + " 还缺" + (troopsLV[hero.Name.Replace(" ", "_")] - hero.Level) + "级");
+                                    }
                                 }
                             }
                         }
