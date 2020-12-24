@@ -138,7 +138,6 @@
     <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
-    <Compile Include="App\Bot\ChatCheck\Scrapper\更新部落阵型.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
@@ -316,11 +315,11 @@ if exist "$(TargetDir)$(TargetName)\app.json" (del /F /A /Q "$(TargetDir)$(Targe
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>if exist "$(TargetDir)$(TargetName).dll" (
-move "$(TargetDir)$(TargetName).dll" "$(TargetDir)$(TargetName)" 
+copy "$(TargetDir)$(TargetName).dll" "$(TargetDir)$(TargetName)" 
 rename "$(TargetDir)$(TargetName)\$(TargetName).dll" "$(TargetName).dll" 
 ) 
 if exist "$(TargetDir)$(TargetName).json" (
-move "$(TargetDir)$(TargetName).json" "$(TargetDir)$(TargetName)" 
+copy "$(TargetDir)$(TargetName).json" "$(TargetDir)$(TargetName)" 
 rename "$(TargetDir)$(TargetName)\$(TargetName).json" "$(TargetName).json" 
 )</PostBuildEvent>
   </PropertyGroup>

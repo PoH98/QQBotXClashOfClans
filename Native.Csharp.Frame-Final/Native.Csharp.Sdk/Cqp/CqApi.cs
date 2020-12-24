@@ -702,10 +702,18 @@ namespace Native.Csharp.Sdk.Cqp
 		/// <returns></returns>
 		public int AddLoger (LogerLevel level, string type, string content)
 		{
-			GCHandle handle = content.GetStringGCHandle (_defaultEncoding);
-			int result = CQP.CQ_addLog (_authCode, (int)level, type, handle.AddrOfPinnedObject ());
-			handle.Free ();
-			return result;
+            try
+            {
+				GCHandle handle = content.GetStringGCHandle(_defaultEncoding);
+				int result = CQP.CQ_addLog(_authCode, (int)level, type, handle.AddrOfPinnedObject());
+				handle.Free();
+				return result;
+			}
+            catch
+            {
+				return -1;
+            }
+
 
 		}
 

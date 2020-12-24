@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
 {
     public class 当前联赛:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message == "/当前联赛")
             {
@@ -51,7 +50,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                                                     sb.AppendLine(member.Name + " : " + member.Attacks[0].Stars +"星(摧毁: "+member.Attacks[0].DestructionPercentage+"%)");
                                                 }
                                             }
-                                            return sb.ToString();
+                                            return new string[] { BaseData.TextToImg(sb.ToString()) };
                                         }
                                     }
                                     else if (roundData.opponent.Tag == keypairs[chat.FromGroup.ToString()].ToUpper())
@@ -72,7 +71,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                                                     sb.AppendLine(member.Name + " : " + member.Attacks[0].Stars + "星(摧毁: " + member.Attacks[0].DestructionPercentage + "%)");
                                                 }
                                             }
-                                            return sb.ToString();
+                                            return new string[] { BaseData.TextToImg(sb.ToString()) };
                                         }
                                     }
                                 }
@@ -83,17 +82,17 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                     {
                         if(league != null)
                         {
-                            return "无法获取任何联赛资料，错误详情: "+league.Reason + "！";
+                            return new string[] { "无法获取任何联赛资料，错误详情: " + league.Reason + "！" };
                         }
                         else
                         {
-                            return "无法获取任何联赛资料！";
+                            return new string[] { "无法获取任何联赛资料！" };
                         }
                     }
                 }
                 else
                 {
-                    return "请设置好config.ini后才使用此功能，或者使用</绑定群 #部落标签>后才使用！";
+                    return new string[] { "请设置好config.ini后才使用此功能，或者使用</绑定群 #部落标签>后才使用！" };
                 }
             }
             return base.GetReply(chat);

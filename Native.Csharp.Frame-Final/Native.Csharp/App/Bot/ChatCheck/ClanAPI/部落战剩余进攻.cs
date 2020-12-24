@@ -1,13 +1,13 @@
 ﻿using CocNET.Interfaces;
 using Native.Csharp.Sdk.Cqp.EventArgs;
+using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot
 {
     public class 部落战剩余进攻:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if(chat.Message == "/部落战剩余进攻")
             {
@@ -15,13 +15,13 @@ namespace Native.Csharp.App.Bot
                 var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
                 if (!string.IsNullOrEmpty(clanData.Reason))
                 {
-                    return "无法获取部落资料！" + clanData.Reason;
+                    return new string[] { "无法获取部落资料！" + clanData.Reason };
                 }
                 else
                 {
                     if (clanData.Reason == "inMaintenance")
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + " 当前服务器在维护！";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + " 当前服务器在维护！" };
                     }
                     else if (clanData.State == "inWar")
                     {
@@ -35,11 +35,11 @@ namespace Native.Csharp.App.Bot
                             }
                         }
                         sb.Append("战斗日结束时间：" + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                        return sb.ToString();
+                        return new string[] { BaseData.TextToImg(sb.ToString()) };
                     }
                     else
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + " 当前部落不在战斗日！(未开战或准备日)";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + " 当前部落不在战斗日！(未开战或准备日)" };
                     }
                 }
             }

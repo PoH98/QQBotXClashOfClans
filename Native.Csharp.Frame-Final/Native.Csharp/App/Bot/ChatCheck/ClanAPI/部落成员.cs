@@ -10,7 +10,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
 {
     class 部落成员:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if(chat.Message == "/部落成员")
             {
@@ -27,16 +27,16 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                         {
                             sb.AppendLine(p.Name + " : " + p.Tag);
                         }
-                        return "@发送者 您需要的玩家资料在下面：\n@PlayerAPI".Replace("@PlayerAPI", sb.ToString()).Replace("@发送者", Common.CqApi.CqCode_At(chat.FromQQ));
+                        return new string[] { BaseData.TextToImg(sb.ToString()) };
                     }
                     else
                     {
-                        return "未知的部落冲突ID，无法搜索该部落资料！";
+                        return new string[] { "未知的部落冲突ID，无法搜索该部落资料！" };
                     }
                 }
                 else
                 {
-                    return "请在config.ini设置好Clan_ID后再继续使用此功能";
+                    return new string[] { "请在config.ini设置好Clan_ID后再继续使用此功能" };
                 }
             }
             return base.GetReply(chat);

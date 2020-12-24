@@ -1,24 +1,22 @@
 ﻿using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 namespace Native.Csharp.App.Bot.ChatCheck.CalculatorAPI
 {
     public class 计算:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message.StartsWith("/计算"))
             {
                 try
                 {
-                    return "计算结果: " + Calculate(chat.Message.Trim().Replace("/计算", ""));
+                    return new string[] { "计算结果: " + Calculate(chat.Message.Trim().Replace("/计算", "")) };
                 }
                 catch
                 {
-                    return "方程式错误";
+                    return new string[] { "方程式错误" };
                 }
             }
             return base.GetReply(chat);

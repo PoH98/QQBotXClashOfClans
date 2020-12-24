@@ -1,9 +1,5 @@
 ﻿using Native.Csharp.Sdk.Cqp.EventArgs;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot.Interface
 {
@@ -11,6 +7,6 @@ namespace Native.Csharp.App.Bot.Interface
     {
         IChain SetNext(IChain chainObject);
 
-        string GetReply(CqGroupMessageEventArgs chat);
+        IEnumerable<string> GetReply(CqGroupMessageEventArgs chat);
     }
 }

@@ -6,17 +6,16 @@ using System.Linq;
 using System.Management;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot
 {
     public class 服务器:ChatCheckChain
     {
-        private PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if(chat.Message == "/服务器")
             {
+                PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
                 StringBuilder sb = new StringBuilder();
                 sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: " + DateTime.Now.ToString() + "\n服务器CPU状态: ");
                 cpuCounter.NextValue();
@@ -46,7 +45,7 @@ namespace Native.Csharp.App.Bot
                     BaseData.Instance.checkClanWar.IsBackground = true;
                     BaseData.Instance.checkClanWar.Start();
                 }
-                return sb.ToString();
+                return new string[] { sb.ToString() };
             }
             return base.GetReply(chat);
         }

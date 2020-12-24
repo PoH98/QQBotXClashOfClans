@@ -38,7 +38,7 @@ namespace Native.Csharp.App.Event
                         }
                         foreach(var message in SplitLongMessage(sb.ToString()))
                         {
-                            Thread.Sleep(rnd.Next(500, 3000));
+                            Thread.Sleep(rnd.Next(1000, 4000));
                             Common.CqApi.SendGroupMessage(e.FromGroup, message.Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
                         }
                             
@@ -55,7 +55,7 @@ namespace Native.Csharp.App.Event
                         Random rnd = new Random();
                         foreach (var message in SplitLongMessage(sb.ToString()))
                         {
-                            Thread.Sleep(rnd.Next(500, 3000));
+                            Thread.Sleep(rnd.Next(1000, 4000));
                             Common.CqApi.SendGroupMessage(e.FromGroup, message.Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
                         }
                     }
@@ -63,39 +63,26 @@ namespace Native.Csharp.App.Event
                 else if (e.Message.StartsWith("/"))
                 {
                     var result = Instance.chains[0].GetReply(e);
-                    if (!string.IsNullOrEmpty(result))
+                    if (result.Count() > 0)
                     {
-                        
-                        if (result.Contains(" [bmp:"))
+                        Random rnd = new Random();
+                        foreach (var r in result)
                         {
-                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
-                            var match = regex.Match(result);
-                            var fileName = match.Groups[1].Value;
-                            result = result.Replace(match.Groups[0].Value, "");
-                            Common.CqApi.SendGroupMessage(e.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
-                            return;
-                        }
-                        else
-                        {
-                            if (result.Length > 200 && !result.Contains("CQ"))
+                            if (r.Contains("[bmp:"))
                             {
-                                var rndName = BaseData.TextToImg(result);
-                                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(rndName));
-                            }
-                            else if(result.Length > 200)
-                            {
-                                Random rnd = new Random();
-                                foreach(var split in SplitLongMessage(result))
-                                {
-                                    Common.CqApi.SendGroupMessage(e.FromGroup, split);
-                                    Thread.Sleep(rnd.Next(1000,3000));
-                                }
+                                Regex regex = new Regex(@"\[bmp:(\S*)\]");
+                                var match = regex.Match(r);
+                                var fileName = match.Groups[1].Value;
+                                var tempr = r.Replace(match.Groups[0].Value, "");
+                                Common.CqApi.SendGroupMessage(e.FromGroup, tempr + Common.CqApi.CqCode_Image(fileName));
                             }
                             else
                             {
-                                Common.CqApi.SendGroupMessage(e.FromGroup, result);
+                                Common.CqApi.SendGroupMessage(e.FromGroup, r);
                             }
+                            Thread.Sleep(rnd.Next(1000, 3000));
                         }
+
                     }
                     else if (!Instance.GameEnabled.Any(x => x == e.FromGroup))
                     {
@@ -157,7 +144,6 @@ namespace Native.Csharp.App.Event
             {
                 Common.CqApi.SendGroupMessage(e.FromGroup, "出现错误，请稍后再试！错误详情：" + ex.ToString());
             }
-
         }
 
         private string[] SplitLongMessage(string originalMessage)
@@ -174,7 +160,7 @@ namespace Native.Csharp.App.Event
             {
                 if(line.Length > 0)
                 {
-                    if (writtenchar > 200)
+                    if (writtenchar > 50)
                     {
                         buffer.Add(sb.ToString());
                         writtenchar = 0;

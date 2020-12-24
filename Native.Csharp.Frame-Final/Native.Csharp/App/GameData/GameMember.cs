@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Management.Instrumentation;
-using System.Runtime.Serialization;
 
 namespace Native.Csharp.App.GameData
 {
-    [Serializable]
     public class GameMember
     {
         /// <summary>
@@ -51,45 +48,40 @@ namespace Native.Csharp.App.GameData
         /// </summary>
         public DateTime PlayTime;
         /// <summary>
-        /// 成员上次在部落里的时间
-        /// </summary>
-        [OptionalField(VersionAdded = 2)]
-        [DefaultValue(null)]
-        public DateTime? LastSeenInClan;
-        /// <summary>
         /// 寻宝等待10分钟
         /// </summary>
-        [OptionalField(VersionAdded = 2)]
         public DateTime TreasurePlayTime;
         /// <summary>
         /// 打Boss等待时间
         /// </summary>
-        [OptionalField(VersionAdded = 2)]
         public DateTime BossPlayTime;
-        /// <summary>
-        /// 上次发指令时间，用于抓机器人用
-        /// </summary>
-        [OptionalField(VersionAdded = 3)]
-        public DateTime LastMessage;
-        /// <summary>
-        /// 上次发指令时间，用于抓机器人用
-        /// </summary>
-        [OptionalField(VersionAdded = 3)]
-        public List<double> MessageRangeRecords = new List<double>();
         /// <summary>
         /// 最后一次被打劫时间
         /// </summary>
-        [OptionalField(VersionAdded = 4)]
         public DateTime LastRobbed;
         /// <summary>
         /// 个人技能
         /// </summary>
-        [OptionalField(VersionAdded = 5)]
         public Skill Skill;
         /// <summary>
         /// 个人技能等级
         /// </summary>
-        [OptionalField(VersionAdded = 5)]
         public int SkillLevel = -1;
+        /// <summary>
+        /// 记录玩家ID以及最后一次他在部落的时间
+        /// </summary>
+        public ClanData[] ClanID_LastSeenInClan;
+    }
+    [Serializable]
+    public class ClanData
+    {
+        /// <summary>
+        /// 部落玩家ID
+        /// </summary>
+        public string ClanID;
+        /// <summary>
+        /// 部落玩家最后发现还在部落的时刻
+        /// </summary>
+        public DateTime? LastSeenInClan;
     }
 }

@@ -44,6 +44,10 @@ namespace Native.Csharp.App.Bot
                                             }
                                             foreach (var file in Directory.GetFiles("com.coc.groupadmin\\" + clanID.KeyName))
                                             {
+                                                if(File.Exists(file.Replace("com.coc.groupadmin\\", "com.coc.groupadmin\\BackUp\\")))
+                                                {
+                                                    File.Delete(file.Replace("com.coc.groupadmin\\", "com.coc.groupadmin\\BackUp\\"));
+                                                }
                                                 File.Copy(file, file.Replace("com.coc.groupadmin\\", "com.coc.groupadmin\\BackUp\\"));
                                             }
                                             lastBackup = DateTime.Now;
@@ -138,11 +142,15 @@ namespace Native.Csharp.App.Bot
             {
                 if (members.Any(x => x.Name.Contains(mem)))
                 {
-                    var _member = gameMembers.Where(x => x.member.Member.Card.Contains(mem));
-                    if (_member != null && _member.Count() > 0)
+                    var _member = gameMembers.FirstOrDefault(x => x.member.Member.Card.Contains(mem));
+                    if (_member != null)
                     {
-                        _member.First().member.LastSeenInClan = DateTime.Now;
-                        _member.First().Dispose();
+                        if(_member.member.ClanID_LastSeenInClan == null)
+                        {
+                            _member.member.ClanID_LastSeenInClan = new ClanData();
+                        }
+                        _member.member.ClanID_LastSeenInClan.ClanID
+                        _member.Dispose();
                     }
                 }
             }

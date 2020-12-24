@@ -13,7 +13,7 @@ namespace Native.Csharp.App.Bot
 {
     public class 改名:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message.StartsWith("/改名"))
             {
@@ -27,11 +27,11 @@ namespace Native.Csharp.App.Bot
                 }
                 if (!long.TryParse(qq, out long tag))
                 {
-                    return "我不知道你在艾特个毛线";
+                    return new string[] { "我不知道你在艾特个毛线" };
                 }
                 if (chat.Message.Contains(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]))
                 {
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的";
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的" };
                 }
                 if (tag == chat.FromQQ)
                 {
@@ -42,7 +42,7 @@ namespace Native.Csharp.App.Bot
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
-                            return "找不到玩家资料或者玩家标签错误: " + player.Reason;
+                            return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
                         }
                         newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                     }
@@ -58,16 +58,16 @@ namespace Native.Csharp.App.Bot
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
-                            return "找不到玩家资料或者玩家标签错误: " + player.Reason;
+                            return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
                         }
                         newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                     }
                     else
                     {
-                        throw new Exception();
+                        throw new Exception("???");
                     }
                     Common.CqApi.SetGroupMemberNewCard(chat.FromGroup, tag, newname);
-                    return  "搞定！已改称为" + newname;
+                    return  new string[] { "搞定！已改称为" + newname };
                 }
                 else if (sendMember.PermitType == PermitType.Holder || sendMember.PermitType == PermitType.Manage)
                 {
@@ -78,7 +78,7 @@ namespace Native.Csharp.App.Bot
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
-                            return "找不到玩家资料或者玩家标签错误: " + player.Reason;
+                            return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
                         }
                         newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                     }
@@ -94,7 +94,7 @@ namespace Native.Csharp.App.Bot
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
-                            return "找不到玩家资料或者玩家标签错误: " + player.Reason;
+                            return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
                         }
                         newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                     }
@@ -103,11 +103,11 @@ namespace Native.Csharp.App.Bot
                         throw new Exception();
                     }
                     Common.CqApi.SetGroupMemberNewCard(chat.FromGroup, tag, newname);
-                    return "搞定！已改称为" + newname;
+                    return new string[] { "搞定！已改称为" + newname };
                 }
                 else
                 {
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + "你没权限，别把我当脑残！";
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你没权限，别把我当脑残！" };
                 }
             }
             return base.GetReply(chat);

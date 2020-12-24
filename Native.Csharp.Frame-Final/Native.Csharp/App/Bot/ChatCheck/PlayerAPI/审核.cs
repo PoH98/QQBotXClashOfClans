@@ -4,19 +4,17 @@ using IniParser;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using Unity.Interception.Utilities;
 
 namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 {
     public class 审核:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message.StartsWith("/审核"))
             {
@@ -27,9 +25,9 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     id = chat.Message.Replace("/审核", "").Replace(" ", "");
                     if (id == BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()])
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的" };
                     }
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id);
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id) };
                 }
                 else if (chat.Message == "/审核")
                 {
@@ -43,15 +41,16 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         if (member != null)
                         {
                             id = member.Tag;
-                            return Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id);
+                            return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id) };
                         }
                         else
                         {
-                            return Common.CqApi.CqCode_At(chat.FromQQ) + "你不在部落里！请发送标签进行审核！";
+                            return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你不在部落里！请发送标签进行审核！" };
                         }
                     }
                     else if (gameName.Contains(","))
                     {
+                        List<string> result = new List<string>();
                         ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
                         var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
                         Random rnd = new Random();
@@ -59,130 +58,45 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                         {
                             if (!string.IsNullOrWhiteSpace(name))
                             {
-                                if (name.StartsWith(" "))
+                                var p = cplayer.Where(x => x.Name.StartsWith(name.Trim())).FirstOrDefault();
+                                if (p != null)
                                 {
-                                    var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
-                                    if (p != null)
-                                    {
-                                        var result = checkMember(p.Tag);
-                                        if (result.Contains(" [bmp:"))
-                                        {
-                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
-                                            var match = regex.Match(result);
-                                            var fileName = match.Groups[1].Value;
-                                            result = result.Replace(match.Groups[0].Value, "");
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
-                                            
-                                        }
-                                        else
-                                        {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
-                                    }
+                                    result.Add(checkMember(p.Tag));
                                 }
                                 else
                                 {
-                                    var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
-                                    if (p != null)
-                                    {
-                                        var result = checkMember(p.Tag);
-                                        if (result.Contains(" [bmp:"))
-                                        {
-                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
-                                            var match = regex.Match(result);
-                                            var fileName = match.Groups[1].Value;
-                                            result = result.Replace(match.Groups[0].Value, "");
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
-                                            
-                                        }
-                                        else
-                                        {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
-                                    }
+                                    result.Add(name + " 不在部落里！请发送标签进行审核！");
                                 }
-                                //delay for a while
-                                Thread.Sleep(rnd.Next(1000, 3000));
                             }
                         }
-                        return string.Empty;
+                        return result;
                     }
                     else if (gameName.Contains("，"))
                     {
+                        List<string> result = new List<string>();
                         ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
                         var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
                         Random rnd = new Random();
-                        foreach (var name in gameName.Split(','))
+                        foreach (var name in gameName.Split('，'))
                         {
                             if (!string.IsNullOrWhiteSpace(name))
                             {
-                                if (name.StartsWith(" "))
+                                var p = cplayer.Where(x => x.Name.StartsWith(name.Trim())).FirstOrDefault();
+                                if (p != null)
                                 {
-                                    var p = cplayer.Where(x => x.Name.Contains(name.Remove(0, name.LastIndexOf(' ') + 1))).FirstOrDefault();
-                                    if (p != null)
-                                    {
-                                        var result = checkMember(p.Tag);
-                                        if (result.Contains(" [bmp:"))
-                                        {
-                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
-                                            var match = regex.Match(result);
-                                            var fileName = match.Groups[1].Value;
-                                            result = result.Replace(match.Groups[0].Value, "");
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
-                                            
-                                        }
-                                        else
-                                        {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
-                                    }
+                                    result.Add(checkMember(p.Tag));
                                 }
                                 else
                                 {
-                                    var p = cplayer.Where(x => x.Name.Contains(name)).FirstOrDefault();
-                                    if (p != null)
-                                    {
-                                        var result = checkMember(p.Tag);
-                                        if (result.Contains(" [bmp:"))
-                                        {
-                                            Regex regex = new Regex(@"\s\[bmp:(\S*)\]\s");
-                                            var match = regex.Match(result);
-                                            var fileName = match.Groups[1].Value;
-                                            result = result.Replace(match.Groups[0].Value, "");
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result + Common.CqApi.CqCode_Image(fileName));
-                                            
-                                        }
-                                        else
-                                        {
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, result);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return Common.CqApi.CqCode_At(chat.FromQQ) + name + " 不在部落里！请发送标签进行审核！";
-                                    }
+                                    result.Add(name + " 不在部落里！请发送标签进行审核！");
                                 }
-                                //delay for a while
-                                Thread.Sleep(rnd.Next(1000, 3000));
                             }
                         }
-                        return string.Empty;
+                        return result;
                     }
                     else
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + "无效的标签！";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "无效的标签！" };
                     }
                 }
                 else if (chat.Message.Contains("https") && chat.Message.Contains("tag="))
@@ -196,13 +110,13 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     }
                     if (id == BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()])
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的" };
                     }
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id);
+                    return new string[] { checkMember(id) };
                 }
                 else
                 {
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + "无效的标签！";
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "无效的标签！" };
                 }
             }
             return base.GetReply(chat);
@@ -366,14 +280,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 {
                     Directory.CreateDirectory("Buffer");
                 }
-                string result = sb.ToString();
-                if(result.Length > 200)
-                {
-                    var rndname = "Buffer\\" + Path.GetRandomFileName();
-                    Convert_Text_to_Image(result.ToString(), "Times New Roman", 13).Save(rndname);
-                    result = " [bmp:" + rndname + "] ";
-                }
-                return result;
+                return BaseData.TextToImg(sb.ToString());
             }
             else
             {
@@ -387,32 +294,6 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 }
 
             }
-        }
-
-        private static Bitmap Convert_Text_to_Image(string txt, string fontname, int fontsize)
-        {
-            //creating bitmap image
-            Bitmap bmp = new Bitmap(1, 1);
-
-            //FromImage method creates a new Graphics from the specified Image.
-            Graphics graphics = Graphics.FromImage(bmp);
-            // Create the Font object for the image text drawing.
-            Font font = new Font(fontname, fontsize);
-            // Instantiating object of Bitmap image again with the correct size for the text and font.
-            SizeF stringSize = graphics.MeasureString(txt, font);
-            bmp = new Bitmap(bmp, (int)stringSize.Width, (int)stringSize.Height);
-            graphics = Graphics.FromImage(bmp);
-
-            /* It can also be a way
-           bmp = new Bitmap(bmp, new Size((int)graphics.MeasureString(txt, font).Width, (int)graphics.MeasureString(txt, font).Height));*/
-
-            //Draw Specified text with specified format 
-            graphics.FillRectangle(new SolidBrush(Color.Black), new RectangleF(0, 0, (float)stringSize.Width, (float)stringSize.Height));
-            graphics.DrawString(txt, font, Brushes.White, 0, 0);
-            font.Dispose();
-            graphics.Flush();
-            graphics.Dispose();
-            return bmp;     //return Bitmap Image 
         }
     }
 }

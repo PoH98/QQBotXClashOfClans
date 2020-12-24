@@ -8,22 +8,22 @@ namespace Native.Csharp.App.Bot.ChatCheck
 {
     public class BaseLink:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             switch (chat.Message)
             {
                 case "/八本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(8);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(8) };
                 case "/九本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(9);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(9) };
                 case "/十本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(10);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(10) };
                 case "/十一本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(11);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(11) };
                 case "/十二本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(12);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(12) };
                 case "/十三本阵型":
-                    return "使用浏览器打开此链接: " + GetLink(13);
+                    return new string[] { "使用浏览器打开此链接: " + GetLink(13) };
             }
             return base.GetReply(chat);
         }

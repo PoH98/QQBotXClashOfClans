@@ -13,12 +13,11 @@ namespace Native.Csharp.App.Bot
 {
     public class 清人: ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message.StartsWith("/清人"))
             {
                 Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到检查指令");
-                Common.CqApi.SendGroupMessage(chat.FromGroup, "处理中...");
                 var Groupmember = Common.CqApi.GetMemberList(chat.FromGroup);
                 ICocCoreClans players = BaseData.Instance.container.Resolve<ICocCoreClans>();
                 var clanmembers = players.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
@@ -28,60 +27,31 @@ namespace Native.Csharp.App.Bot
                     if (Clanmember != null)
                     {
                         var namelist = getGroupMemberNameList(chat.FromGroup);
-                        var reportMember = new List<string>();
-                        foreach (var mem in Clanmember)
-                        {
-                            //If not any group member name contains the clan member's name
-                            if (!namelist.Any(x => mem.Contains(x)))
-                            {
-                                reportMember.Add("不在群：" + mem);
-                            }
-                        }
-                        foreach (var mem in namelist)
-                        {
-                            if (!Clanmember.Any(x => x.Contains(mem)))
-                            {
-                                List<GameMember> gameMembers = new List<GameMember>();
-                                XmlSerializer reader = new XmlSerializer(typeof(GameMember));
-                                if (!Directory.Exists("com.coc.groupadmin\\" + chat.FromGroup))
-                                {
-                                    return null;
-                                }
-                                var files = Directory.GetFiles("com.coc.groupadmin\\" + chat.FromGroup);
-                                foreach (var file in files)
-                                {
-                                    using (FileStream stream = new FileStream(file, FileMode.Open))
-                                    {
-                                        gameMembers.Add((GameMember)reader.Deserialize(stream));
-                                    }
-                                }
-                                var _member = gameMembers.Where(x => x.Member.Card.Contains(mem));
-                                if (_member != null && _member.Count() > 0)
-                                {
-                                    var member = _member.First();
-                                    if (member.LastSeenInClan == null)
-                                    {
-                                        member.LastSeenInClan = member.Member.JoiningTime;
-                                    }
-                                    reportMember.Add("不在部落：" + mem + "(最后记录在部落内" + Math.Round((DateTime.Now.Date - member.LastSeenInClan.Value).TotalDays).ToString("### ##0") + "天前)");
-                                }
-                            }
-                        }
                         StringBuilder sb = new StringBuilder();
-                        foreach (var leftmember in reportMember)
+                        sb.AppendLine("不在部落:");
+                        foreach(var name in Clanmember)
                         {
-                            sb.AppendLine(leftmember);
+                            var fetch = namelist.FirstOrDefault(x => name.Contains(x));
+                            if (fetch == null)
+                            {
+                                sb.AppendLine(name);
+                            }
+                            else
+                            {
+                                namelist.Remove(fetch);
+                            }
                         }
-                        return "需要被清成员名单:\n" + sb.ToString();
+                        
+                        return new string[] { BaseData.TextToImg("需要被清成员名单:\n" + sb.ToString()) };
                     }
                     else
                     {
-                       return "请确保config.ini里的设置是正确的！";
+                       return new string[] { "请确保config.ini里的设置是正确的！" };
                     }
                 }
                 else
                 {
-                   return "请确保config.ini里的设置是正确的！";
+                   return new string[] { "请确保config.ini里的设置是正确的！" };
                 }
             }
             return base.GetReply(chat);
@@ -100,14 +70,7 @@ namespace Native.Csharp.App.Bot
                         var splitted = member.Card.Split(',');
                         foreach (var split in splitted)
                         {
-                            if (split.StartsWith(" "))
-                            {
-                                namelist.Add(split.Remove(0, 1));
-                            }
-                            else
-                            {
-                                namelist.Add(split);
-                            }
+                            namelist.Add(split.Trim());
                         }
                     }
                     else if (member.Card.Contains("，"))
@@ -115,19 +78,12 @@ namespace Native.Csharp.App.Bot
                         var splitted = member.Card.Split('，');
                         foreach (var split in splitted)
                         {
-                            if (split.StartsWith(" "))
-                            {
-                                namelist.Add(split.Remove(0, 1));
-                            }
-                            else
-                            {
-                                namelist.Add(split);
-                            }
+                            namelist.Add(split.Trim());
                         }
                     }
                     else if (member.Card.Contains("-"))
                     {
-                        namelist.Add(member.Card.Split('-')[1]);
+                        namelist.Add(string.Join("-", member.Card.Split('-').Skip(1)));
                     }
                     else if (string.IsNullOrEmpty(member.Card))
                     {

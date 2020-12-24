@@ -1,16 +1,13 @@
 ﻿using Native.Csharp.Sdk.Cqp.EventArgs;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 {
     public class 下载:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message.StartsWith("/下载 "))
             {
@@ -28,12 +25,12 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     if (i.Text.Contains(version) || version.Contains(i.Text))
                     {
                         found = true;
-                        return "你要的部落冲突下载链接：" + i.Href;
+                        return new string[] { "你要的部落冲突下载链接：" + i.Href };
                     }
                 }
                 if (!found)
                 {
-                    return Common.CqApi.CqCode_At(chat.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString();
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "哈？你确定你要的是部落冲突？我这里只有:\n" + sb.ToString() };
                 }
                 else
                 {

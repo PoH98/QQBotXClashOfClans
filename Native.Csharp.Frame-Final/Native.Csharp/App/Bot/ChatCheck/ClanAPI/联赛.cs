@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Native.Csharp.App.Bot
 {
     public class 联赛:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message == "/联赛")
             {
@@ -19,6 +18,7 @@ namespace Native.Csharp.App.Bot
                 var keypairs = BaseData.valuePairs(configType.部落冲突);
                 if (keypairs.ContainsKey(chat.FromGroup.ToString()))
                 {
+                    List<string> result = new List<string>();
                     LeagueWar league = war.GetCurrentWarLeague(keypairs[chat.FromGroup.ToString()]);
                     if (league != null && string.IsNullOrEmpty(league.Reason))
                     {
@@ -38,7 +38,7 @@ namespace Native.Csharp.App.Bot
                             sb.AppendLine("============");
 
                         }
-                        Common.CqApi.SendGroupMessage(chat.FromGroup, sb.ToString());
+                        result.Add(BaseData.TextToImg(sb.ToString()));
                         sb.Clear();
                         Array.Reverse(league.Rounds);
                         foreach (var rounds in league.Rounds)
@@ -55,7 +55,7 @@ namespace Native.Csharp.App.Bot
                                         {
                                             sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.opponent.Name);
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, sb.ToString());
+                                            result.Add(BaseData.TextToImg(sb.ToString()));
                                             sb.Clear();
                                         }
                                         else if (roundData.state == "inWar")
@@ -63,7 +63,8 @@ namespace Native.Csharp.App.Bot
                                             sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.opponent.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.clan.Stars + ", 敌方战星: " + roundData.opponent.Stars);
-                                            return sb.ToString();
+                                            result.Add(BaseData.TextToImg(sb.ToString()));
+                                            break;
                                         }
                                     }
                                     else if (roundData.opponent.Tag == keypairs[chat.FromGroup.ToString()].ToUpper())
@@ -72,7 +73,7 @@ namespace Native.Csharp.App.Bot
                                         {
                                             sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.clan.Name);
-                                            Common.CqApi.SendGroupMessage(chat.FromGroup, sb.ToString());
+                                            result.Add(BaseData.TextToImg(sb.ToString()));
                                             sb.Clear();
                                         }
                                         else if (roundData.state == "inWar")
@@ -80,28 +81,30 @@ namespace Native.Csharp.App.Bot
                                             sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.clan.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.opponent.Stars + ", 敌方战星: " + roundData.clan.Stars);
-                                            return sb.ToString();
+                                            result.Add(BaseData.TextToImg(sb.ToString()));
+                                            break;
                                         }
                                     }
                                 }
                             }
                         }
+                        return result;
                     }
                     else if (!string.IsNullOrEmpty(league.Reason))
                     {
                         if (league.Reason == "inMaintenance")
                         {
-                            return " 当前服务器在维护！";
+                            return new string[] { " 当前服务器在维护！" };
                         }
                     }
                     else
                     {
-                        return "请在config.ini设置好Clan_ID后再继续使用此功能或者当前不在联赛时间";
+                        return new string[] { "请在config.ini设置好Clan_ID后再继续使用此功能或者当前不在联赛时间" };
                     }
                 }
                 else
                 {
-                    return "请在config.ini设置好Clan_ID后再继续使用此功能";
+                    return new string[] { "请在config.ini设置好Clan_ID后再继续使用此功能" };
                 }
             }
             return base.GetReply(chat);

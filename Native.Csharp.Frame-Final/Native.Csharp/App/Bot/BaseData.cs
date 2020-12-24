@@ -13,7 +13,6 @@ using DataAccess;
 using Native.Csharp.App.Bot.Interface;
 using System.Linq;
 using System.Drawing;
-using System.Security.Cryptography;
 
 namespace Native.Csharp.App.Bot
 {
@@ -442,33 +441,31 @@ namespace Native.Csharp.App.Bot
 
         public static string TextToImg(string text)
         {
-            string md5 = MD5Hash(text);
-            string rndName = Path.Combine("Buffer\\" + md5);
-            if (!File.Exists(rndName))
+            string fileName = MD5(text);
+            string fullPath = Path.Combine("Buffer\\", fileName);
+            if (!File.Exists(fullPath))
             {
-                Convert_Text_to_Image(text, "Times New Roman", 13).Save(rndName);
+                Convert_Text_to_Image(text, "Times New Roman", 13).Save(fullPath);
             }
-            return rndName;
+            return "[bmp:" + fullPath + "]";
         }
-        public static string MD5Hash(string text)
+
+        public static string MD5(string input)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
-
-            //compute hash from the bytes of text  
-            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
-
-            //get hash result after compute it  
-            byte[] result = md5.Hash;
-
-            StringBuilder strBuilder = new StringBuilder();
-            for (int i = 0; i < result.Length; i++)
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
             {
-                //change it into 2 hexadecimal digits  
-                //for each byte  
-                strBuilder.Append(result[i].ToString("x2"));
-            }
+                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-            return strBuilder.ToString();
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
 
         private static Bitmap Convert_Text_to_Image(string txt, string fontname, int fontsize)
@@ -487,9 +484,10 @@ namespace Native.Csharp.App.Bot
 
             /* It can also be a way
            bmp = new Bitmap(bmp, new Size((int)graphics.MeasureString(txt, font).Width, (int)graphics.MeasureString(txt, font).Height));*/
-
+            Random rnd = new Random();
+            var colorCode = rnd.Next(0, 30);
             //Draw Specified text with specified format 
-            graphics.FillRectangle(new SolidBrush(Color.Black), new RectangleF(0, 0, (float)stringSize.Width, (float)stringSize.Height));
+            graphics.FillRectangle(new SolidBrush(Color.FromArgb(colorCode, colorCode, colorCode)), new RectangleF(0, 0, (float)stringSize.Width, (float)stringSize.Height));
             graphics.DrawString(txt, font, Brushes.White, 0, 0);
             font.Dispose();
             graphics.Flush();

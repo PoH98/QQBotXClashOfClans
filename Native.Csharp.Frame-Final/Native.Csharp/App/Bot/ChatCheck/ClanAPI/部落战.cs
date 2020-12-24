@@ -1,5 +1,6 @@
 ﻿using CocNET.Interfaces;
 using Native.Csharp.Sdk.Cqp.EventArgs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace Native.Csharp.App.Bot
 {
     public class 部落战:ChatCheckChain
     {
-        public override string GetReply(CqGroupMessageEventArgs chat)
+        public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
             if (chat.Message == "/部落战")
             {
@@ -15,7 +16,7 @@ namespace Native.Csharp.App.Bot
                 var clanData = clan.GetCurrentWar(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
                 if (!string.IsNullOrEmpty(clanData.Reason))
                 {
-                    return "无法获取部落资料！" + clanData.Reason;
+                    return new string[] { "无法获取部落资料！" + clanData.Reason };
                 }
                 else
                 {
@@ -53,7 +54,7 @@ namespace Native.Csharp.App.Bot
                             }
                         }
                         sb.Append("战斗日结束时间：" + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
-                        return sb.ToString();
+                        return new string[] { BaseData.TextToImg(sb.ToString()) };
                     }
                     else if (clanData.State == "warEnded")
                     {
@@ -89,7 +90,7 @@ namespace Native.Csharp.App.Bot
                             }
                         }
                         sb.Append("部落战已结束！");
-                        return sb.ToString();
+                        return new string[] { BaseData.TextToImg(sb.ToString()) };
                     }
                     else if (clanData.State == "preparation")
                     {
@@ -103,15 +104,15 @@ namespace Native.Csharp.App.Bot
                         }
                         sb.AppendLine("开战时间为: " + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                         sb.AppendLine("当前为准备日");
-                        return sb.ToString();
+                        return new string[] { BaseData.TextToImg(sb.ToString()) };
                     }
                     else if (clanData.Reason == "inMaintenance")
                     {
-                       return Common.CqApi.CqCode_At(chat.FromQQ) + " 当前服务器在维护！";
+                       return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + " 当前服务器在维护！" };
                     }
                     else
                     {
-                        return Common.CqApi.CqCode_At(chat.FromQQ) + " 当前部落无部落战！";
+                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + " 当前部落无部落战！" };
                     }
                 }
             }
