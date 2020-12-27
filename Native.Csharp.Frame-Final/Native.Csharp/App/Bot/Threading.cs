@@ -96,7 +96,6 @@ namespace Native.Csharp.App.Bot
                                             {
                                                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "部落战检测", clanData.Message);
                                             }
-                                            UpdateMemberInClanStatus(value, members);
                                         }
                                         else
                                         {
@@ -124,37 +123,6 @@ namespace Native.Csharp.App.Bot
 
             while (Common.IsRunning) ;
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");
-        }
-
-        internal static void UpdateMemberInClanStatus(long groupID, List<Member> members)
-        {
-            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落成员检测", "正在读取部落当前成员名单");
-            var groupnamelist = new 清人().getGroupMemberNameList(groupID);
-            List<GameAPI> gameMembers = new List<GameAPI>();
-            XmlSerializer reader = new XmlSerializer(typeof(GameMember));
-            var files = Directory.GetFiles("com.coc.groupadmin\\" + groupID);
-            foreach (var file in files)
-            {
-                var playerID = long.Parse(file.Remove(0, file.LastIndexOf('\\') + 1).Replace(".bin", ""));
-                gameMembers.Add(new GameAPI(groupID, playerID));
-            }
-            foreach (var mem in groupnamelist)
-            {
-                if (members.Any(x => x.Name.Contains(mem)))
-                {
-                    var _member = gameMembers.FirstOrDefault(x => x.member.Member.Card.Contains(mem));
-                    if (_member != null)
-                    {
-                        if(_member.member.ClanID_LastSeenInClan == null)
-                        {
-                            _member.member.ClanID_LastSeenInClan = new ClanData();
-                        }
-                        _member.member.ClanID_LastSeenInClan.ClanID
-                        _member.Dispose();
-                    }
-                }
-            }
-            gameMembers.Clear();
         }
     }
 }

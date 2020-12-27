@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace Native.Csharp.App.GameData
 {
+    [Serializable]
     public class GameMember
     {
         /// <summary>
@@ -62,19 +64,31 @@ namespace Native.Csharp.App.GameData
         /// <summary>
         /// 个人技能
         /// </summary>
+        [OptionalField(VersionAdded = 1)]
         public Skill Skill;
         /// <summary>
         /// 个人技能等级
         /// </summary>
+        [OptionalField(VersionAdded = 1)]
         public int SkillLevel = -1;
         /// <summary>
         /// 记录玩家ID以及最后一次他在部落的时间
         /// </summary>
-        public ClanData[] ClanID_LastSeenInClan;
+        //public List<ClanData> ClanID_LastSeenInClan;
     }
     [Serializable]
     public class ClanData
     {
+        public ClanData()
+        {
+
+        }
+
+        public ClanData(string ClanID, DateTime? LastSeenInClan)
+        {
+            this.ClanID = ClanID;
+            this.LastSeenInClan = LastSeenInClan;
+        }
         /// <summary>
         /// 部落玩家ID
         /// </summary>

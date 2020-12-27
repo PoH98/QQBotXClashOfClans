@@ -15,7 +15,7 @@ namespace Native.Csharp.App.Bot
     {
         public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
-            if (chat.Message.StartsWith("/清人"))
+            /*if (chat.Message.StartsWith("/清人"))
             {
                 Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到检查指令");
                 var Groupmember = Common.CqApi.GetMemberList(chat.FromGroup);
@@ -53,7 +53,7 @@ namespace Native.Csharp.App.Bot
                 {
                    return new string[] { "请确保config.ini里的设置是正确的！" };
                 }
-            }
+            }*/
             return base.GetReply(chat);
         }
 

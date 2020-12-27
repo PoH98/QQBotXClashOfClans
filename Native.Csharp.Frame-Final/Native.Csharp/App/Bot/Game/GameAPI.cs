@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace Native.Csharp.App.Bot.Game
@@ -294,6 +295,18 @@ namespace Native.Csharp.App.Bot.Game
                     member.Work = member.Work.Next();
                     Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "已升级啦！接下来的工作为" + member.Work.ToString() + ", 工资为" + SharedData.Instance.工资[member.Work] + "金币！");
                 }
+                var holiday1 = ChinaDate.GetHoliday(DateTime.Now);
+                var holiday2 = ChinaDate.GetChinaHoliday(DateTime.Now);
+                if (holiday1 != ChinaDate.GHoliday.无)
+                {
+                    member.Cash += 2000;
+                    Common.CqApi.SendGroupMessage(member.Member.GroupId, "今天是" + holiday1.ToString() + "，大本营特意送了2000金币！");
+                }
+                if (holiday2 != ChinaDate.NHoliday.无)
+                {
+                    member.Cash += 2000;
+                    Common.CqApi.SendGroupMessage(member.Member.GroupId, "今天是" + holiday2.ToString() + "，大本营特意送了2000金币！");
+                }
             }
             else
             {
@@ -533,7 +546,12 @@ namespace Native.Csharp.App.Bot.Game
                         sb.AppendLine(w.Name + " 伤害：" + w.minDamage + "-" + w.maxDamage + " 血量：" + w.maxHP + " 价格：" + w.Price);
                     }
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(BaseData.TextToImg(sb.ToString())));
+                var r = BaseData.TextToImg(sb.ToString());
+                Regex regex = new Regex(@"\[bmp:(\S*)\]");
+                var match = regex.Match(r);
+                var fileName = match.Groups[1].Value;
+                var tempr = r.Replace(match.Groups[0].Value, "");
+                Common.CqApi.SendGroupMessage(e.FromGroup, tempr + Common.CqApi.CqCode_Image(fileName));
             }
             weaponList.Clear();
             return this;
@@ -661,7 +679,12 @@ namespace Native.Csharp.App.Bot.Game
                     }
                 }
             }
-            Common.CqApi.SendGroupMessage(member.Member.GroupId, sb.ToString());
+            var r = BaseData.TextToImg(sb.ToString());
+            Regex regex = new Regex(@"\[bmp:(\S*)\]");
+            var match = regex.Match(r);
+            var fileName = match.Groups[1].Value;
+            var tempr = r.Replace(match.Groups[0].Value, "");
+            Common.CqApi.SendGroupMessage(member.Member.GroupId, tempr + Common.CqApi.CqCode_Image(fileName));
             return this;
         }
 
@@ -713,6 +736,10 @@ namespace Native.Csharp.App.Bot.Game
                                 member.Cash -= upgradePrice;
                                 Common.CqApi.SendGroupMessage(e.FromGroup, "技能等级已提升！现在等级为" + member.SkillLevel);
                             }
+                            else
+                            {
+                                Common.CqApi.SendGroupMessage(e.FromGroup, "你没有钱升级这个玩意！");
+                            }
                         }
                     }
                     else
@@ -733,6 +760,10 @@ namespace Native.Csharp.App.Bot.Game
                             member.Skill = selectedSkill;
   
                         }
+                        else
+                        {
+                            Common.CqApi.SendGroupMessage(e.FromGroup, "你没有钱更换这个玩意！");
+                        }
                     }
                 }
             }
@@ -748,7 +779,12 @@ namespace Native.Csharp.App.Bot.Game
                     }
                     sb.AppendLine("=========================");
                 }
-                Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_Image(BaseData.TextToImg(sb.ToString())));
+                var r = BaseData.TextToImg(sb.ToString());
+                Regex regex = new Regex(@"\[bmp:(\S*)\]");
+                var match = regex.Match(r);
+                var fileName = match.Groups[1].Value;
+                var tempr = r.Replace(match.Groups[0].Value, "");
+                Common.CqApi.SendGroupMessage(e.FromGroup, tempr + Common.CqApi.CqCode_Image(fileName));
             }
             skillList.Clear();
             return this;

@@ -138,6 +138,7 @@
     <Compile Include="App\Bot\ChatCheck\ClanAPI\绑定群.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
+    <Compile Include="App\Bot\ChinaDate.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />

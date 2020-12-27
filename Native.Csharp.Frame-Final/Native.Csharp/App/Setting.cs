@@ -1,5 +1,4 @@
 ﻿using Native.Csharp.App.Bot;
-using Native.Csharp.App.GameData;
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -12,7 +11,6 @@ using System.Windows.Forms;
 using SC_Compression;
 using Unity.Interception.Utilities;
 using Native.Csharp.App.Bot.Game;
-using CocNET.Interfaces;
 using IniParser;
 
 namespace Native.Csharp.App
@@ -237,12 +235,12 @@ namespace Native.Csharp.App
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(comboBox1.SelectedIndex > -1)
+            /*if(comboBox1.SelectedIndex > -1)
             {
                 ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
                 var members = clan.GetClansMembers(BaseData.valuePairs(configType.部落冲突)[comboBox1.SelectedItem.ToString()]);
-                Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), members);
-            }
+                //Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), members);
+            }*/
             FileIniDataParser parse = new FileIniDataParser();
             BaseData.UpdateTranslate(parse);
             BaseData.UpdateTownhallINI(parse);
