@@ -17,7 +17,8 @@ namespace Native.Csharp.App.GameData
         给矿工点蜡烛,
         给雷龙充电,
         给大雪怪带孩子,
-        帮村妇藏宝石在树上
+        帮村妇藏宝石在树上,
+        到隔壁村庄偷厕纸
     }
 
     public enum SkillType

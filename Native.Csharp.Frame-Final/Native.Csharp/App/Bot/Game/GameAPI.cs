@@ -59,6 +59,7 @@ namespace Native.Csharp.App.Bot.Game
                 using (FileStream stream = new FileStream(memberFile, FileMode.Open))
                 {
                     this.member = (GameMember)reader.Deserialize(stream);
+                    this.member.Member = Common.CqApi.GetMemberInfo(e.FromGroup, e.FromQQ);
                 }
             }
             catch(Exception ex)
@@ -174,7 +175,7 @@ namespace Native.Csharp.App.Bot.Game
                     member.Cash += 150;
                     member.Exp += 150;
                     Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "拿到了21点！可喜可贺！");
-                    if (member.Exp > SharedData.Instance.需要经验值[member.Work] && member.Work != Work.给大雪怪带孩子)
+                    if (member.Exp > SharedData.Instance.需要经验值[member.Work] &&  member.Work != Enum.GetValues(typeof(Work)).Cast<Work>().Last())
                     {
                         member.Work = member.Work.Next();
                         Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "已升级啦！接下来的工作为" + member.Work.ToString() + ", 工资为" + SharedData.Instance.工资[member.Work] + "金币！");
@@ -290,7 +291,7 @@ namespace Native.Csharp.App.Bot.Game
                 member.Exp += SharedData.Instance.工资[member.Work];
                 member.Cash += SharedData.Instance.工资[member.Work];
                 member.Checked = DateTime.Now;
-                if (member.Exp > SharedData.Instance.需要经验值[member.Work] && member.Work != Work.给大雪怪带孩子)
+                if (member.Exp > SharedData.Instance.需要经验值[member.Work] && member.Work != Enum.GetValues(typeof(Work)).Cast<Work>().Last())
                 {
                     member.Work = member.Work.Next();
                     Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "已升级啦！接下来的工作为" + member.Work.ToString() + ", 工资为" + SharedData.Instance.工资[member.Work] + "金币！");
@@ -310,16 +311,8 @@ namespace Native.Csharp.App.Bot.Game
             }
             else
             {
-                Random rnd = new Random();
-                var cost = rnd.Next(100, 300);
-                Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "过劳，被抬入了大本营急救，丢失了工作的工资！还需要倒贴" + cost + "的工资付医药费！");
-                member.Cash -= cost;
-                if (member.Cash < -1000)
-                {
-                    member.Cash = 0;
-                    Common.CqApi.SetGroupBanSpeak(member.Member.GroupId, member.Member.QQId, new TimeSpan(2, 0, 0));
-                    Common.CqApi.SendGroupMessage(member.Member.GroupId, Common.CqApi.CqCode_At(member.Member.QQId) + "因为欠债太多，已被抓去卖两个小时的屁股还钱！");
-                }
+                Common.CqApi.SendGroupMessage(member.Member.GroupId, "虽然" + Common.CqApi.CqCode_At(member.Member.QQId) + "很想自主996加班，然而被雇主给轰了出去并且被告上大本营法庭处置");
+                Common.CqApi.SetGroupBanSpeak(member.Member.GroupId, member.Member.QQId, new TimeSpan(0,1,0));
             }
             return this;
         }
@@ -414,7 +407,7 @@ namespace Native.Csharp.App.Bot.Game
                     prey.member.Cash -= get;
                     member.Cash += get;
                     prey.member.LastRobbed = DateTime.Now;
-                    Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(e.FromQQ) + "打劫成功！获得了" + get + "金币！");
+                    Common.CqApi.SendGroupMessage(e.FromGroup, "恭喜" + Common.CqApi.CqCode_At(e.FromQQ) + "打劫"+Common.CqApi.CqCode_At(prey.member.Member.QQId) +"成功！获得了" + get + "金币！");
                 }
                 else if (member.CurrentHP <= 0 && prey.member.CurrentHP <= 0)
                 {

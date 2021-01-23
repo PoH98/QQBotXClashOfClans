@@ -33,7 +33,8 @@ namespace Native.Csharp.App.GameData
             { Work.给矿工点蜡烛, 640 },
             { Work.给雷龙充电, 700 },
             { Work.给大雪怪带孩子, 860 },
-            { Work.帮村妇藏宝石在树上, 900 }
+            { Work.帮村妇藏宝石在树上, 930 },
+            { Work.到隔壁村庄偷厕纸, 1000  }
 
         };
 
@@ -50,7 +51,8 @@ namespace Native.Csharp.App.GameData
             { Work.给矿工点蜡烛, 30000 },
             { Work.给雷龙充电, 36500 },
             { Work.给大雪怪带孩子, 50000 },
-            { Work.帮村妇藏宝石在树上, 65000 }
+            { Work.帮村妇藏宝石在树上, 65000 },
+            { Work.到隔壁村庄偷厕纸, 72000  }
         };
 
         internal string[] TreasureFindingSuccess =

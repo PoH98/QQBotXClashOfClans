@@ -61,6 +61,11 @@ namespace Native.Csharp.App.Bot
                                     {
                                         if(long.TryParse(clanID.KeyName, out long value))
                                         {
+                                            if (DateTime.Now.Month == 1 && DateTime.Now.Day == 1 && DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.Second == 0)
+                                            {
+                                                //新年快乐
+                                                Common.CqApi.SendGroupMessage(value, Common.CqApi.CqCode_At() + "我tm祝各位tm的"+DateTime.Now.Year+"新年快乐");
+                                            }
                                             var clanData = clan.GetCurrentWar(clanID.Value);
                                             var members = clan.GetClansMembers(clanID.Value);
                                             if (string.IsNullOrEmpty(clanData.Message))
