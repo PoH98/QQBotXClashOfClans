@@ -1,0 +1,116 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.0/",
+    "signature": "f1e6c8a5360ef32c63d3efd394d4499cd1c47031"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.0": {},
+    ".NETStandard,Version=v2.0/": {
+      "Unity.Container/5.9.2": {
+        "dependencies": {
+          "Microsoft.SourceLink.GitHub": "1.0.0-beta2-18618-05",
+          "NETStandard.Library": "2.0.3",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.2",
+          "System.ValueTuple": "4.5.0",
+          "Unity.Abstractions": "4.0.2"
+        },
+        "runtime": {
+          "Unity.Container.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/1.0.0-beta2-18618-05": {},
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "Microsoft.SourceLink.Common/1.0.0-beta2-18618-05": {},
+      "Microsoft.SourceLink.GitHub/1.0.0-beta2-18618-05": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.0.0-beta2-18618-05",
+          "Microsoft.SourceLink.Common": "1.0.0-beta2-18618-05"
+        }
+      },
+      "NETStandard.Library/2.0.3": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "assemblyVersion": "4.0.4.1",
+            "fileVersion": "4.6.26919.2"
+          }
+        }
+      },
+      "System.ValueTuple/4.5.0": {},
+      "Unity.Abstractions/4.0.2": {
+        "dependencies": {
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "Unity.Abstractions.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Unity.Container/5.9.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kcnqXhm6lxU8UFtpVO8enW7L8Gisw05bI46B3cWlW7K1dgGPb4hAyfiGyGczYOU6n4RtHO9CCfh0Lk74qkbF6w==",
+      "path": "microsoft.build.tasks.git/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.build.tasks.git.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-d15KS6WIdb5TzAEQiNM7KxB5TYb7cgiRk/767t83xYicHpHoqekPHXLWOc6gyh/FDF77dj4oR1/qg2tnPRfM1g==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eJP4JUDOiiWPBvwN+/0v1otoT8VPFOm6upABUAS6TwFbLfjRiLI2Ko44gyxF0nW+uMQHx186tnTDt+fg7je97Q==",
+      "path": "microsoft.sourcelink.common/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.sourcelink.common.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7cQMyVdud/ritrYqgc99LecTC0g9rA2QhO1QFi6OBubsA++gMXRiXx/ct1rmycxM9EvHJSNZ9DHbZHu42RLMLQ==",
+      "path": "microsoft.sourcelink.github/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.sourcelink.github.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tPWvrxEoydwKR5+Q79JKqoJexpfjOz+tK5a3IkLyc+QNNC1fkLyWzjBe3l0k3tvKMi7lug1v479LHSvCkzAW2Q==",
+      "path": "netstandard.library/2.0.3",
+      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hMkdWxksypQlFXB7JamQegDscxEAQO4FHd/lw/zlSZU9dZgAij65xjCrXer183wvoNAzJic5zzjj2oc9/dloWg==",
+      "path": "system.runtime.compilerservices.unsafe/4.5.2",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2XTuQk0XMNISXCC56nTqmf/BrEDUsT42N+NSB+wRSlQCOIjV2QaBrbVaR89kD4RX7U5KwfK/fT9J9XEo6QiZ6g==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    },
+    "Unity.Abstractions/4.0.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

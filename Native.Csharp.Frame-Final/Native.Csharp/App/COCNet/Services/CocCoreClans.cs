@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Web;
+using Native.Csharp.App;
 
 namespace CocNET.Services
 {
@@ -37,16 +38,24 @@ namespace CocNET.Services
         }
 
         /// <summary>
-        /// Get list of clan members
+        /// Get list of clan Members
         /// </summary>
-        /// <param name="clanTag">Clan tag to get members.</param>
+        /// <param name="clanTag">Clan tag to get Members.</param>
         /// <returns></returns>
         public List<Member> GetClansMembers(string clanTag)
         {
+            Common.CqApi.AddLoger(Native.Csharp.Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突API", "开始搜"+clanTag);
             var call = Request.GetCall(API_URL_CLANS, HttpUtility.UrlEncode(clanTag), "members");
+            try
+            {
+                var Members = Request.GetResponse<Members>(call);
+                return Members.MemberList;
+            }
+            catch
+            {
+                return null;
+            }
 
-            var members = Request.GetResponse<Members>(call);
-            return members.MemberList;
         }
 
         /// <summary>
@@ -77,10 +86,10 @@ namespace CocNET.Services
         }
 
         /// <summary>
-        /// Search all clans by criteria with clan members. This may take a while.
+        /// Search all clans by criteria with clan Members. This may take a while.
         /// </summary>
         /// <param name="searchFilter">SearchFilter with your criteria to search clans.</param>
-        /// <param name="withMember">True if you want search clans with clan members, else false.</param>
+        /// <param name="withMember">True if you want search clans with clan Members, else false.</param>
         /// <returns></returns>
         public SearchClan GetClans(SearchFilter searchFilter, bool withMember)
         {

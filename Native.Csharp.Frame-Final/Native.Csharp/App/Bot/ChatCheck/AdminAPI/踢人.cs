@@ -37,9 +37,9 @@ namespace Native.Csharp.App.Bot
                 }
                 else
                 {
-                    var member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
-                    Common.CqApi.SetGroupMemberRemove(chat.FromGroup, member.QQId);
-                    return new string[] { "已把" + member.Nick + "|" + member.Card + "踢出群聊！" };
+                    var Member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
+                    Common.CqApi.SetGroupMemberRemove(chat.FromGroup, Member.QQId);
+                    return new string[] { "已把" + Member.Nick + "|" + Member.Card + "踢出群聊！" };
                 }
             }
             return base.GetReply(chat);

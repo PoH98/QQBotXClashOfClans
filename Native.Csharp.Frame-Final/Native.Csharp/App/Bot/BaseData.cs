@@ -5,7 +5,6 @@ using System.IO;
 using System;
 using System.Text;
 using System.Net;
-using Funq;
 using CocNET;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Threading;
@@ -13,6 +12,7 @@ using DataAccess;
 using Native.Csharp.App.Bot.Interface;
 using System.Linq;
 using System.Drawing;
+using Unity;
 
 namespace Native.Csharp.App.Bot
 {
@@ -27,7 +27,7 @@ namespace Native.Csharp.App.Bot
 
         public CocCore core;
 
-        public Container container;
+        public IUnityContainer container;
         public CqEventArgsBase Event { get; private set; }
 
         public Thread checkClanWar;

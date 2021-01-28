@@ -3,12 +3,11 @@ using CocNET.Types.Players;
 using IniParser;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Unity.Interception.Utilities;
+using Unity;
 
 namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 {
@@ -18,7 +17,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
         {
             if (chat.Message.StartsWith("/审核"))
             {
-                string id = string.Empty;
+                string id;
                 if (chat.Message.Contains("#"))
                 {
                     //发送标签checkMember
@@ -27,77 +26,20 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     {
                         return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的" };
                     }
-                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id) };
+                    return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + CheckMember(id) };
                 }
                 else if (chat.Message == "/审核")
                 {
-                    var gameName = Common.CqApi.GetMemberInfo(chat.FromGroup, chat.FromQQ).Card;
-                    if (gameName.Contains("-"))
+                    if(Member.ClanData.Count < 1)
                     {
-                        ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
-                        var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
-                        var playername = gameName.Split('-').Skip(1).JoinStrings("-");
-                        var member = cplayer.Where(x => x.Name == playername).FirstOrDefault();
-                        if (member != null)
-                        {
-                            id = member.Tag;
-                            return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + checkMember(id) };
-                        }
-                        else
-                        {
-                            return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你不在部落里！请发送标签进行审核！" };
-                        }
+                        return new string[] { "还请先绑定好自己QQ号后再使用不发玩家标签的审核指令！" };
                     }
-                    else if (gameName.Contains(","))
+                    List<string> message = new List<string>();
+                    foreach(var clanData in Member.ClanData)
                     {
-                        List<string> result = new List<string>();
-                        ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
-                        var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
-                        Random rnd = new Random();
-                        foreach (var name in gameName.Split(','))
-                        {
-                            if (!string.IsNullOrWhiteSpace(name))
-                            {
-                                var p = cplayer.Where(x => x.Name.StartsWith(name.Trim())).FirstOrDefault();
-                                if (p != null)
-                                {
-                                    result.Add(checkMember(p.Tag));
-                                }
-                                else
-                                {
-                                    result.Add(name + " 不在部落里！请发送标签进行审核！");
-                                }
-                            }
-                        }
-                        return result;
+                        message.Add(CheckMember(clanData.ClanID));
                     }
-                    else if (gameName.Contains("，"))
-                    {
-                        List<string> result = new List<string>();
-                        ICocCoreClans cplayers = BaseData.Instance.container.Resolve<ICocCoreClans>();
-                        var cplayer = cplayers.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
-                        Random rnd = new Random();
-                        foreach (var name in gameName.Split('，'))
-                        {
-                            if (!string.IsNullOrWhiteSpace(name))
-                            {
-                                var p = cplayer.Where(x => x.Name.StartsWith(name.Trim())).FirstOrDefault();
-                                if (p != null)
-                                {
-                                    result.Add(checkMember(p.Tag));
-                                }
-                                else
-                                {
-                                    result.Add(name + " 不在部落里！请发送标签进行审核！");
-                                }
-                            }
-                        }
-                        return result;
-                    }
-                    else
-                    {
-                        return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "无效的标签！" };
-                    }
+                    return message;
                 }
                 else if (chat.Message.Contains("https") && chat.Message.Contains("tag="))
                 {
@@ -112,7 +54,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                     {
                         return new string[] { Common.CqApi.CqCode_At(chat.FromQQ) + "你当我傻？拿部落标签给我查玩家？草你马的" };
                     }
-                    return new string[] { checkMember(id) };
+                    return new string[] { CheckMember(id) };
                 }
                 else
                 {
@@ -122,7 +64,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
             return base.GetReply(chat);
         }
 
-        private static string checkMember(string id)
+        private static string CheckMember(string id)
         {
             Common.CqApi.AddLoger(LogerLevel.Debug, "部落Debug", "判断的部落ID为" + id);
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();

@@ -3,6 +3,7 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity;
 
 namespace Native.Csharp.App.Bot
 {
@@ -27,13 +28,13 @@ namespace Native.Csharp.App.Bot
                         sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                         sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                         sb.AppendLine();
-                        foreach (var member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
+                        foreach (var Member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
                         {
-                            if (member.Attacks != null)
+                            if (Member.Attacks != null)
                             {
-                                sb.Append(member.Name + "已进攻 " + member.Attacks.Count + " 次 \n");
+                                sb.Append(Member.Name + "已进攻 " + Member.Attacks.Count + " 次 \n");
                                 int x = 1;
-                                foreach (var attack in member.Attacks)
+                                foreach (var attack in Member.Attacks)
                                 {
                                     if (x == 1)
                                     {
@@ -50,7 +51,7 @@ namespace Native.Csharp.App.Bot
                             }
                             else
                             {
-                                sb.Append(member.Name + " " + member.Tag + " 无进攻次数\n");
+                                sb.Append(Member.Name + " " + Member.Tag + " 无进攻次数\n");
                             }
                         }
                         sb.Append("战斗日结束时间：" + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
@@ -63,13 +64,13 @@ namespace Native.Csharp.App.Bot
                         sb.Append("当前我方战星: " + clanData.Clan.Stars + "(摧毁：" + clanData.Clan.DestructionPercentage + ")\n");
                         sb.Append("当前对手战星：" + clanData.Opponent.Stars + "(摧毁：" + clanData.Opponent.DestructionPercentage + ")\n");
                         sb.AppendLine();
-                        foreach (var member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
+                        foreach (var Member in clanData.Clan.Members.OrderBy(x => x.MapPosition))
                         {
-                            if (member.Attacks != null)
+                            if (Member.Attacks != null)
                             {
-                                sb.Append(member.Name + "已进攻 " + member.Attacks.Count + " 次 \n");
+                                sb.Append(Member.Name + "已进攻 " + Member.Attacks.Count + " 次 \n");
                                 int x = 1;
-                                foreach (var attack in member.Attacks)
+                                foreach (var attack in Member.Attacks)
                                 {
                                     if (x == 1)
                                     {
@@ -86,7 +87,7 @@ namespace Native.Csharp.App.Bot
                             }
                             else
                             {
-                                sb.Append(member.Name + " 无进攻\n");
+                                sb.Append(Member.Name + " 无进攻\n");
                             }
                         }
                         sb.Append("部落战已结束！");
@@ -97,9 +98,9 @@ namespace Native.Csharp.App.Bot
                         StringBuilder sb = new StringBuilder();
                         sb.Append("当前部落战资料：\n");
                         int x = 1;
-                        foreach (var member in clanData.Clan.Members.OrderBy(y => y.MapPosition))
+                        foreach (var Member in clanData.Clan.Members.OrderBy(y => y.MapPosition))
                         {
-                            sb.AppendLine(x + ". " + member.Name);
+                            sb.AppendLine(x + ". " + Member.Name);
                             x++;
                         }
                         sb.AppendLine("开战时间为: " + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));

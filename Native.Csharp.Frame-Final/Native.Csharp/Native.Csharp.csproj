@@ -65,19 +65,16 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Funq, Version=1.0.0.0, Culture=neutral, PublicKeyToken=95c13cd3fe8e976a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Funq.1.0.0\lib\net40\Funq.dll</HintPath>
-    </Reference>
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=106.11.7.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.11.7\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SC-Compression">
       <HintPath>..\..\..\SC-Compression\SC-Compression\bin\Debug\SC-Compression.dll</HintPath>
@@ -128,9 +125,11 @@
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\切换发字模式.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\多绑定.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\服务器.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\游戏解除.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\解绑.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\踢人.cs" />
     <Compile Include="App\Bot\ChatCheck\BaseAPI\BaseLink.cs" />
     <Compile Include="App\Bot\ChatCheck\CalculatorAPI\计算.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\下载.cs" />
     <Compile Include="App\Bot\ChatCheck\PlayerAPI\鱼情.cs" />
     <Compile Include="App\Bot\ChinaDate.cs" />
+    <Compile Include="App\Bot\ChineseDetection.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
@@ -195,7 +195,7 @@
     <Compile Include="App\COCNet\Types\Players\PlayerRanking.cs" />
     <Compile Include="App\Common.cs" />
     <Compile Include="App\Bot\Abstract\ChatCheckChain.cs" />
-    <Compile Include="App\Bot\ChatCheck\AdminAPI\改名.cs" />
+    <Compile Include="App\Bot\ChatCheck\AdminAPI\绑定.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\清人.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落资料.cs" />
     <Compile Include="App\Bot\ChatCheck\ClanAPI\部落成员.cs" />

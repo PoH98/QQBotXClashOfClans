@@ -38,22 +38,22 @@ namespace Native.Csharp.App.Bot
                 }
                 else
                 {
-                    var member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
+                    var Member = Common.CqApi.GetMemberInfo(chat.FromGroup, tag);
                     foreach(var group in Common.CqApi.GetGroupList())
                     {
-                        if (Common.CqApi.GetMemberList(group.Id).Any(x => x.QQId == member.QQId))
+                        if (Common.CqApi.GetMemberList(group.Id).Any(x => x.QQId == Member.QQId))
                         {
-                            Common.CqApi.SetGroupMemberRemove(group.Id, member.QQId);
+                            Common.CqApi.SetGroupMemberRemove(group.Id, Member.QQId);
                             Common.CqApi.SendGroupMessage(group.Id, "检测到已被拉黑的人存在群里，自动踢出群！");
                         }
                     }
-                    Common.CqApi.SetGroupMemberRemove(chat.FromGroup, member.QQId);
+                    Common.CqApi.SetGroupMemberRemove(chat.FromGroup, Member.QQId);
                     if (!Directory.Exists("com.coc.groupadmin\\Blacklist"))
                     {
                         Directory.CreateDirectory("com.coc.groupadmin\\Blacklist");
                     }
-                    File.WriteAllText("com.coc.groupadmin\\Blacklist\\" + member.QQId, "");
-                    return new string[] { "已把" + member.Nick + "|" + member.Card + "踢出群聊！" };
+                    File.WriteAllText("com.coc.groupadmin\\Blacklist\\" + Member.QQId, "");
+                    return new string[] { "已把" + Member.Nick + "|" + Member.Card + "踢出群聊！" };
                 }
             }
             return base.GetReply(chat);

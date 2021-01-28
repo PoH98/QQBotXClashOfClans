@@ -62,6 +62,8 @@ namespace Native.Csharp.App.Event
                 }
                 else if (e.Message.StartsWith("/"))
                 {
+                    GameAPI Member = new GameAPI(e);
+                    Instance.chains[0].SetMember(Member.Member);
                     var result = Instance.chains[0].GetReply(e);
                     if (result.Count() > 0)
                     {
@@ -89,44 +91,45 @@ namespace Native.Csharp.App.Event
                         switch (e.Message)
                         {
                             case "/拉霸":
-                                new GameAPI(e).JackPot().Dispose();
+                                Member.JackPot();
                                 break;
                             case "/寻宝":
-                                new GameAPI(e).FindTreasure().Dispose();
+                                Member.FindTreasure();
                                 break;
                             case "/帮助":
-                                new GameAPI(e).Help().Dispose();
+                                Member.Help();
                                 break;
                             case "/工作":
-                                new GameAPI(e).MemberWork().Dispose();
+                                Member.MemberWork();
                                 break;
                             case "/我":
-                                new GameAPI(e).MemberCheck().Dispose();
+                                Member.MemberCheck();
                                 break;
                             case "/21点":
-                                new GameAPI(e).Member21Point().Dispose();
+                                Member.Member21Point();
                                 break;
                             case "/排名":
-                                new GameAPI(e).GetRank().Dispose();
+                                Member.GetRank();
                                 break;
                             default:
                                 if (e.Message.StartsWith("/打劫"))
                                 {
-                                    new GameAPI(e).Robber(e).Dispose();
+                                    Member.Robber(e);
                                 }
                                 else if (e.Message.StartsWith("/购买"))
                                 {
-                                    new GameAPI(e).Shop(e).Dispose();
+                                    Member.Shop(e);
                                 }
                                 else if (e.Message.StartsWith("/技能"))
                                 {
-                                    new GameAPI(e).SkillShop(e).Dispose();
+                                    Member.SkillShop(e);
                                 }
                                 break;
                         }
                     }
+                    Member.Dispose();
                 }
-                sw.Start();
+                sw.Stop();
                 Common.CqApi.AddLoger(LogerLevel.Debug, "部落冲突群管", "指令处理完毕！已使用" + sw.ElapsedMilliseconds + "毫秒");
                 if (Directory.Exists("Buffer"))
                 {

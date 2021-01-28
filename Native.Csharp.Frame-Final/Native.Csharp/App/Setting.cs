@@ -45,26 +45,26 @@ namespace Native.Csharp.App
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
+            using (var Member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                numericUpDown1.Value = member.member.Exp;
-                numericUpDown2.Value = member.member.Cash;
+                numericUpDown1.Value = Member.Member.Exp;
+                numericUpDown2.Value = Member.Member.Cash;
             }
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
+            using (var Member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                member.member.Exp = Convert.ToInt32(numericUpDown1.Value);
+                Member.Member.Exp = Convert.ToInt32(numericUpDown1.Value);
             }
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            using (var member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
+            using (var Member = new GameAPI(long.Parse(comboBox1.SelectedItem.ToString()), long.Parse(comboBox2.SelectedItem.ToString())))
             {
-                member.member.Cash = Convert.ToInt32(numericUpDown2.Value);
+                Member.Member.Cash = Convert.ToInt32(numericUpDown2.Value);
             }
         }
 
@@ -238,8 +238,8 @@ namespace Native.Csharp.App
             /*if(comboBox1.SelectedIndex > -1)
             {
                 ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
-                var members = clan.GetClansMembers(BaseData.valuePairs(configType.部落冲突)[comboBox1.SelectedItem.ToString()]);
-                //Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), members);
+                var Members = clan.GetClansMembers(BaseData.valuePairs(configType.部落冲突)[comboBox1.SelectedItem.ToString()]);
+                //Threading.UpdateMemberInClanStatus(Convert.ToInt64(comboBox1.SelectedItem.ToString()), Members);
             }*/
             FileIniDataParser parse = new FileIniDataParser();
             BaseData.UpdateTranslate(parse);

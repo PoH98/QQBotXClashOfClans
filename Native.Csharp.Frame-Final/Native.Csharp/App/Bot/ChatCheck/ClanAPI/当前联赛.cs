@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity;
 
 namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
 {
@@ -39,15 +40,15 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                                             sb.AppendLine("对手为" + roundData.opponent.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.clan.Stars + ", 敌方战星: " + roundData.opponent.Stars);
                                             sb.AppendLine("========================");
-                                            foreach (var member in roundData.clan.Members.OrderBy(x => x.MapPosition))
+                                            foreach (var Member in roundData.clan.Members.OrderBy(x => x.MapPosition))
                                             {
-                                                if(member.Attacks == null || member.Attacks.Length < 1)
+                                                if(Member.Attacks == null || Member.Attacks.Length < 1)
                                                 {
-                                                    sb.AppendLine(member.Name + " : 还未进攻");
+                                                    sb.AppendLine(Member.Name + " : 还未进攻");
                                                 }
                                                 else
                                                 {
-                                                    sb.AppendLine(member.Name + " : " + member.Attacks[0].Stars +"星(摧毁: "+member.Attacks[0].DestructionPercentage+"%)");
+                                                    sb.AppendLine(Member.Name + " : " + Member.Attacks[0].Stars +"星(摧毁: "+Member.Attacks[0].DestructionPercentage+"%)");
                                                 }
                                             }
                                             return new string[] { BaseData.TextToImg(sb.ToString()) };
@@ -60,15 +61,15 @@ namespace Native.Csharp.App.Bot.ChatCheck.ClanAPI
                                             sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.clan.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.opponent.Stars + ", 敌方战星: " + roundData.clan.Stars);
-                                            foreach (var member in roundData.opponent.Members.OrderBy(x => x.MapPosition))
+                                            foreach (var Member in roundData.opponent.Members.OrderBy(x => x.MapPosition))
                                             {
-                                                if (member.Attacks == null || member.Attacks.Length < 1)
+                                                if (Member.Attacks == null || Member.Attacks.Length < 1)
                                                 {
-                                                    sb.AppendLine(member.Name + " : 还未进攻");
+                                                    sb.AppendLine(Member.Name + " : 还未进攻");
                                                 }
                                                 else
                                                 {
-                                                    sb.AppendLine(member.Name + " : " + member.Attacks[0].Stars + "星(摧毁: " + member.Attacks[0].DestructionPercentage + "%)");
+                                                    sb.AppendLine(Member.Name + " : " + Member.Attacks[0].Stars + "星(摧毁: " + Member.Attacks[0].DestructionPercentage + "%)");
                                                 }
                                             }
                                             return new string[] { BaseData.TextToImg(sb.ToString()) };

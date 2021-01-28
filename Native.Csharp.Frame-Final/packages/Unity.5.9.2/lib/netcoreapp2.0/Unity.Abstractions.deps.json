@@ -1,0 +1,64 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": "e630fdb8cd9b2b4c9d69e1947222265759d5ac71"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "Unity.Abstractions/4.0.2": {
+        "dependencies": {
+          "Microsoft.SourceLink.GitHub": "1.0.0-beta2-18618-05",
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "Unity.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/1.0.0-beta2-18618-05": {},
+      "Microsoft.SourceLink.Common/1.0.0-beta2-18618-05": {},
+      "Microsoft.SourceLink.GitHub/1.0.0-beta2-18618-05": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "1.0.0-beta2-18618-05",
+          "Microsoft.SourceLink.Common": "1.0.0-beta2-18618-05"
+        }
+      },
+      "System.ValueTuple/4.5.0": {}
+    }
+  },
+  "libraries": {
+    "Unity.Abstractions/4.0.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kcnqXhm6lxU8UFtpVO8enW7L8Gisw05bI46B3cWlW7K1dgGPb4hAyfiGyGczYOU6n4RtHO9CCfh0Lk74qkbF6w==",
+      "path": "microsoft.build.tasks.git/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.build.tasks.git.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eJP4JUDOiiWPBvwN+/0v1otoT8VPFOm6upABUAS6TwFbLfjRiLI2Ko44gyxF0nW+uMQHx186tnTDt+fg7je97Q==",
+      "path": "microsoft.sourcelink.common/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.sourcelink.common.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/1.0.0-beta2-18618-05": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7cQMyVdud/ritrYqgc99LecTC0g9rA2QhO1QFi6OBubsA++gMXRiXx/ct1rmycxM9EvHJSNZ9DHbZHu42RLMLQ==",
+      "path": "microsoft.sourcelink.github/1.0.0-beta2-18618-05",
+      "hashPath": "microsoft.sourcelink.github.1.0.0-beta2-18618-05.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2XTuQk0XMNISXCC56nTqmf/BrEDUsT42N+NSB+wRSlQCOIjV2QaBrbVaR89kD4RX7U5KwfK/fT9J9XEo6QiZ6g==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    }
+  }
+}

@@ -1,13 +1,12 @@
 ﻿using CocNET.Interfaces;
-using Native.Csharp.App.GameData;
+using Native.Csharp.App.Bot.Game;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
+using Unity;
 
 namespace Native.Csharp.App.Bot
 {
@@ -15,88 +14,86 @@ namespace Native.Csharp.App.Bot
     {
         public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
-            /*if (chat.Message.StartsWith("/清人"))
+            if (chat.Message.StartsWith("/清人"))
             {
                 Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到检查指令");
-                var Groupmember = Common.CqApi.GetMemberList(chat.FromGroup);
-                ICocCoreClans players = BaseData.Instance.container.Resolve<ICocCoreClans>();
-                var clanmembers = players.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]);
-                if (clanmembers != null)
+                var GroupMember = Common.CqApi.GetMemberList(chat.FromGroup);
+                var clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                var result = clan.GetClansMembers(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()].Trim());
+                if(result == null)
                 {
-                    var Clanmember = clanmembers.Select(x => x.Name).ToList();
-                    if (Clanmember != null)
+                    return new string[] { "请检查设置或者绑定部落后才使用此功能！" };
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("不在部落的成员名单: ");
+                foreach (var member in GroupMember)
+                {
+                    using (var api = new GameAPI(chat.FromGroup, member.QQId))
                     {
-                        var namelist = getGroupMemberNameList(chat.FromGroup);
-                        StringBuilder sb = new StringBuilder();
-                        sb.AppendLine("不在部落:");
-                        foreach(var name in Clanmember)
+                        try
                         {
-                            var fetch = namelist.FirstOrDefault(x => name.Contains(x));
-                            if (fetch == null)
+                            if (api.Member.ClanData.Count < 1)
                             {
-                                sb.AppendLine(name);
+                                continue;
                             }
-                            else
+                            if (api.Member.ClanData.Any(x => !x.InClan))
                             {
-                                namelist.Remove(fetch);
+                                sb.AppendLine(member.Card + ":-");
+                                foreach (var data in api.Member.ClanData)
+                                {
+                                    if (!data.InClan)
+                                    {
+                                        try
+                                        {
+                                            sb.AppendLine(" * " + data.Name + " 已经不在部落" + (DateTime.Now - data.LastSeenInClan.Value).TotalDays + "天");
+                                        }
+                                        catch
+                                        {
+                                            sb.AppendLine(" * " + data.Name + " 无在部落记录");
+                                        }
+
+                                    }
+                                }
+                                sb.AppendLine("==============");
                             }
+                        }
+                        catch
+                        {
+                            continue;
                         }
                         
-                        return new string[] { BaseData.TextToImg("需要被清成员名单:\n" + sb.ToString()) };
-                    }
-                    else
-                    {
-                       return new string[] { "请确保config.ini里的设置是正确的！" };
                     }
                 }
-                else
+                /*sb.AppendLine("不在群的成员名单: ");
+                foreach (var id in result)
                 {
-                   return new string[] { "请确保config.ini里的设置是正确的！" };
-                }
-            }*/
-            return base.GetReply(chat);
-        }
-
-        public List<string> getGroupMemberNameList(long groupID)
-        {
-            var me = Common.CqApi.GetLoginQQ();
-            List<string> namelist = new List<string>();
-            foreach (var member in Common.CqApi.GetMemberList(groupID))
-            {
-                if (member.QQId != me)
-                {
-                    if (member.Card.Contains(","))
+                    bool Found = false;
+                    foreach(var mem in GroupMember)
                     {
-                        var splitted = member.Card.Split(',');
-                        foreach (var split in splitted)
+                        try
                         {
-                            namelist.Add(split.Trim());
+                            using (var m = new GameAPI(chat.FromQQ, mem.QQId))
+                            {
+                                Found = m.Member.ClanData.Any(y => y.ClanID.Trim() == id.Tag.Trim());
+                                if (Found)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        catch
+                        {
+
                         }
                     }
-                    else if (member.Card.Contains("，"))
+                    if (!Found)
                     {
-                        var splitted = member.Card.Split('，');
-                        foreach (var split in splitted)
-                        {
-                            namelist.Add(split.Trim());
-                        }
+                        sb.AppendLine(id.ClanRank + ":" + id.Name);
                     }
-                    else if (member.Card.Contains("-"))
-                    {
-                        namelist.Add(string.Join("-", member.Card.Split('-').Skip(1)));
-                    }
-                    else if (string.IsNullOrEmpty(member.Card))
-                    {
-                        namelist.Add(member.Nick);
-                    }
-                    else
-                    {
-                        namelist.Add(member.Card);
-                    }
-                }
-
+                }*/
+                return new string[] { BaseData.TextToImg(sb.ToString()) };
             }
-            return namelist;
+            return base.GetReply(chat);
         }
     }
 }

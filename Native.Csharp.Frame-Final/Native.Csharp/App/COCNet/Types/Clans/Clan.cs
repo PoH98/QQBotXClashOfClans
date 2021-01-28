@@ -43,10 +43,10 @@ namespace CocNET.Types.Clans
         [JsonProperty("requiredTrophies")]
         public int RequiredTrophies { get; set; }
 
-        [JsonProperty("members")]
+        [JsonProperty("Members")]
         public int Members { get; set; }
 
-        [JsonProperty("memberList")]
+        [JsonProperty("MemberList")]
         public List<Member> MemberList { get; set; }
 
         [JsonProperty("clanVersusPoints")]

@@ -35,7 +35,7 @@ namespace CocNET.Types.Clans.CurrentWar
         [JsonProperty("expEarned")]
         public decimal ExpEarned { get; set; }
 
-        [JsonProperty("members")]
+        [JsonProperty("Members")]
         public List<WarMember> Members { get; set; }
     }
 }

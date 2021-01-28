@@ -1,8 +1,8 @@
 ﻿using Native.Csharp.Sdk.Cqp.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Native.Csharp.App.GameData
 {
@@ -74,8 +74,11 @@ namespace Native.Csharp.App.GameData
         /// <summary>
         /// 记录玩家ID以及最后一次他在部落的时间
         /// </summary>
-        //public List<ClanData> ClanID_LastSeenInClan;
+        [OptionalField(VersionAdded = 2)]
+        [XmlArray]
+        public List<ClanData> ClanData;
     }
+
     [Serializable]
     public class ClanData
     {
@@ -84,10 +87,14 @@ namespace Native.Csharp.App.GameData
 
         }
 
-        public ClanData(string ClanID, DateTime? LastSeenInClan)
+        public ClanData(string ClanID, DateTime? LastSeenInClan = null)
         {
             this.ClanID = ClanID;
             this.LastSeenInClan = LastSeenInClan;
+            if(LastSeenInClan == null)
+            {
+                InClan = true;
+            }
         }
         /// <summary>
         /// 部落玩家ID
@@ -97,5 +104,13 @@ namespace Native.Csharp.App.GameData
         /// 部落玩家最后发现还在部落的时刻
         /// </summary>
         public DateTime? LastSeenInClan;
+        /// <summary>
+        /// 是否还在部落
+        /// </summary>
+        public bool InClan;
+        /// <summary>
+        /// 游戏内名字
+        /// </summary>
+        public string Name;
     }
 }

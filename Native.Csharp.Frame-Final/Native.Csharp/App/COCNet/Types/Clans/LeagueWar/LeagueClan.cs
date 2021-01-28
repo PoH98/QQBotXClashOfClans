@@ -26,7 +26,7 @@ namespace CocNET.Types.Clans.LeagueWar
         [JsonProperty("stars")]
         public int Stars { get; set; }
 
-        [JsonProperty("members")]
+        [JsonProperty("Members")]
         public LeagueMember[] Members { get; set; }
     }
 }

@@ -1,14 +1,11 @@
 ﻿using CocNET.Interfaces;
-using CocNET.Types.Other;
+using CocNET.Types.Players;
 using Native.Csharp.App.Bot.Game;
-using Native.Csharp.App.GameData;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Xml.Serialization;
+using Unity;
 
 namespace Native.Csharp.App.Bot
 {
@@ -26,6 +23,7 @@ namespace Native.Csharp.App.Bot
                     if ((DateTime.Now.Minute == 0 || DateTime.Now.Minute == 30) && DateTime.Now.Second == 0)
                     {
                         ICocCoreClans clan = BaseData.Instance.container.Resolve<ICocCoreClans>();
+                        ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                         try
                         {
                             foreach (var clanID in BaseData.Instance.config["部落冲突"])
@@ -67,7 +65,6 @@ namespace Native.Csharp.App.Bot
                                                 Common.CqApi.SendGroupMessage(value, Common.CqApi.CqCode_At() + "我tm祝各位tm的"+DateTime.Now.Year+"新年快乐");
                                             }
                                             var clanData = clan.GetCurrentWar(clanID.Value);
-                                            var members = clan.GetClansMembers(clanID.Value);
                                             if (string.IsNullOrEmpty(clanData.Message))
                                             {
                                                 string status = "";
@@ -100,6 +97,36 @@ namespace Native.Csharp.App.Bot
                                             else
                                             {
                                                 Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Error, "部落战检测", clanData.Message);
+                                            }
+                                            var Members = clan.GetClansMembers(clanID.Value);
+                                            var GroupMembers = Common.CqApi.GetMemberList(value);
+                                            foreach(var member in GroupMembers)
+                                            {
+                                                using(var api = new GameAPI(value, member.QQId))
+                                                {
+                                                    foreach(var cd in api.Member.ClanData)
+                                                    {
+                                                        var m = Members.Where(x => x.Tag == cd.ClanID).FirstOrDefault();
+                                                        if(m != null)
+                                                        {
+                                                            cd.InClan = true;
+                                                            cd.Name = m.Name;
+                                                            cd.LastSeenInClan = DateTime.Now;
+                                                        }
+                                                        else
+                                                        {
+                                                            cd.InClan = false;
+                                                        }
+                                                    }
+                                                    if(api.Member.ClanData.Count == 1 && DateTime.Now.Hour == 0)
+                                                    {
+                                                        Player player = players.GetPlayer(api.Member.ClanData.First().ClanID);
+                                                        if(api.Member.Member.Card != BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name)
+                                                        {
+                                                            Common.CqApi.SetGroupMemberNewCard(value, api.Member.Member.QQId, BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                         else

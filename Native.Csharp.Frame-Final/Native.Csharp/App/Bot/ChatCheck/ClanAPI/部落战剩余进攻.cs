@@ -2,6 +2,7 @@
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using System.Collections.Generic;
 using System.Text;
+using Unity;
 
 namespace Native.Csharp.App.Bot
 {
@@ -27,11 +28,11 @@ namespace Native.Csharp.App.Bot
                     {
                         StringBuilder sb = new StringBuilder();
                         sb.Append(Common.CqApi.CqCode_At(chat.FromQQ) + "\n你要的部落战资料：\n");
-                        foreach (var member in clanData.Clan.Members)
+                        foreach (var Member in clanData.Clan.Members)
                         {
-                            if (member.Attacks == null)
+                            if (Member.Attacks == null)
                             {
-                                sb.Append(member.Name + " " + member.Tag + "\n");
+                                sb.Append(Member.Name + " " + Member.Tag + "\n");
                             }
                         }
                         sb.Append("战斗日结束时间：" + clanData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));

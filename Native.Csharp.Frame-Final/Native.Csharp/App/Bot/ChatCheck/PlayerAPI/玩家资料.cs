@@ -4,6 +4,7 @@ using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity;
 
 namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
 {
