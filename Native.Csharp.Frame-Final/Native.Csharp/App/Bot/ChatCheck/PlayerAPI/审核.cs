@@ -32,7 +32,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.PlayerAPI
                 {
                     if(Member.ClanData.Count < 1)
                     {
-                        return new string[] { "还请先绑定好自己QQ号后再使用不发玩家标签的审核指令！" };
+                        return new string[] { "还请先使用/绑定指令后再使用不发玩家标签的审核指令！" };
                     }
                     List<string> message = new List<string>();
                     foreach(var clanData in Member.ClanData)

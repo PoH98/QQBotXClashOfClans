@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="App\Bot\AdminAPI.cs" />
     <Compile Include="App\Bot\BaseData.cs" />
+    <Compile Include="App\Bot\BaseLinkData.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\切换发字模式.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\多绑定.cs" />
     <Compile Include="App\Bot\ChatCheck\AdminAPI\拉黑.cs" />

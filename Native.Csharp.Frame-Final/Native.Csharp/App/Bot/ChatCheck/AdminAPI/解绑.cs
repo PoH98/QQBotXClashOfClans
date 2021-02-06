@@ -37,7 +37,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                 {
                     if (chat.Message.Contains('#'))
                     {
-                        newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim();
+                        newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
                         if (Member.ClanData.Any(x => x.ClanID == newname))
                         {
                             var selected = Member.ClanData.Where(x => x.ClanID == newname).FirstOrDefault();
@@ -153,7 +153,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                         var Member = API.Member;
                         if (chat.Message.Contains('#'))
                         {
-                            newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim();
+                            newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
                             if (Member.ClanData.Any(x => x.ClanID == newname))
                             {
                                 var selected = Member.ClanData.Where(x => x.ClanID == newname).FirstOrDefault();

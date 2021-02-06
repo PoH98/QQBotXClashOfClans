@@ -40,6 +40,7 @@ namespace Native.Csharp.App.Bot
 
         public bool SplitLongText = false;
 
+        public Dictionary<int, BaseLinkData> BaseLinks = new Dictionary<int, BaseLinkData>();
         public static BaseData Instance
         {
             get

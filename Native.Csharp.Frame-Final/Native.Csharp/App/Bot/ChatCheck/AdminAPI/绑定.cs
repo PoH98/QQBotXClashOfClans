@@ -15,7 +15,7 @@ namespace Native.Csharp.App.Bot
     {
         public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
-            if (chat.Message.StartsWith("/绑定"))
+            if (chat.Message.StartsWith("/绑定 "))
             {
                 Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到改名指令");
                 GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(chat.FromGroup, chat.FromQQ);
@@ -27,7 +27,7 @@ namespace Native.Csharp.App.Bot
                 }
                 if (!long.TryParse(qq, out long tag))
                 {
-                    return new string[] { "我不知道你在艾特个毛线" };
+                    tag = chat.FromQQ;
                 }
                 if (chat.Message.Contains(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]))
                 {
@@ -37,7 +37,7 @@ namespace Native.Csharp.App.Bot
                 {
                     if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
                     {
-                        newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim();
+                        newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
                         if (!Member.ClanData.Any(x => x.ClanID == newname))
                         {
                             Member.ClanData.Add(new GameData.ClanData(newname));
@@ -135,7 +135,7 @@ namespace Native.Csharp.App.Bot
                         var Member = API.Member;
                         if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
                         {
-                            newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim();
+                            newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
                             if (!Member.ClanData.Any(x => x.ClanID == newname))
                             {
                                 Member.ClanData.Add(new GameData.ClanData(newname));

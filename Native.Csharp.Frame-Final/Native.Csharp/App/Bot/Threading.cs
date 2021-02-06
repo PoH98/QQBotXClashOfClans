@@ -106,7 +106,7 @@ namespace Native.Csharp.App.Bot
                                                 {
                                                     foreach(var cd in api.Member.ClanData)
                                                     {
-                                                        var m = Members.Where(x => x.Tag == cd.ClanID).FirstOrDefault();
+                                                        var m = Members.Where(x => x.Tag == cd.ClanID || x.Tag.Replace("0","O") == cd.ClanID || x.Tag.Replace("1","I") == cd.ClanID || x.Tag.Replace("0", "O").Replace("1", "I") == cd.ClanID).FirstOrDefault();
                                                         if(m != null)
                                                         {
                                                             cd.InClan = true;

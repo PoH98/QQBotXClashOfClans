@@ -40,9 +40,9 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                     ids.AddRange(chat.Message.Split(' ').Where(x => x.Contains("#")));
                     foreach (var id in ids)
                     {
-                        if (!Member.ClanData.Any(x => x.ClanID == id.Trim()))
+                        if (!Member.ClanData.Any(x => x.ClanID == id.Trim().ToUpper()))
                         {
-                            Member.ClanData.Add(new GameData.ClanData(id.Trim()));
+                            Member.ClanData.Add(new GameData.ClanData(id.Trim().ToUpper()));
                         }
                     }
                     string newname = string.Empty;
@@ -52,12 +52,12 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                         var player = players.GetPlayer(id.Trim());
                         if(player == null)
                         {
-                            var remove = Member.ClanData.First(x => x.ClanID == id.Trim());
+                            var remove = Member.ClanData.First(x => x.ClanID == id.Trim().ToUpper());
                             Member.ClanData.Remove(remove);
                         }
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
-                            var remove = Member.ClanData.First(x => x.ClanID == id.Trim());
+                            var remove = Member.ClanData.First(x => x.ClanID == id.Trim().ToUpper());
                             Member.ClanData.Remove(remove);
                         }
                         var name = player.Name;
@@ -88,9 +88,9 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                         ids.AddRange(chat.Message.Split(' ').Where(x => x.Contains("#")));
                         foreach (var id in ids)
                         {
-                            if (!Member.ClanData.Any(x => x.ClanID == id.Trim()))
+                            if (!Member.ClanData.Any(x => x.ClanID == id.Trim().ToUpper()))
                             {
-                                Member.ClanData.Add(new GameData.ClanData(id.Trim()));
+                                Member.ClanData.Add(new GameData.ClanData(id.Trim().ToUpper()));
                             }
                         }
                         string newname = string.Empty;
@@ -100,12 +100,12 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                             var player = players.GetPlayer(id.Trim());
                             if (player == null)
                             {
-                                var remove = Member.ClanData.First(x => x.ClanID == id.Trim());
+                                var remove = Member.ClanData.First(x => x.ClanID == id.Trim().ToUpper());
                                 Member.ClanData.Remove(remove);
                             }
                             if (!string.IsNullOrEmpty(player.Reason))
                             {
-                                var remove = Member.ClanData.First(x => x.ClanID == id.Trim());
+                                var remove = Member.ClanData.First(x => x.ClanID == id.Trim().ToUpper());
                                 Member.ClanData.Remove(remove);
                             }
                             var name = player.Name;

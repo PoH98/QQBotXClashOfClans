@@ -26,6 +26,7 @@ namespace Native.Csharp.App.Bot
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("不在部落的成员名单: ");
+                List<string> noBind = new List<string>();
                 foreach (var member in GroupMember)
                 {
                     using (var api = new GameAPI(chat.FromGroup, member.QQId))
@@ -34,6 +35,7 @@ namespace Native.Csharp.App.Bot
                         {
                             if (api.Member.ClanData.Count < 1)
                             {
+                                noBind.Add(api.Member.Member.Card);
                                 continue;
                             }
                             if (api.Member.ClanData.Any(x => !x.InClan))
@@ -45,7 +47,7 @@ namespace Native.Csharp.App.Bot
                                     {
                                         try
                                         {
-                                            sb.AppendLine(" * " + data.Name + " 已经不在部落" + (DateTime.Now - data.LastSeenInClan.Value).TotalDays + "天");
+                                            sb.AppendLine(" * " + data.Name + " 已经不在部落" + (DateTime.Now - data.LastSeenInClan.Value).TotalDays.ToString("N2") + "天");
                                         }
                                         catch
                                         {
@@ -64,33 +66,11 @@ namespace Native.Csharp.App.Bot
                         
                     }
                 }
-                /*sb.AppendLine("不在群的成员名单: ");
-                foreach (var id in result)
+                sb.AppendLine("群里无绑定名单: ");
+                foreach(var nb in noBind)
                 {
-                    bool Found = false;
-                    foreach(var mem in GroupMember)
-                    {
-                        try
-                        {
-                            using (var m = new GameAPI(chat.FromQQ, mem.QQId))
-                            {
-                                Found = m.Member.ClanData.Any(y => y.ClanID.Trim() == id.Tag.Trim());
-                                if (Found)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    if (!Found)
-                    {
-                        sb.AppendLine(id.ClanRank + ":" + id.Name);
-                    }
-                }*/
+                    sb.AppendLine(nb);
+                }
                 return new string[] { BaseData.TextToImg(sb.ToString()) };
             }
             return base.GetReply(chat);

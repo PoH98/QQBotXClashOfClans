@@ -1,6 +1,7 @@
 ﻿using Native.Csharp.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -27,7 +28,25 @@ namespace Native.Csharp.App.Bot.ChatCheck
             }
             return base.GetReply(chat);
         }
+
         private string GetLink(int 大本等级)
+        {
+            if (BaseData.Instance.BaseLinks.ContainsKey(大本等级))
+            {
+                if((DateTime.Now - BaseData.Instance.BaseLinks[大本等级].LastUpdate).TotalDays >= 2 || BaseData.Instance.BaseLinks[大本等级].Links.Count <= 1)
+                {
+                   BaseData.Instance.BaseLinks.Remove(大本等级);
+                   BaseData.Instance.BaseLinks.Add(大本等级, new BaseLinkData(DateTime.Now, LoadLink(大本等级)));
+                }
+            }
+            else
+            {
+                BaseData.Instance.BaseLinks.Add(大本等级, new BaseLinkData(DateTime.Now, LoadLink(大本等级)));
+            }
+            return BaseData.Instance.BaseLinks[大本等级].GetLink();
+        }
+
+        private List<string> LoadLink(int 大本等级)
         {
             Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Debug, "部落冲突阵型DEBUG", "正在获取" + 大本等级 + "本的阵型");
             string 网页 = string.Empty;
@@ -73,10 +92,7 @@ namespace Native.Csharp.App.Bot.ChatCheck
                     TM的部落链接.Add(阵型链接.Href);
                 }
             }
-            Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突阵型获取", "已获取" + TM的部落链接.Count + "阵型");
-            Random rnd = new Random();
-            int rndResult = rnd.Next(0, TM的部落链接.Count);
-            return "https://link.clashofclans.com/cn?" + TM的部落链接[rndResult].Remove(0, "https://link.clashofclans.com/cn?".Length);
+            return TM的部落链接;
         }
     }
 }
