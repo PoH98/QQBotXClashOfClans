@@ -1,5 +1,6 @@
 ﻿using CocNET.Interfaces;
 using Native.Csharp.App.Bot.Game;
+using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
@@ -15,7 +16,7 @@ namespace Native.Csharp.App.Bot
     {
         public override IEnumerable<string> GetReply(CqGroupMessageEventArgs chat)
         {
-            if (chat.Message.StartsWith("/绑定 "))
+            if (chat.Message.StartsWith("/绑定"))
             {
                 Common.CqApi.AddLoger(LogerLevel.Info_Receive, "部落冲突群管", "接受到改名指令");
                 GroupMemberInfo sendMember = Common.CqApi.GetMemberInfo(chat.FromGroup, chat.FromQQ);
@@ -37,18 +38,18 @@ namespace Native.Csharp.App.Bot
                 {
                     if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
                     {
-                        newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
-                        if (!Member.ClanData.Any(x => x.ClanID == newname))
-                        {
-                            Member.ClanData.Add(new GameData.ClanData(newname));
-                        }
+                        newname = "#" + chat.Message.Split('#').Last().Trim().ToUpper();
                         ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
                             return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
                         }
-                        if(Member.ClanData.Count == 1)
+                        if (!Member.ClanData.Any(x => x.ClanID == newname))
+                        {
+                            Member.ClanData.Add(new ClanData(newname));
+                        }
+                        if (Member.ClanData.Count == 1)
                         {
                             newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
                         }
@@ -58,10 +59,10 @@ namespace Native.Csharp.App.Bot
                             foreach(var clanData in Member.ClanData)
                             {
                                 var name = players.GetPlayer(clanData.ClanID).Name;
-                                if (names.Contains(name.Substring(Math.Max(0, 3))) && name.StartsWithChinese())
+                                if (names.Contains(name.Substring(Math.Max(name.Length, 3))) && name.StartsWithChinese())
                                 {
                                     //有重复名字
-                                    names.Add(name.Substring(Math.Max(0, name.Length - 3)));
+                                    names.Add(name.Substring(Math.Max(name.Length, name.Length - 3)));
                                 }
                                 else if(name.StartsWithChinese())
                                 {
@@ -83,15 +84,15 @@ namespace Native.Csharp.App.Bot
                         {
                             newname = newname.Remove(newname.IndexOf('&'));
                         }
-                        if (!Member.ClanData.Any(x => x.ClanID == newname))
-                        {
-                            Member.ClanData.Add(new GameData.ClanData(newname));
-                        }
                         ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
                         {
                             return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
+                        }
+                        if (!Member.ClanData.Any(x => x.ClanID == newname))
+                        {
+                            Member.ClanData.Add(new ClanData(newname));
                         }
                         if (Member.ClanData.Count == 1)
                         {
@@ -103,7 +104,7 @@ namespace Native.Csharp.App.Bot
                             foreach (var clanData in Member.ClanData)
                             {
                                 var name = players.GetPlayer(clanData.ClanID).Name;
-                                if (names.Contains(name.Substring(Math.Max(0, 3))) && name.StartsWithChinese())
+                                if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
                                 {
                                     //有重复名字
                                     names.Add(name.Substring(Math.Max(0, name.Length - 3)));
@@ -135,16 +136,16 @@ namespace Native.Csharp.App.Bot
                         var Member = API.Member;
                         if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
                         {
-                            newname = chat.Message.Split(' ').Where(x => x.Contains("#")).Last().Trim().ToUpper();
-                            if (!Member.ClanData.Any(x => x.ClanID == newname))
-                            {
-                                Member.ClanData.Add(new GameData.ClanData(newname));
-                            }
+                            newname = "#" + chat.Message.Split('#').Last().Trim().ToUpper();
                             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                             var player = players.GetPlayer(newname);
                             if (!string.IsNullOrEmpty(player.Reason))
                             {
                                 return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
+                            }
+                            if (!Member.ClanData.Any(x => x.ClanID == newname))
+                            {
+                                Member.ClanData.Add(new ClanData(newname));
                             }
                             if (Member.ClanData.Count == 1)
                             {
@@ -156,7 +157,7 @@ namespace Native.Csharp.App.Bot
                                 foreach (var clanData in Member.ClanData)
                                 {
                                     var name = players.GetPlayer(clanData.ClanID).Name;
-                                    if (names.Contains(name.Substring(Math.Max(0, 3))) && name.StartsWithChinese())
+                                    if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
                                     {
                                         //有重复名字
                                         names.Add(name.Substring(Math.Max(0, name.Length - 3)));
@@ -181,15 +182,15 @@ namespace Native.Csharp.App.Bot
                             {
                                 newname = newname.Remove(newname.IndexOf('&'));
                             }
-                            if (!Member.ClanData.Any(x => x.ClanID == newname))
-                            {
-                                Member.ClanData.Add(new GameData.ClanData(newname));
-                            }
                             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                             var player = players.GetPlayer(newname);
                             if (!string.IsNullOrEmpty(player.Reason))
                             {
                                 return new string[] { "找不到玩家资料或者玩家标签错误: " + player.Reason };
+                            }
+                            if (!Member.ClanData.Any(x => x.ClanID == newname))
+                            {
+                                Member.ClanData.Add(new ClanData(newname));
                             }
                             if (Member.ClanData.Count == 1)
                             {
@@ -201,7 +202,7 @@ namespace Native.Csharp.App.Bot
                                 foreach (var clanData in Member.ClanData)
                                 {
                                     var name = players.GetPlayer(clanData.ClanID).Name;
-                                    if (names.Contains(name.Substring(Math.Max(0, 3))) && name.StartsWithChinese())
+                                    if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
                                     {
                                         //有重复名字
                                         names.Add(name.Substring(Math.Max(0, name.Length - 3)));

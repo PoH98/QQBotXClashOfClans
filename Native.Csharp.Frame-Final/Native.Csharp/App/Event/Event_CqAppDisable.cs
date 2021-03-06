@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Native.Csharp.App.Bot;
+using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 
@@ -34,6 +35,7 @@ namespace Native.Csharp.App.Event
                     BaseData.Instance.checkClanWar = null;
                     Common.CqApi.AddLoger(Sdk.Cqp.Enum.LogerLevel.Info, "部落冲突检测", "部落战检测系统停止");
                 }
+                SharedData.Instance.merchant.Dispose();
             }
             catch
             {

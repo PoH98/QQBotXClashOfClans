@@ -27,7 +27,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                 }
                 if (!long.TryParse(qq, out long tag))
                 {
-                    return new string[] { "我不知道你在艾特个毛线" };
+                    tag = chat.FromQQ;
                 }
                 if (chat.Message.Contains(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]))
                 {

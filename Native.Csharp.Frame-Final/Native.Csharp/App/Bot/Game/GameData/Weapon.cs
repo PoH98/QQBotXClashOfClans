@@ -25,6 +25,7 @@ namespace Native.Csharp.App.GameData
         public abstract string Name { get; }
         public abstract int Price { get; }
         public abstract TimeSpan GetAwaitTime { get; }
+        public abstract WeaponSkill WeaponSkill { get; }
     }
 
     [Serializable]
@@ -41,6 +42,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 0;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 10, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
@@ -57,14 +60,16 @@ namespace Native.Csharp.App.GameData
         public override int Price => 5000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 15, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
     public class Lighting : Weapon
     {
-        public override int minDamage => 91;
+        public override int minDamage => 95;
 
-        public override int maxDamage => 112;
+        public override int maxDamage => 130;
 
         public override string Name => "闪电";
 
@@ -73,14 +78,16 @@ namespace Native.Csharp.App.GameData
         public override int Price => 10000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 35, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
     public class Magic : Weapon
     {
-        public override int minDamage => 80;
+        public override int minDamage => 70;
 
-        public override int maxDamage => 130;
+        public override int maxDamage => 80;
 
         public override string Name => "火球";
 
@@ -89,6 +96,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 10000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(0, 35, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.KeepDamage;
     }
     [Serializable]
     public class BDrag : Weapon
@@ -104,6 +113,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 20000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(1, 10, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
     [Serializable]
     public class Pekka : Weapon
@@ -119,6 +130,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 20000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(1, 10, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
 
@@ -136,6 +149,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 25000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(1, 30, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
@@ -152,6 +167,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => 35000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(1, 30, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
@@ -168,30 +185,36 @@ namespace Native.Csharp.App.GameData
         public override int Price => 35000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(1, 50, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
     public class Inferno : Weapon
     {
         public override int minDamage => 370;
-        public override int maxDamage => 530;
+        public override int maxDamage => 400;
         public override string Name => "巨型地狱塔";
         public override int maxHP => 2600;
         public override int Price => 40000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(2, 25, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.Doubled;
     }
 
     [Serializable]
     public class MDSmartStick : Weapon
     {
-        public override int minDamage => 400;
-        public override int maxDamage => 580;
+        public override int minDamage => 800;
+        public override int maxDamage => 1080;
         public override string Name => "马德牌智能拐杖";
-        public override int maxHP => 3000;
+        public override int maxHP => 3200;
         public override int Price => 55000;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(3, 0, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.None;
     }
 
     [Serializable]
@@ -208,6 +231,8 @@ namespace Native.Csharp.App.GameData
         public override int Price => -1;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(365,0, 0, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.Doubled;
     }
 
     [Serializable]
@@ -224,5 +249,7 @@ namespace Native.Csharp.App.GameData
         public override int Price => -1;
 
         public override TimeSpan GetAwaitTime => new TimeSpan(365, 0, 0, 0);
+
+        public override WeaponSkill WeaponSkill => WeaponSkill.Doubled;
     }
 }

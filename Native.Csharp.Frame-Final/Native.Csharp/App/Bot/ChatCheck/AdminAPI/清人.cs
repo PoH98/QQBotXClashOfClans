@@ -41,18 +41,27 @@ namespace Native.Csharp.App.Bot
                             if (api.Member.ClanData.Any(x => !x.InClan))
                             {
                                 sb.AppendLine(member.Card + ":-");
-                                foreach (var data in api.Member.ClanData)
+                                var buffer = api.Member.ClanData;
+                                foreach (var data in buffer)
                                 {
                                     if (!data.InClan)
                                     {
-                                        try
+                                        if (string.IsNullOrEmpty(data.Name))
                                         {
-                                            sb.AppendLine(" * " + data.Name + " 已经不在部落" + (DateTime.Now - data.LastSeenInClan.Value).TotalDays.ToString("N2") + "天");
+                                            api.Member.ClanData.Remove(api.Member.ClanData.Where(x => x.ClanID == data.ClanID).First());
                                         }
-                                        catch
+                                        else
                                         {
-                                            sb.AppendLine(" * " + data.Name + " 无在部落记录");
+                                            try
+                                            {
+                                                sb.AppendLine(" * " + data.Name + " 已经不在部落" + (DateTime.Now - data.LastSeenInClan.Value).TotalDays.ToString("N2") + "天");
+                                            }
+                                            catch
+                                            {
+                                                sb.AppendLine(" * " + data.Name + " 无在部落记录");
+                                            }
                                         }
+
 
                                     }
                                 }

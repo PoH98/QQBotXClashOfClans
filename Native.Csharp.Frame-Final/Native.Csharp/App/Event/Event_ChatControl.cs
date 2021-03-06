@@ -111,6 +111,17 @@ namespace Native.Csharp.App.Event
                             case "/排名":
                                 Member.GetRank();
                                 break;
+                            case "/合成A":
+                            case "/合成a":
+                                Member.Buff("A");
+                                break;
+                            case "/合成H":
+                            case "/合成h":
+                                Member.Buff("H");
+                                break;
+                            case "/拍卖场":
+                                Member.ListTrade();
+                                break;
                             default:
                                 if (e.Message.StartsWith("/打劫"))
                                 {
@@ -123,6 +134,14 @@ namespace Native.Csharp.App.Event
                                 else if (e.Message.StartsWith("/技能"))
                                 {
                                     Member.SkillShop(e);
+                                }
+                                else if (e.Message.StartsWith("/拍卖场购买"))
+                                {
+                                    Member.PurchaseTradeItem(e.Message);
+                                }
+                                else if (e.Message.StartsWith("/拍卖场出售"))
+                                {
+                                    Member.SellTradeItem(e.Message);
                                 }
                                 break;
                         }

@@ -27,4 +27,11 @@ namespace Native.Csharp.App.GameData
         Heal,
         DoubleHit
     }
+
+    public enum WeaponSkill
+    {
+        None,
+        KeepDamage,
+        Doubled
+    }
 }

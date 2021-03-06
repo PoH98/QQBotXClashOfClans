@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Native.Csharp.App.Bot.GameData.Trade;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -94,6 +95,8 @@ namespace Native.Csharp.App.GameData
             "到了森林里，你发现了个淡黄的长裙，蓬松的头发的男人，他发现你后大声的喊I potato you，吓得你连滚带爬的跑回了家！",
             "今天你觉得一点干劲都没有，还是明天再努力吧！"
         };
+
+        internal TradeMerchant merchant = new TradeMerchant();
 
         internal static SharedData instance;
     }

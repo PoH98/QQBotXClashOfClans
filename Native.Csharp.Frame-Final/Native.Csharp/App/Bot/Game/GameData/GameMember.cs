@@ -1,4 +1,5 @@
-﻿using Native.Csharp.Sdk.Cqp.Model;
+﻿using Native.Csharp.App.Bot.GameData;
+using Native.Csharp.Sdk.Cqp.Model;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -77,6 +78,21 @@ namespace Native.Csharp.App.GameData
         [OptionalField(VersionAdded = 2)]
         [XmlArray]
         public List<ClanData> ClanData;
+        /// <summary>
+        /// 玩家仓库
+        /// </summary>
+        [OptionalField(VersionAdded = 3)]
+        public List<InventoryItem> Inventory;
+        /// <summary>
+        /// 额外提升伤害
+        /// </summary>
+        [OptionalField(VersionAdded = 3)]
+        public int BonusDamage;
+        /// <summary>
+        /// 额外提升血量
+        /// </summary>
+        [OptionalField(VersionAdded = 3)]
+        public int BonusHP;
     }
 
     [Serializable]
@@ -112,5 +128,17 @@ namespace Native.Csharp.App.GameData
         /// 游戏内名字
         /// </summary>
         public string Name;
+    }
+
+    public class InventoryItem
+    {
+        /// <summary>
+        /// 材料
+        /// </summary>
+        public Element Element;
+        /// <summary>
+        /// 玩家拥有数量
+        /// </summary>
+        public int ContainsCount;
     }
 }

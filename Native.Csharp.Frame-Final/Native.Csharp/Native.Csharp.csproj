@@ -142,6 +142,12 @@
     <Compile Include="App\Bot\ChineseDetection.cs" />
     <Compile Include="App\Bot\GameAPI.cs" />
     <Compile Include="App\Bot\Game\GameAPI.cs" />
+    <Compile Include="App\Bot\Game\GameData\Craft\Buff.cs" />
+    <Compile Include="App\Bot\Game\GameData\Elements\Attack.cs" />
+    <Compile Include="App\Bot\Game\GameData\Elements\Element.cs" />
+    <Compile Include="App\Bot\Game\GameData\Elements\HP.cs" />
+    <Compile Include="App\Bot\Game\GameData\Trade\TradeItem.cs" />
+    <Compile Include="App\Bot\Game\GameData\Trade\TradeMerchant.cs" />
     <Compile Include="App\Bot\LinkFinder.cs" />
     <Compile Include="App\Bot\Threading.cs" />
     <Compile Include="App\COCNet\CocCore.cs" />
@@ -230,11 +236,11 @@
     <Compile Include="App\Event\Event_MemberAddGroup.cs" />
     <Compile Include="App\Event\Event_MemberLeave.cs" />
     <Compile Include="App\Event\Event_UI.cs" />
-    <Compile Include="App\GameData\Enums.cs" />
-    <Compile Include="App\GameData\GameMember.cs" />
-    <Compile Include="App\GameData\SharedData.cs" />
-    <Compile Include="App\GameData\Skill.cs" />
-    <Compile Include="App\GameData\Weapon.cs" />
+    <Compile Include="App\Bot\Game\GameData\Enums.cs" />
+    <Compile Include="App\Bot\Game\GameData\GameMember.cs" />
+    <Compile Include="App\Bot\Game\GameData\SharedData.cs" />
+    <Compile Include="App\Bot\Game\GameData\Skill.cs" />
+    <Compile Include="App\Bot\Game\GameData\Weapon.cs" />
     <Compile Include="App\Setting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -295,6 +301,7 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ImportGroup Label=".NET DllExport" />
   <ImportGroup Label=".NET DllExport" />

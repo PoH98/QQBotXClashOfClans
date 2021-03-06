@@ -1,5 +1,6 @@
 ﻿using CocNET.Interfaces;
 using Native.Csharp.App.Bot.Game;
+using Native.Csharp.App.GameData;
 using Native.Csharp.Sdk.Cqp;
 using Native.Csharp.Sdk.Cqp.Enum;
 using Native.Csharp.Sdk.Cqp.EventArgs;
@@ -42,7 +43,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                     {
                         if (!Member.ClanData.Any(x => x.ClanID == id.Trim().ToUpper()))
                         {
-                            Member.ClanData.Add(new GameData.ClanData(id.Trim().ToUpper()));
+                            Member.ClanData.Add(new ClanData(id.Trim().ToUpper()));
                         }
                     }
                     string newname = string.Empty;
@@ -90,7 +91,7 @@ namespace Native.Csharp.App.Bot.ChatCheck.AdminAPI
                         {
                             if (!Member.ClanData.Any(x => x.ClanID == id.Trim().ToUpper()))
                             {
-                                Member.ClanData.Add(new GameData.ClanData(id.Trim().ToUpper()));
+                                Member.ClanData.Add(new ClanData(id.Trim().ToUpper()));
                             }
                         }
                         string newname = string.Empty;
