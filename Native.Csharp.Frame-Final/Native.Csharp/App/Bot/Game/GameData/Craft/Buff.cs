@@ -50,45 +50,45 @@ namespace Native.Csharp.App.GameData
                 if (el0 >= 30)
                 {
                     el0d.ContainsCount -= 30;
-                    member.Member.BonusDamage++;
+                    member.Member.BonusDamage += 2;
                     return "强化成功！";
                 }
                 else if (el1 >= 15)
                 {
                     el1d.ContainsCount -= 15;
-                    member.Member.BonusDamage++;
+                    member.Member.BonusDamage += 2;
                     return "强化成功！";
                 }
                 else if (el2 >= 10)
                 {
                     el2d.ContainsCount -= 10;
-                    member.Member.BonusDamage++;
+                    member.Member.BonusDamage += 2;
                     return "强化成功！";
                 }
                 else if (el3 >= 5)
                 {
                     el3d.ContainsCount -= 5;
-                    member.Member.BonusDamage++;
+                    member.Member.BonusDamage += 2;
                     return "强化成功！";
                 }
                 else if (el4 >= 3)
                 {
                     el4d.ContainsCount -= 3;
-                    member.Member.BonusDamage++;
+                    member.Member.BonusDamage += 2;
                     return "强化成功！";
                 }
                 else
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("强化失败！材料不足！还缺少");
-                    if (el0 < 50)
+                    if (el0 < 30)
                     {
-                        var left = 50 - el0;
+                        var left = 30 - el0;
                         sb.AppendLine(el0d.Element.Name + ":" + left);
                     }
-                    if (el1 < 35)
+                    if (el1 < 15)
                     {
-                        var left = 35 - el1;
+                        var left = 15 - el1;
                         sb.AppendLine(el1d.Element.Name + ":" + left);
                     }
                     if (el2 < 10)
@@ -133,14 +133,14 @@ namespace Native.Csharp.App.GameData
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("强化失败！材料不足！还缺少");
-                if (el0 < 50)
+                if (el0 < 30)
                 {
-                    var left = 50 - el0;
+                    var left = 30 - el0;
                     sb.AppendLine(el0d.Element.Name + ":" + left);
                 }
-                if (el1 < 35)
+                if (el1 < 15)
                 {
-                    var left = 35 - el1;
+                    var left = 15 - el1;
                     sb.AppendLine(el1d.Element.Name + ":" + left);
                 }
                 if (el2 < 10)
@@ -200,45 +200,45 @@ namespace Native.Csharp.App.GameData
                 if (el0 >= 30)
                 {
                     el0d.ContainsCount -= 30;
-                    member.Member.BonusHP+=5;
+                    member.Member.BonusHP += 10;
                     return "强化成功！";
                 }
                 else if (el1 >= 15)
                 {
                     el1d.ContainsCount -= 15;
-                    member.Member.BonusHP += 5;
+                    member.Member.BonusHP += 10;
                     return "强化成功！";
                 }
                 else if (el2 >= 10)
                 {
                     el2d.ContainsCount -= 10;
-                    member.Member.BonusHP += 5;
+                    member.Member.BonusHP += 10;
                     return "强化成功！";
                 }
                 else if (el3 >= 5)
                 {
                     el3d.ContainsCount -= 5;
-                    member.Member.BonusHP += 5;
+                    member.Member.BonusHP += 10;
                     return "强化成功！";
                 }
                 else if (el4 >= 3)
                 {
                     el4d.ContainsCount -= 3;
-                    member.Member.BonusHP += 5;
+                    member.Member.BonusHP += 10;
                     return "强化成功！";
                 }
                 else
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("强化失败！材料不足！还缺少");
-                    if (el0 < 50)
+                    if (el0 < 30)
                     {
-                        var left = 50 - el0;
+                        var left = 30 - el0;
                         sb.AppendLine(el0d.Element.Name + ":" + left);
                     }
-                    if (el1 < 35)
+                    if (el1 < 15)
                     {
-                        var left = 35 - el1;
+                        var left = 15 - el1;
                         sb.AppendLine(el1d.Element.Name + ":" + left);
                     }
                     if (el2 < 10)
@@ -283,14 +283,14 @@ namespace Native.Csharp.App.GameData
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("强化失败！材料不足！还缺少");
-                if (el0 < 50)
+                if (el0 < 30)
                 {
-                    var left = 50 - el0;
+                    var left = 30 - el0;
                     sb.AppendLine(el0d.Element.Name + ":" + left);
                 }
-                if (el1 < 35)
+                if (el1 < 15)
                 {
-                    var left = 35 - el1;
+                    var left = 15 - el1;
                     sb.AppendLine(el1d.Element.Name + ":" + left);
                 }
                 if (el2 < 10)

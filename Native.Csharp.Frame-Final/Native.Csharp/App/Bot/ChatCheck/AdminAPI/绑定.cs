@@ -59,19 +59,27 @@ namespace Native.Csharp.App.Bot
                             foreach(var clanData in Member.ClanData)
                             {
                                 var name = players.GetPlayer(clanData.ClanID).Name;
-                                if (names.Contains(name.Substring(Math.Max(name.Length, 3))) && name.StartsWithChinese())
-                                {
-                                    //有重复名字
-                                    names.Add(name.Substring(Math.Max(name.Length, name.Length - 3)));
-                                }
-                                else if(name.StartsWithChinese())
-                                {
-                                    names.Add(string.Concat(name.Take(3)));
-                                }
-                                else
+                                if(name.Length < 3)
                                 {
                                     names.Add(name);
                                 }
+                                else
+                                {
+                                    if (names.Contains(name.Substring(Math.Min(name.Length, 3))) && name.StartsWithChinese())
+                                    {
+                                        //有重复名字
+                                        names.Add(name.Substring(Math.Max(0, name.Length - 3)));
+                                    }
+                                    else if (name.StartsWithChinese())
+                                    {
+                                        names.Add(string.Concat(name.Take(3)));
+                                    }
+                                    else
+                                    {
+                                        names.Add(name);
+                                    }
+                                }
+
                             }
                             newname = string.Join(",", names);
                         }
@@ -104,20 +112,26 @@ namespace Native.Csharp.App.Bot
                             foreach (var clanData in Member.ClanData)
                             {
                                 var name = players.GetPlayer(clanData.ClanID).Name;
-                                if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
-                                {
-                                    //有重复名字
-                                    names.Add(name.Substring(Math.Max(0, name.Length - 3)));
-                                }
-                                else if (name.StartsWithChinese())
-                                {
-                                    names.Add(string.Concat(name.Take(3)));
-                                }
-                                else
+                                if (name.Length < 3)
                                 {
                                     names.Add(name);
                                 }
-
+                                else
+                                {
+                                    if (names.Contains(name.Substring(Math.Min(name.Length, 3))) && name.StartsWithChinese())
+                                    {
+                                        //有重复名字
+                                        names.Add(name.Substring(Math.Max(0, name.Length - 3)));
+                                    }
+                                    else if (name.StartsWithChinese())
+                                    {
+                                        names.Add(string.Concat(name.Take(3)));
+                                    }
+                                    else
+                                    {
+                                        names.Add(name);
+                                    }
+                                }
                             }
                             newname = string.Join(",", names);
                         }
@@ -157,18 +171,25 @@ namespace Native.Csharp.App.Bot
                                 foreach (var clanData in Member.ClanData)
                                 {
                                     var name = players.GetPlayer(clanData.ClanID).Name;
-                                    if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
+                                    if (name.Length < 3)
                                     {
-                                        //有重复名字
-                                        names.Add(name.Substring(Math.Max(0, name.Length - 3)));
-                                    }
-                                    else if (name.StartsWithChinese())
-                                    {
-                                        names.Add(string.Concat(name.Take(3)));
+                                        names.Add(name);
                                     }
                                     else
                                     {
-                                        names.Add(name);
+                                        if (names.Contains(name.Substring(Math.Min(name.Length, 3))) && name.StartsWithChinese())
+                                        {
+                                            //有重复名字
+                                            names.Add(name.Substring(Math.Max(0, name.Length - 3)));
+                                        }
+                                        else if (name.StartsWithChinese())
+                                        {
+                                            names.Add(string.Concat(name.Take(3)));
+                                        }
+                                        else
+                                        {
+                                            names.Add(name);
+                                        }
                                     }
                                 }
                                 newname = string.Join(",", names);
@@ -202,18 +223,25 @@ namespace Native.Csharp.App.Bot
                                 foreach (var clanData in Member.ClanData)
                                 {
                                     var name = players.GetPlayer(clanData.ClanID).Name;
-                                    if (names.Contains(name.Substring(Math.Max(name.Length, name.Length - 3))) && name.StartsWithChinese())
+                                    if (name.Length < 3)
                                     {
-                                        //有重复名字
-                                        names.Add(name.Substring(Math.Max(0, name.Length - 3)));
-                                    }
-                                    else if (name.StartsWithChinese())
-                                    {
-                                        names.Add(string.Concat(name.Take(3)));
+                                        names.Add(name);
                                     }
                                     else
                                     {
-                                        names.Add(name);
+                                        if (names.Contains(name.Substring(Math.Min(name.Length, 3))) && name.StartsWithChinese())
+                                        {
+                                            //有重复名字
+                                            names.Add(name.Substring(Math.Max(0, name.Length - 3)));
+                                        }
+                                        else if (name.StartsWithChinese())
+                                        {
+                                            names.Add(string.Concat(name.Take(3)));
+                                        }
+                                        else
+                                        {
+                                            names.Add(name);
+                                        }
                                     }
                                 }
                                 newname = string.Join(",", names);

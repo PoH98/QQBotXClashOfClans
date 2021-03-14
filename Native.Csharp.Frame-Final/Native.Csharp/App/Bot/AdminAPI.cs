@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using static Native.Csharp.App.Bot.BaseData;
 using Unity;
+using Native.Csharp.App.Bot.Game;
+using System;
 
 namespace Native.Csharp.App.Bot
 {
@@ -17,11 +19,29 @@ namespace Native.Csharp.App.Bot
 
         public static void ChangeNewMemberName(string id, CqAddGroupRequestEventArgs e)
         {
+            //直接绑定
+            GameAPI data = new GameAPI(e.FromGroup, e.FromQQ);
+            data.Member.ClanData = new List<App.GameData.ClanData>();
             ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
             var player = players.GetPlayer(id);
             var newname = BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name;
+            var cdata = new App.GameData.ClanData() { ClanID = id, Name = player.Name };
+            try
+            {
+                if (valuePairs(configType.部落冲突)[e.FromGroup.ToString()] == player.Clan.Tag)
+                {
+                    cdata.InClan = true;
+                    cdata.LastSeenInClan = DateTime.Now;
+                }
+            }
+            catch
+            {
+                //Ignore if not found clan ID
+            }
+            data.Member.ClanData.Add(cdata);
+            data.Dispose();
             Common.CqApi.SetGroupMemberNewCard(e.FromGroup, e.FromQQ, newname);
-            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "新人看群文件部落规则，违反任何一条都将会被机票！群昵称已自动改为" + newname);
+            Common.CqApi.SendGroupMessage(e.FromGroup, Common.CqApi.CqCode_At(e.FromQQ) + "新人看群文件部落规则，违反任何一条都将会被机票！已经自动绑定成功为" + newname);
             Common.CqApi.SendGroupMessage(e.FromGroup, id);
         }
 

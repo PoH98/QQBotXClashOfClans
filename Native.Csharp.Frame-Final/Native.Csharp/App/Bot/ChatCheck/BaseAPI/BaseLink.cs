@@ -13,17 +13,34 @@ namespace Native.Csharp.App.Bot.ChatCheck
         {
             switch (chat.Message)
             {
+                case "/三本阵型":
+                case "/四本阵型":
+                case "/五本阵型":
+                case "/六本阵型":
+                case "/七本阵型":
+                case "/3本阵型":
+                case "/4本阵型":
+                case "/5本阵型":
+                case "/6本阵型":
+                case "/7本阵型":
+                    return new string[] { "阵型指令只接受八本以上！" };
                 case "/八本阵型":
+                case "/8本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(8) };
                 case "/九本阵型":
+                case "/9本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(9) };
                 case "/十本阵型":
+                case "/10本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(10) };
                 case "/十一本阵型":
+                case "/11本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(11) };
                 case "/十二本阵型":
+                case "/12本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(12) };
                 case "/十三本阵型":
+                case "/13本阵型":
                     return new string[] { "使用浏览器打开此链接: " + GetLink(13) };
             }
             return base.GetReply(chat);

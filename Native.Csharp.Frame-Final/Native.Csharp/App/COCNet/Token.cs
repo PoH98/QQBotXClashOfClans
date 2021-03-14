@@ -13,10 +13,7 @@ namespace CocNET
     {
         public static void GetNewToken()
         {
-            if(BaseData.Instance.Event != null)
-            {
-                Common.CqApi.AddLoger(LogerLevel.Info ,"部落冲突Token","更新Token中...");
-            }
+            Common.CqApi.AddLoger(LogerLevel.Info, "部落冲突Token", "更新Token中...");
             if (string.IsNullOrEmpty(BaseData.Instance.config["部落冲突"]["Api邮箱"]) || string.IsNullOrEmpty(BaseData.Instance.config["部落冲突"]["Api密码"]))
             {
                 throw new Exception("缺少 [部落冲突][Api邮箱] 或者 [部落冲突][Api密码]");
@@ -136,10 +133,7 @@ namespace CocNET
                 reply = reader.ReadToEnd();
                 net.Close();
                 BaseData.UpdateIP();
-                if (BaseData.Instance.Event != null)
-                {
-                    Common.CqApi.AddLoger(LogerLevel.Info ,"部落冲突Token", "Token更新完毕！新Token为" + BaseData.Instance.config["部落冲突"]["Token"]);
-                }
+                Common.CqApi.AddLoger(LogerLevel.Info, "部落冲突Token", "Token更新完毕！新Token为" + BaseData.Instance.config["部落冲突"]["Token"]);
             }
             catch
             {

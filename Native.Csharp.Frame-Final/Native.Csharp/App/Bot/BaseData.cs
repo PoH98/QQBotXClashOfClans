@@ -23,12 +23,11 @@ namespace Native.Csharp.App.Bot
         public readonly string[] THLevels = { "开挂玩家", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四" };
 
         private string IPAddress;
-        public long Group { get; private set; }
 
         public CocCore core;
 
         public IUnityContainer container;
-        public CqEventArgsBase Event { get; private set; }
+
 
         public Thread checkClanWar;
 
@@ -54,12 +53,6 @@ namespace Native.Csharp.App.Bot
         }
 
         private static BaseData _instance;
-
-        public static void ShareEvent(CqEventArgsBase eventargs, long group)
-        {
-            Instance.Event = eventargs;
-            Instance.Group = group;
-        }
 
         public static void InitFirstUse()
         {

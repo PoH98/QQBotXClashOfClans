@@ -41,7 +41,6 @@ namespace Native.Csharp.App.Event
                             Thread.Sleep(rnd.Next(1000, 4000));
                             Common.CqApi.SendGroupMessage(e.FromGroup, message.Replace("@发送者", Common.CqApi.CqCode_At(e.FromQQ)));
                         }
-                            
                     }
                     else
                     {

@@ -1,4 +1,5 @@
 ﻿using Native.Csharp.App.Bot;
+using Native.Csharp.App.Bot.Game;
 using Native.Csharp.Sdk.Cqp.EventArgs;
 using Native.Csharp.Sdk.Cqp.Interface;
 using System;
@@ -13,7 +14,9 @@ namespace Native.Csharp.App.Event
         {
             try
             {
-                Common.CqApi.SendGroupMessage(e.FromGroup, e.BeingOperateQQ + " 已退群！");
+                GameAPI api = new GameAPI(e.FromGroup, e.BeingOperateQQ);
+                Common.CqApi.SendGroupMessage(e.FromGroup, api.Member.Member.Nick + " 已退群！");
+                api.Dispose();
                 if (File.Exists("com.coc.groupadmin\\" + e.FromGroup + "\\" + e.BeingOperateQQ + ".bin"))
                 {
                     File.Delete("com.coc.groupadmin\\" + e.FromGroup + "\\" + e.BeingOperateQQ + ".bin");
