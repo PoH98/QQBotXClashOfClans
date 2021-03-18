@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>932905019</QQId>
+    <Nick>ฅ՞•ﻌ•՞ฅ</Nick>
+    <Card>九本-Back</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>17880</Cash>
+  <Exp>28180</Exp>
+  <Work>给矿工点蜡烛</Work>
+  <Checked>2021-03-09T17:15:02.3802807+08:00</Checked>
+  <Combo>1</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>-65</CurrentHP>
+  <Robbed>2021-01-25T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-08T09:21:33.0716158+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-08T09:21:09.227882+08:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-03-08T10:06:59.0572038+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>1</SkillLevel>
+  <ClanData />
+  <Inventory />
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

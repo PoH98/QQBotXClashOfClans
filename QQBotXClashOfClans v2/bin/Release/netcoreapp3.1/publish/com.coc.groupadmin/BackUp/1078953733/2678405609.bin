@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>2678405609</QQId>
+    <Nick>1076</Nick>
+    <Card>未知,.丶Everヾ,空城,锦晗,旧梦,锦城</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>Holder</PermitType>
+    <SpecialTitle>听东风叫床</SpecialTitle>
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>40505</Cash>
+  <Exp>184300</Exp>
+  <Work>到隔壁村庄偷厕纸</Work>
+  <Checked>2021-03-16T07:24:14.1922847+08:00</Checked>
+  <Combo>1</Combo>
+  <weapon xsi:type="Killer" />
+  <CurrentHP>-708</CurrentHP>
+  <Robbed>2021-03-06T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-16T21:36:09.5515613+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-16T21:36:08.2859495+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-08-30T16:22:42.1268846+08:00</BossPlayTime>
+  <LastRobbed>2021-03-13T21:32:46.9194503+08:00</LastRobbed>
+  <Skill xsi:type="DoubleHit" />
+  <SkillLevel>4</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#LJYYQ2GP8</ClanID>
+      <LastSeenInClan>2021-02-12T17:30:01.9700204+08:00</LastSeenInClan>
+      <InClan>false</InClan>
+      <Name>故梦-锦城</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#YJJ92RUPP</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.1165869+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>.丶Everヾ</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#8LY0VGVGR</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.1165869+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>未知的自己</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#Y0CVL9RRR</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.1165869+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>故梦-空城</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#8YVPV9CRU</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.1165869+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>故梦-锦晗</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#Q2PQRRVUL</ClanID>
+      <LastSeenInClan>2021-02-23T21:00:02.0060334+08:00</LastSeenInClan>
+      <InClan>false</InClan>
+      <Name>故梦-旧梦</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="西瓜" />
+      <ContainsCount>3</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>7</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人脸石头" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>3</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="伽马射线" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="十万羊驼" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="陨石碎片" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>809233738</GroupId>
+    <QQId>804892801</QQId>
+    <Nick>唯一由里</Nick>
+    <Card>海拉</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>Manage</PermitType>
+    <SpecialTitle>真•女装盟主</SpecialTitle>
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>4751</Cash>
+  <Exp>14470</Exp>
+  <Work>给龙灭火</Work>
+  <Checked>2021-03-15T19:06:32.5004658+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="Magic" />
+  <CurrentHP>-60</CurrentHP>
+  <Robbed>2021-03-15T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-11T07:12:45.4202563+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-15T19:06:36.3598358+08:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-03-09T00:03:04.0057291+08:00</LastRobbed>
+  <Skill xsi:type="Heal" />
+  <SkillLevel>1</SkillLevel>
+  <ClanData />
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>7</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="十万羊驼" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

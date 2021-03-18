@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>947061291</QQId>
+    <Nick>识趣</Nick>
+    <Card>九本-湘湘村庄</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>5949</Cash>
+  <Exp>2940</Exp>
+  <Work>给巨人当沙包</Work>
+  <Checked>2021-03-10T10:17:10.6909144+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>-4</CurrentHP>
+  <Robbed>2021-02-04T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-10T10:17:15.9721392+08:00</PlayTime>
+  <TreasurePlayTime>2021-02-16T08:00:35.9337796+08:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-02-15T00:08:20.3077965+08:00</LastRobbed>
+  <SkillLevel>-1</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#LCGPYOUVQ</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.10095+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>湘湘村庄</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory />
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

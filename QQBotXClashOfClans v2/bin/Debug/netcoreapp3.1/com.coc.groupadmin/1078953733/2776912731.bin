@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>2776912731</QQId>
+    <Nick>Melantha</Nick>
+    <Card>十本-有事就bb</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle>地位最低</SpecialTitle>
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>92153</Cash>
+  <Exp>159430</Exp>
+  <Work>到隔壁村庄偷厕纸</Work>
+  <Checked>2021-03-13T00:13:37.3908818+08:00</Checked>
+  <Combo>1</Combo>
+  <weapon xsi:type="MDSmartStick" />
+  <CurrentHP>-658</CurrentHP>
+  <Robbed>2021-03-13T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-13T06:25:41.149573+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-13T06:25:08.5089964+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-07-28T19:23:52.0563775+08:00</BossPlayTime>
+  <LastRobbed>2021-01-23T18:36:46.1547485+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>5</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#LJ9J09C02</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.75079+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>有事就bb</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>11</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="西瓜" />
+      <ContainsCount>8</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>11</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="十万羊驼" />
+      <ContainsCount>3</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="陨石碎片" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>9</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="伽马射线" />
+      <ContainsCount>4</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人脸石头" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="红巨星" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="蓝巨星" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>2</BonusDamage>
+  <BonusHP>10</BonusHP>
+</GameMember>

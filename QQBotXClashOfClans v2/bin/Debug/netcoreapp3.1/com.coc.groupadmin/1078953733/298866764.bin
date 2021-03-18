@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>298866764</QQId>
+    <Nick>不是吧</Nick>
+    <Card>十本-不离十。</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>30341</Cash>
+  <Exp>130810</Exp>
+  <Work>到隔壁村庄偷厕纸</Work>
+  <Checked>2021-03-12T05:50:22.1184604+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="Killer" />
+  <CurrentHP>-29</CurrentHP>
+  <Robbed>2021-03-12T00:00:00+08:00</Robbed>
+  <PlayTime>2020-12-29T22:32:50.648812+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-12T05:50:25.9465809+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-08-30T15:22:43.529113+08:00</BossPlayTime>
+  <LastRobbed>2021-02-14T11:33:23.2109392+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>4</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#PQVLR8U8R</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.7038871+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>不离十。</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

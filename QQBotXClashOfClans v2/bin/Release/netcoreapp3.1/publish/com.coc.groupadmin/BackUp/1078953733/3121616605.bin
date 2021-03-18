@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>3121616605</QQId>
+    <Nick>dayday</Nick>
+    <Card>九本-Soul</Card>
+    <Sex>Man</Sex>
+    <Age>3</Age>
+    <Area />
+    <JoiningTime>2020-03-10T17:18:06+08:00</JoiningTime>
+    <LastDateTime>2020-03-22T07:02:23+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T08:00:00+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>false</CanModifiedCard>
+  </Member>
+  <Cash>8837</Cash>
+  <Exp>9200</Exp>
+  <Work>给法师搞爆炸头</Work>
+  <Checked>2020-07-09T20:50:43.0739575+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>-71</CurrentHP>
+  <Robbed>2020-07-09T00:00:00+08:00</Robbed>
+  <PlayTime>2020-06-20T13:05:13.682529+08:00</PlayTime>
+  
+  <TreasurePlayTime>2020-07-09T20:51:20.8015104+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-07-09T20:59:35.9538606+08:00</BossPlayTime>
+
+  <LastRobbed>2020-07-28T07:57:29.676514+08:00</LastRobbed>
+</GameMember>

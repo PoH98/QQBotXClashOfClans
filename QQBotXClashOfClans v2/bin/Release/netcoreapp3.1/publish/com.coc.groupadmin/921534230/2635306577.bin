@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>921534230</GroupId>
+    <QQId>2635306577</QQId>
+    <Nick>过情.雨可</Nick>
+    <Card>北部</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>300</Cash>
+  <Exp>300</Exp>
+  <Work>给野蛮人刷背</Work>
+  <Checked>0001-01-01T00:00:00</Checked>
+  <Combo>2</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>100</CurrentHP>
+  <Robbed>0001-01-01T00:00:00</Robbed>
+  <PlayTime>0001-01-01T00:00:00</PlayTime>
+  <TreasurePlayTime>0001-01-01T00:00:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>0001-01-01T00:00:00</LastRobbed>
+  <SkillLevel>-1</SkillLevel>
+  <ClanData />
+  <Inventory />
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

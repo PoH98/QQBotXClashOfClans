@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>3239657718</QQId>
+    <Nick>人类绝缘体.</Nick>
+    <Card>九本-清欢</Card>
+    <Sex>Unknown</Sex>
+    <Age>0</Age>
+    <Area />
+    <JoiningTime>2020-06-15T14:31:00+08:00</JoiningTime>
+    <LastDateTime>2020-06-15T14:47:38+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T08:00:00+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>false</CanModifiedCard>
+  </Member>
+  <Cash>4943</Cash>
+  <Exp>2610</Exp>
+  <Work>给巨人当沙包</Work>
+  <Checked>2020-07-31T19:26:14.111075+08:00</Checked>
+  <Combo>2</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>9</CurrentHP>
+  <Robbed>2020-07-09T00:00:00+08:00</Robbed>
+  <PlayTime>2020-07-15T10:15:24.415753+08:00</PlayTime>
+  <LastSeenInClan>2020-07-31T20:30:05.3268892+08:00</LastSeenInClan>
+  <TreasurePlayTime>2020-07-31T19:26:20.4186951+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-07-28T18:26:49.7360642+08:00</BossPlayTime>
+  <LastMessage>0001-01-01T00:00:00</LastMessage>
+  <MessageRangeRecords />
+  <LastRobbed>0001-01-01T00:00:00</LastRobbed>
+</GameMember>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>2845377464</QQId>
+    <Nick>98年老粽子</Nick>
+    <Card>九本-凉茶和凉皮</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>3560</Cash>
+  <Exp>2600</Exp>
+  <Work>给巨人当沙包</Work>
+  <Checked>2021-01-11T21:20:29.5248696+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="Stick" />
+  <CurrentHP>-71</CurrentHP>
+  <Robbed>0001-01-01T00:00:00</Robbed>
+  <PlayTime>2021-01-03T10:00:57.8017594+08:00</PlayTime>
+  <TreasurePlayTime>2021-01-11T21:20:24.592878+08:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-01-04T22:08:09.7826688+08:00</LastRobbed>
+  <SkillLevel>-1</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#L8Y0PU8R2</ClanID>
+      <LastSeenInClan>2021-02-04T23:30:01.5298771+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>凉茶和凉皮</Name>
+    </ClanData>
+  </ClanData>
+</GameMember>

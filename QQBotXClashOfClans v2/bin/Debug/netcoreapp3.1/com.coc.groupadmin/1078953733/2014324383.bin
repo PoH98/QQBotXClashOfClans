@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>2014324383</QQId>
+    <Nick>🐳</Nick>
+    <Card>Destory,乌鸦</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle>野猪之王</SpecialTitle>
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>35568</Cash>
+  <Exp>57420</Exp>
+  <Work>帮村妇藏宝石在树上</Work>
+  <Checked>2021-03-13T05:47:19.0560439+08:00</Checked>
+  <Combo>2</Combo>
+  <weapon xsi:type="Killer" />
+  <CurrentHP>-14</CurrentHP>
+  <Robbed>2021-03-13T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-13T10:58:46.6588461+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-13T10:58:45.0807288+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-08-17T12:32:20.9091411+08:00</BossPlayTime>
+  <LastRobbed>2021-03-12T22:35:20.8149612+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>3</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#9Y8YJP8VV</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.7351678+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>Destory</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#YYUUR9YRC</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.7351678+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>天下乌鸦我最白</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>6</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="伽马射线" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>4</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="陨石碎片" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="西瓜" />
+      <ContainsCount>3</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="十万羊驼" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="红巨星" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>6</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人脸石头" />
+      <ContainsCount>4</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="蓝巨星" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

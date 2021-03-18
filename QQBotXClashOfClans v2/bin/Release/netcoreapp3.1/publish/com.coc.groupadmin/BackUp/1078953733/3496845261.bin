@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>3496845261</QQId>
+    <Nick>恋.</Nick>
+    <Card>七本-白茶与风.</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>1018</Cash>
+  <Exp>6140</Exp>
+  <Work>给炸弹人重组骨架</Work>
+  <Checked>2021-03-09T03:07:01.8564373+08:00</Checked>
+  <Combo>1</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>-850</CurrentHP>
+  <Robbed>2021-03-08T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-08T02:59:52.5306107+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-08T02:59:50.4368588+08:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-02-26T11:17:50.4688251+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>1</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#LV8LG0PL8</ClanID>
+      <LastSeenInClan>2021-03-16T23:30:01.1322197+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>白茶与风.</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="西瓜" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

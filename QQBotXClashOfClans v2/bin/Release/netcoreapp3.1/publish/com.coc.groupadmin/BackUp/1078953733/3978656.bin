@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>3978656</QQId>
+    <Nick>我一贱你就笑</Nick>
+    <Card>八本-Mr. J丶先森</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area />
+    <JoiningTime>2020-06-29T10:57:07+08:00</JoiningTime>
+    <LastDateTime>2020-06-29T10:57:07+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T08:00:00+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>false</CanModifiedCard>
+  </Member>
+  <Cash>7066</Cash>
+  <Exp>5650</Exp>
+  <Work>给炸弹人重组骨架</Work>
+  <Checked>2020-07-31T04:15:53.5241511+08:00</Checked>
+  <Combo>1</Combo>
+  <weapon xsi:type="Lighting" />
+  <CurrentHP>410</CurrentHP>
+  <Robbed>2020-07-31T00:00:00+08:00</Robbed>
+  <PlayTime>2020-07-31T14:22:45.9186912+08:00</PlayTime>
+  <LastSeenInClan>2020-07-31T20:30:05.3122569+08:00</LastSeenInClan>
+  <TreasurePlayTime>2020-07-31T14:22:50.4050156+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-07-26T09:54:42.194075+08:00</BossPlayTime>
+  <LastMessage>0001-01-01T00:00:00</LastMessage>
+  <MessageRangeRecords />
+  <LastRobbed>2020-07-24T00:04:09.1403665+08:00</LastRobbed>
+</GameMember>

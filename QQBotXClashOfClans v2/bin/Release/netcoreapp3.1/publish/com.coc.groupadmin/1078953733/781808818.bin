@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>781808818</QQId>
+    <Nick>30丶</Nick>
+    <Card>八本-LTODREAM</Card>
+    <Sex>Man</Sex>
+    <Age>22</Age>
+    <Area />
+    <JoiningTime>2020-05-20T19:01:15+08:00</JoiningTime>
+    <LastDateTime>2020-05-20T19:36:32+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T08:00:00+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>false</CanModifiedCard>
+  </Member>
+  <Cash>4896</Cash>
+  <Exp>100</Exp>
+  <Work>给野蛮人刷背</Work>
+  <Checked>0001-01-01T00:00:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="None" />
+  <CurrentHP>-166</CurrentHP>
+  <Robbed>0001-01-01T00:00:00</Robbed>
+  <PlayTime>0001-01-01T00:00:00</PlayTime>
+  <TreasurePlayTime>0001-01-01T00:00:00</TreasurePlayTime>
+  <BossPlayTime>0001-01-01T00:00:00</BossPlayTime>
+  <LastRobbed>2021-02-19T08:44:03.2886473+08:00</LastRobbed>
+  <SkillLevel>-1</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#92YJ0QC8L</ClanID>
+      <LastSeenInClan>2021-02-05T19:30:02.1144373+08:00</LastSeenInClan>
+      <InClan>false</InClan>
+      <Name>LTODREAM</Name>
+    </ClanData>
+  </ClanData>
+</GameMember>

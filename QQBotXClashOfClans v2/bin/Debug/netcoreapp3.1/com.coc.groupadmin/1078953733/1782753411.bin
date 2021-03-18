@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>1782753411</QQId>
+    <Nick>与肺癌少年勇闯天涯</Nick>
+    <Card>十二本-未知的自己</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>None</PermitType>
+    <SpecialTitle />
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>1933</Cash>
+  <Exp>9720</Exp>
+  <Work>给天使配眼镜</Work>
+  <Checked>2021-02-28T02:05:50.1552945+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="Stick" />
+  <CurrentHP>-548</CurrentHP>
+  <Robbed>2021-02-28T00:00:00+08:00</Robbed>
+  <PlayTime>2021-02-28T02:05:49.2490418+08:00</PlayTime>
+  <TreasurePlayTime>2021-02-28T02:05:45.4366079+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-07-12T11:27:02.8688967+08:00</BossPlayTime>
+  <LastRobbed>2021-02-08T00:18:22.6691948+08:00</LastRobbed>
+  <SkillLevel>-1</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#8LY0VGVGR</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.7195424+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>未知的自己</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>

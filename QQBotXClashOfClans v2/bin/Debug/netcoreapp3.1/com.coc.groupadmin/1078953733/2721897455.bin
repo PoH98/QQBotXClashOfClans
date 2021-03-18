@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<GameMember xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Member>
+    <GroupId>1078953733</GroupId>
+    <QQId>2721897455</QQId>
+    <Nick>PoH98(´థ౪థ)σ</Nick>
+    <Card>东风,南风,西风,北风</Card>
+    <Sex>Man</Sex>
+    <Age>0</Age>
+    <Area>未知</Area>
+    <JoiningTime>1970-01-01T08:00:00+08:00</JoiningTime>
+    <LastDateTime>1970-01-01T08:00:00+08:00</LastDateTime>
+    <Level />
+    <PermitType>Manage</PermitType>
+    <SpecialTitle>色情大佬😍</SpecialTitle>
+    <SpecialTitleDurationTime>1970-01-01T07:59:59+08:00</SpecialTitleDurationTime>
+    <BadRecord>false</BadRecord>
+    <CanModifiedCard>true</CanModifiedCard>
+  </Member>
+  <Cash>20026</Cash>
+  <Exp>130180</Exp>
+  <Work>到隔壁村庄偷厕纸</Work>
+  <Checked>2021-03-13T01:32:28.8153363+08:00</Checked>
+  <Combo>0</Combo>
+  <weapon xsi:type="Knive" />
+  <CurrentHP>-736</CurrentHP>
+  <Robbed>2021-02-26T00:00:00+08:00</Robbed>
+  <PlayTime>2021-03-05T20:52:11.6820681+08:00</PlayTime>
+  <TreasurePlayTime>2021-03-13T09:20:38.2642339+08:00</TreasurePlayTime>
+  <BossPlayTime>2020-08-29T01:50:40.7012414+08:00</BossPlayTime>
+  <LastRobbed>2021-03-13T00:29:47.5936448+08:00</LastRobbed>
+  <Skill xsi:type="Critical" />
+  <SkillLevel>4</SkillLevel>
+  <ClanData>
+    <ClanData>
+      <ClanID>#2RLPUQQQC</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.75079+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>东风神欧洛斯</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#8ULQVV9PL</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.75079+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>南风神阿洛斯</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#9P8LC8VPQ</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.75079+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>西风神费洛斯</Name>
+    </ClanData>
+    <ClanData>
+      <ClanID>#PRY8RGRYV</ClanID>
+      <LastSeenInClan>2021-03-13T11:30:01.75079+08:00</LastSeenInClan>
+      <InClan>true</InClan>
+      <Name>北风神玻瑞斯</Name>
+    </ClanData>
+  </ClanData>
+  <Inventory>
+    <InventoryItem>
+      <Element xsi:type="蝴蝶" />
+      <ContainsCount>4</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="伽马射线" />
+      <ContainsCount>0</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="灯笼" />
+      <ContainsCount>2</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="人皮" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+    <InventoryItem>
+      <Element xsi:type="西瓜" />
+      <ContainsCount>1</ContainsCount>
+    </InventoryItem>
+  </Inventory>
+  <BonusDamage>0</BonusDamage>
+  <BonusHP>0</BonusHP>
+</GameMember>
