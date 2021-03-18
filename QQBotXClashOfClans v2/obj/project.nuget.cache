@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ebRVLKJx+z4J+slRMe0k9DXe8MQU43a6pdBx7QLh7LPkJygy6LCUcon6p+BxxS/5FNmkRaD6CUQY5zvDd/eqJw==",
+  "dgSpecHash": "VOlK4UCIo53eFilKMxoEu0fKZKj6riTX+o2aAmrGUOoulTLugntNsYbLaWvVPHVIVaNtk479pHuVoHYRJYAbQA==",
   "success": true,
-  "projectFilePath": "D:\\Repos\\QQBotXClashOfClans v2\\QQBotXClashOfClans v2\\QQBotXClashOfClans v2.csproj",
+  "projectFilePath": "D:\\Repos\\QQBotXClashOfClans\\QQBotXClashOfClans v2\\QQBotXClashOfClans v2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PoH98\\.nuget\\packages\\colorful.console\\1.2.15\\colorful.console.1.2.15.nupkg.sha512",
     "C:\\Users\\PoH98\\.nuget\\packages\\csvhelper\\26.0.1\\csvhelper.26.0.1.nupkg.sha512",

@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "QQBotXClashOfClans v2/1.0.0": {
+      "QQBotXClashOfClans v2/2.0.0": {
         "dependencies": {
           "Colorful.Console": "1.2.15",
           "CsvHelper": "26.0.1",
@@ -1036,7 +1036,7 @@
     }
   },
   "libraries": {
-    "QQBotXClashOfClans v2/1.0.0": {
+    "QQBotXClashOfClans v2/2.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
