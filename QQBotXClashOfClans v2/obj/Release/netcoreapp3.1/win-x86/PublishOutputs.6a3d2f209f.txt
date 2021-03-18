@@ -1,2 +1,0 @@
-D:\Repos\QQBotXClashOfClans v2\QQBotXClashOfClans v2\bin\Release\netcoreapp3.1\publish\QQBotXClashOfClans v2.pdb
-D:\Repos\QQBotXClashOfClans v2\QQBotXClashOfClans v2\bin\Release\netcoreapp3.1\publish\QQBotXClashOfClans v2.exe
