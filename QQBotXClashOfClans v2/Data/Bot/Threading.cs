@@ -83,6 +83,7 @@ namespace QQBotXClashOfClans_v2
                                                     //New thread
                                                     Thread t = new Thread(() => {
                                                         var wait =  clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Logger.Instance.AddLog(LogType.Debug, "部落战当前准备日，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
                                                         Thread.Sleep(wait);
                                                         Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
                                                         return;
@@ -95,6 +96,7 @@ namespace QQBotXClashOfClans_v2
                                                 {
                                                     Thread t = new Thread(() => {
                                                         var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Logger.Instance.AddLog(LogType.Debug, "部落战当前已开始，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
                                                         Thread.Sleep(wait);
                                                         Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
                                                         return;
@@ -114,6 +116,7 @@ namespace QQBotXClashOfClans_v2
                                                     //New thread
                                                     Thread t = new Thread(() => {
                                                         var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Logger.Instance.AddLog(LogType.Debug, "部落战当前准备日，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
                                                         Thread.Sleep(wait);
                                                         Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
                                                         return;
@@ -126,6 +129,7 @@ namespace QQBotXClashOfClans_v2
                                                 {
                                                     Thread t = new Thread(() => {
                                                         var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Logger.Instance.AddLog(LogType.Debug, "部落战当前已开始，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
                                                         Thread.Sleep(wait);
                                                         Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
                                                         return;
@@ -159,7 +163,7 @@ namespace QQBotXClashOfClans_v2
                                                     Player player = players.GetPlayer(api.Member.ClanData.First().ClanID);
                                                     if (api.Member.Member.Card != BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name)
                                                     {
-                                                        Session.ChangeGroupMemberInfoAsync(api.Member.Member.QQId, value, new GroupMemberCardInfo(BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name, null)).RunSynchronously();
+                                                        Session.ChangeGroupMemberInfo(api.Member.Member.QQId, value, new GroupMemberCardInfo(BaseData.Instance.THLevels[player.TownHallLevel] + "本-" + player.Name, null));
                                                     }
                                                 }
                                             }

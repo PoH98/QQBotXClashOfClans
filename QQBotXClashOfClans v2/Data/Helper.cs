@@ -19,6 +19,10 @@ namespace QQBotXClashOfClans_v2.Data
             AsyncHelpers.RunSync(() => session.MuteAsync(memberId, groupNumber, time));
         }
 
+        public static void ChangeGroupMemberInfo(this MiraiHttpSession session, long memberId, long groupNumber, IGroupMemberCardInfo memberCardInfo)
+        {
+            AsyncHelpers.RunSync(() => session.ChangeGroupMemberInfoAsync(memberId, groupNumber, memberCardInfo));
+        }
     }
 
     public static class AsyncHelpers

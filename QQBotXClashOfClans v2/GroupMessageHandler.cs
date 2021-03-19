@@ -46,13 +46,16 @@ namespace QQBotXClashOfClans_v2
                         }
                         foreach (var message in SplitLongMessage(sb.ToString()))
                         {
-                            Thread.Sleep(rnd.Next(1000, 4000));
                             if (message.Contains("@发送者"))
                             {
                                 List<IMessageBase> mb = new List<IMessageBase>();
                                 var splits = message.Split("@发送者");
                                 foreach(var split in splits)
                                 {
+                                    if (string.IsNullOrWhiteSpace(split) || string.IsNullOrEmpty(split))
+                                    {
+                                        continue;
+                                    }
                                     mb.Add(new AtMessage(e.Sender.Id));
                                     mb.Add(new PlainMessage(split));
                                 }
@@ -62,6 +65,7 @@ namespace QQBotXClashOfClans_v2
                             {
                                 await session.SendGroupMessageAsync(e.Sender.Group.Id, new IMessageBase[] { new PlainMessage(message) });
                             }
+                            Thread.Sleep(rnd.Next(1000, 4000));
                         }
                     }
                     else
@@ -76,13 +80,16 @@ namespace QQBotXClashOfClans_v2
                         Random rnd = new Random();
                         foreach (var message in SplitLongMessage(sb.ToString()))
                         {
-                            Thread.Sleep(rnd.Next(1000, 4000));
                             if (message.Contains("@发送者"))
                             {
                                 List<IMessageBase> mb = new List<IMessageBase>();
                                 var splits = message.Split("@发送者");
                                 foreach (var split in splits)
                                 {
+                                    if (string.IsNullOrWhiteSpace(split) || string.IsNullOrEmpty(split))
+                                    {
+                                        continue;
+                                    }
                                     mb.Add(new AtMessage(e.Sender.Id));
                                     mb.Add(new PlainMessage(split));
                                 }
@@ -92,6 +99,7 @@ namespace QQBotXClashOfClans_v2
                             {
                                 await session.SendGroupMessageAsync(e.Sender.Group.Id, new IMessageBase[] { new PlainMessage(message) });
                             }
+                            Thread.Sleep(rnd.Next(1000, 4000));
                         }
                     }
                 }
