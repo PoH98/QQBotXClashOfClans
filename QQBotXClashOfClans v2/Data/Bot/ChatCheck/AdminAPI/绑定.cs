@@ -19,11 +19,17 @@ namespace QQBotXClashOfClans_v2
                 Logger.Instance.AddLog(LogType.Debug, "接受到改名指令");
                 var sendMember = chat.Sender;
                 string newname;
-                long? tag = (chat.MessageChain.Where(x => x is AtMessage).FirstOrDefault() as AtMessage)?.Target;
-                if (tag == null)
+                var at = chat.MessageChain.Where(x => x is AtMessage);
+                long tag = 0;
+                if(at.Count() > 0)
+                {
+                    tag = (at.First() as AtMessage).Target;
+                }
+                else
                 {
                     tag = chat.Sender.Id;
                 }
+                Logger.Instance.AddLog(LogType.Debug, "检测到艾特为" + tag);
                 if (chat.Message.Contains(BaseData.Instance.config["部落冲突"][chat.FromGroup.ToString()]))
                 {
                     return new IMessageBase[]{ new AtMessage(chat.FromQQ), new PlainMessage("你当我傻？拿部落标签给我查玩家？草你马的")};
@@ -134,12 +140,12 @@ namespace QQBotXClashOfClans_v2
                     {
                         return new IMessageBase[]{new PlainMessage("你给我的是什么鬼？！")};
                     }
-                    await chat.Session.ChangeGroupMemberInfoAsync(tag.Value, chat.FromGroup, new GroupMemberCardInfo(newname , null));
+                    await chat.Session.ChangeGroupMemberInfoAsync(tag, chat.FromGroup, new GroupMemberCardInfo(newname , null));
                     return  new IMessageBase[]{new PlainMessage("搞定！已改称为" + newname)};
                 }
                 else if (sendMember.Permission != GroupPermission.Member)
                 {
-                    using var API = new GameAPI(chat.FromGroup, tag.Value, chat.Session);
+                    using var API = new GameAPI(chat.FromGroup, tag, chat.Session);
                     var Member = API.Member;
                     if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
                     {
@@ -244,7 +250,7 @@ namespace QQBotXClashOfClans_v2
                     {
                         throw new Exception();
                     }
-                    await chat.Session.ChangeGroupMemberInfoAsync(tag.Value, chat.FromGroup, new GroupMemberCardInfo(newname, null));
+                    await chat.Session.ChangeGroupMemberInfoAsync(tag, chat.FromGroup, new GroupMemberCardInfo(newname, null));
                     return new IMessageBase[] { new PlainMessage("搞定！已改称为" + newname) };
                 }
                 else

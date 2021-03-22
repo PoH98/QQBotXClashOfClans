@@ -75,17 +75,22 @@ namespace QQBotXClashOfClans_v2
                                                 //新年快乐
                                                 Session.SendGroupMessage(value, new AtAllMessage(), new PlainMessage("我tm祝各位tm的" + DateTime.Now.Year + "新年快乐"));
                                             }
-                                            if (!War.ContainsKey(value))
+                                            if (!War.ContainsKey(value) || War[value] == null)
                                             {
                                                 var clanData = clan.GetCurrentWar(clanID.Value);
                                                 if (clanData.State.ToLower() == "preparation")
                                                 {
                                                     //New thread
                                                     Thread t = new Thread(() => {
-                                                        var wait =  clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已进入准备日！"));
+                                                        //Weird error which always more 12 hours
+                                                        var wait =  clanData.EndTime.ToLocalTime() - DateTime.Now - new TimeSpan(12, 0, 0);
                                                         Logger.Instance.AddLog(LogType.Debug, "部落战当前准备日，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
-                                                        Thread.Sleep(wait);
-                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
+                                                        if(wait.TotalSeconds > 0)
+                                                        {
+                                                            Thread.Sleep(wait);
+                                                            Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
+                                                        }
                                                         return;
                                                     });
                                                     t.IsBackground = true;
@@ -97,8 +102,11 @@ namespace QQBotXClashOfClans_v2
                                                     Thread t = new Thread(() => {
                                                         var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
                                                         Logger.Instance.AddLog(LogType.Debug, "部落战当前已开始，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
-                                                        Thread.Sleep(wait);
-                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
+                                                        if(wait.TotalSeconds > 0)
+                                                        {
+                                                            Thread.Sleep(wait);
+                                                            Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
+                                                        }
                                                         return;
                                                     });
                                                     t.IsBackground = true;
@@ -106,7 +114,7 @@ namespace QQBotXClashOfClans_v2
                                                     t.Start();
                                                 }
                                             }
-                                            else if (!War[value].IsAlive)
+                                            else if (War[value].ThreadState == ThreadState.Stopped || War[value].ThreadState == ThreadState.Aborted || War[value].ThreadState == ThreadState.Suspended)
                                             {
                                                 War[value] = null;
                                                 GC.Collect();
@@ -115,10 +123,15 @@ namespace QQBotXClashOfClans_v2
                                                 {
                                                     //New thread
                                                     Thread t = new Thread(() => {
-                                                        var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
+                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已进入准备日！"));
+                                                        //Weird error which always more 12 hours
+                                                        var wait = clanData.EndTime.ToLocalTime() - DateTime.Now - new TimeSpan(12, 0, 0);
                                                         Logger.Instance.AddLog(LogType.Debug, "部落战当前准备日，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
-                                                        Thread.Sleep(wait);
-                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
+                                                        if(wait.TotalSeconds > 0)
+                                                        {
+                                                            Thread.Sleep(wait);
+                                                            Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已开始！"));
+                                                        }
                                                         return;
                                                     });
                                                     t.IsBackground = true;
@@ -130,8 +143,11 @@ namespace QQBotXClashOfClans_v2
                                                     Thread t = new Thread(() => {
                                                         var wait = clanData.EndTime.ToLocalTime() - DateTime.Now;
                                                         Logger.Instance.AddLog(LogType.Debug, "部落战当前已开始，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
-                                                        Thread.Sleep(wait);
-                                                        Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
+                                                        if (wait.TotalSeconds > 0)
+                                                        {
+                                                            Thread.Sleep(wait);
+                                                            Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已结束！"));
+                                                        }
                                                         return;
                                                     });
                                                     t.IsBackground = true;
