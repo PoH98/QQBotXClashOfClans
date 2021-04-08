@@ -4,6 +4,7 @@ using Mirai_CSharp.Plugin.Interfaces;
 using QQBotXClashOfClans_v2.Game;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,7 +20,8 @@ namespace QQBotXClashOfClans_v2
     {
         public async Task<bool> GroupMessage(MiraiHttpSession session, IGroupMessageEventArgs e)
         {
-            if(e.Chain[1] is PlainMessage)
+            Stopwatch sw = Stopwatch.StartNew();
+            if (e.Chain[1] is PlainMessage)
             {
                 var plain = e.Chain[1] as PlainMessage;
                 lock (Instance.LogLocker)
@@ -33,7 +35,6 @@ namespace QQBotXClashOfClans_v2
                 var data = valuePairs(configType.自动回复);
                 if (data.Keys.Contains(plain.Message))
                 {
-
                     if (data[plain.Message].Contains('|'))
                     {
                         var messages = data[plain.Message].Split('|');
@@ -105,9 +106,10 @@ namespace QQBotXClashOfClans_v2
                 }
                 else if (plain.Message.StartsWith("/"))
                 {
-                    using GameAPI Member = new GameAPI(new ChainEventArgs() { Message = plain.Message, MessageChain = e.Chain, Sender = e.Sender, Session = session });
+                    var eventArgs = new ChainEventArgs() { Message = plain.Message, MessageChain = e.Chain, Sender = e.Sender, Session = session };
+                    using GameAPI Member = new GameAPI(eventArgs);
                     Instance.chains[0].SetMember(Member.Member);
-                    var result = await Instance.chains[0].GetReply(new ChainEventArgs() { Message = plain.Message, MessageChain = e.Chain, Sender = e.Sender, Session = session });
+                    var result = await Instance.chains[0].GetReply(eventArgs);
                     if (result.Count() > 0)
                     {
                         await session.SendGroupMessageAsync(e.Sender.Group.Id, result.ToArray());
@@ -173,6 +175,8 @@ namespace QQBotXClashOfClans_v2
                         }
                     }
                 }
+                sw.Stop();
+                Logger.Instance.AddLog(LogType.Debug, "消息处理完毕，使用了" + sw.Elapsed.TotalMilliseconds + "毫秒");
                 return true;
             }
             else
@@ -191,6 +195,27 @@ namespace QQBotXClashOfClans_v2
                 }
 
             }
+            if (Directory.Exists("Buffer"))
+            {
+                foreach (var file in Directory.GetFiles("Buffer"))
+                {
+                    FileInfo info = new FileInfo(file);
+                    var alived = DateTime.Now - info.CreationTime;
+                    if(alived.TotalDays >= 1)
+                    {
+                        try
+                        {
+                            info.Delete();
+                        }
+                        catch
+                        {
+                            Logger.Instance.AddLog(LogType.Error, "缓存文件[" + file + "]无法被删除！");
+                        }
+                    }
+                }
+            }
+            sw.Stop();
+            Logger.Instance.AddLog(LogType.Debug, "消息处理完毕，使用了" + sw.Elapsed.TotalMilliseconds + "毫秒");
             return false;
         }
         private string[] SplitLongMessage(string originalMessage)
@@ -224,10 +249,6 @@ namespace QQBotXClashOfClans_v2
 
     public class GroupRequestHandler : IGroupApply
     {
-        public GroupRequestHandler()
-        {
-        }
-
         public async Task<bool> GroupApply(MiraiHttpSession session, IGroupApplyEventArgs e)
         {
             try

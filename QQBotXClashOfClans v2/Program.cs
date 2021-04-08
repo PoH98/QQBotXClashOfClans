@@ -1,9 +1,9 @@
-﻿using IniParser;
+﻿using CocNET;
+using IniParser;
 using IniParser.Model;
 using Mirai_CSharp;
 using Mirai_CSharp.Models;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -26,7 +26,6 @@ namespace QQBotXClashOfClans_v2
             {
                 qqId = Convert.ToInt64(args[1]);
             }
-            LoggedInQQ = qqId;
             try
             {
                 Logger.Instance.AddLog(LogType.Info, "正在加载...");
@@ -78,6 +77,7 @@ namespace QQBotXClashOfClans_v2
                     return;
                 }
             }
+            LoggedInQQ = qqId;
             MiraiHttpSessionOptions options = new MiraiHttpSessionOptions("127.0.0.1", 8080,key);
             await using var session = new MiraiHttpSession();
             BaseData.Instance.checkClanWar = new Thread(new Threading(session).CheckClanWar)

@@ -224,7 +224,7 @@ namespace Native.Csharp.App.GameData
 
         public override int maxDamage => 2600;
 
-        public override int maxHP => 30000;
+        public override int maxHP => 10000;
 
         public override string Name => "粒子高射炮";
 
@@ -242,7 +242,7 @@ namespace Native.Csharp.App.GameData
 
         public override int maxDamage => 2600;
 
-        public override int maxHP => 30000;
+        public override int maxHP => 10000;
 
         public override string Name => "浩劫反物质火炮";
 

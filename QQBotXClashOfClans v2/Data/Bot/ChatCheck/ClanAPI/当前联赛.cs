@@ -25,13 +25,22 @@ namespace QQBotXClashOfClans_v2.ChatCheck.ClanAPI
                     {
                         StringBuilder sb = new StringBuilder();
                         Array.Reverse(league.Rounds);
-                        foreach (var rounds in league.Rounds)
+                        IMessageBase[] result = null;
+                        Parallel.ForEach(league.Rounds, (rounds) =>
                         {
                             foreach (var warTag in rounds.warTags)
                             {
                                 if (warTag != "#0")
                                 {
+                                    if(result != null)
+                                    {
+                                        return;
+                                    }
                                     var roundData = war.GetCurrentWarLeagueRound(warTag);
+                                    if (result != null)
+                                    {
+                                        return;
+                                    }
                                     Logger.Instance.AddLog(LogType.Debug, "联赛部落" + roundData.clan.Name + " vs " + roundData.opponent.Name);
                                     if (roundData.clan.Tag == keypairs[chat.FromGroup.ToString()].ToUpper())
                                     {
@@ -43,16 +52,16 @@ namespace QQBotXClashOfClans_v2.ChatCheck.ClanAPI
                                             sb.AppendLine("========================");
                                             foreach (var Member in roundData.clan.Members.OrderBy(x => x.MapPosition))
                                             {
-                                                if(Member.Attacks == null || Member.Attacks.Length < 1)
+                                                if (Member.Attacks == null || Member.Attacks.Length < 1)
                                                 {
                                                     sb.AppendLine(Member.Name + " : 还未进攻");
                                                 }
                                                 else
                                                 {
-                                                    sb.AppendLine(Member.Name + " : " + Member.Attacks[0].Stars +"星(摧毁: "+Member.Attacks[0].DestructionPercentage+"%)");
+                                                    sb.AppendLine(Member.Name + " : " + Member.Attacks[0].Stars + "星(摧毁: " + Member.Attacks[0].DestructionPercentage + "%)");
                                                 }
                                             }
-                                            return new IMessageBase[]{ BaseData.TextToImg(sb.ToString(),chat.Session) };
+                                            result = new IMessageBase[] { BaseData.TextToImg(sb.ToString(), chat.Session) };
                                         }
                                     }
                                     else if (roundData.opponent.Tag == keypairs[chat.FromGroup.ToString()].ToUpper())
@@ -73,12 +82,17 @@ namespace QQBotXClashOfClans_v2.ChatCheck.ClanAPI
                                                     sb.AppendLine(Member.Name + " : " + Member.Attacks[0].Stars + "星(摧毁: " + Member.Attacks[0].DestructionPercentage + "%)");
                                                 }
                                             }
-                                            return new IMessageBase[]{ BaseData.TextToImg(sb.ToString(),chat.Session) };
+                                            result = new IMessageBase[] { BaseData.TextToImg(sb.ToString(), chat.Session) };
                                         }
                                     }
                                 }
                             }
+                        });
+                        if(result == null)
+                        {
+                            result = new IMessageBase[] { new PlainMessage("联赛资料获取失败！也许现在不是联赛时间？") };
                         }
+                        return result;
                     }
                     else
                     {

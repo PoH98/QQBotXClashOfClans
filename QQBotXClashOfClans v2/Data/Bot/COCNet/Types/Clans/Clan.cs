@@ -34,6 +34,12 @@ namespace CocNET.Types.Clans
         [JsonProperty("warWins")]
         public int WarWins { get; set; }
 
+        [JsonProperty("warTies")]
+        public int WarTies { get; set; }
+
+        [JsonProperty("warLosses")]
+        public int WarLosses { get; set; }
+
         [JsonProperty("warWinStreak")]
         public int WarWinStreak { get; set; }
 

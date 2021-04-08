@@ -14,7 +14,7 @@ namespace QQBotXClashOfClans_v2.ChatCheck.CalculatorAPI
             {
                 try
                 {
-                    return new IMessageBase[]{new PlainMessage("计算结果: " + Calculate(chat.Message.Trim().Replace("/计算", "")))};
+                    return new IMessageBase[]{new PlainMessage("计算结果: " + Calculate(chat.Message.Trim().Replace("/计算", "").Replace("÷", "/")))};
                 }
                 catch
                 {

@@ -23,10 +23,10 @@ namespace QQBotXClashOfClans_v2
                     Logger.Instance.AddLog(LogType.Info, "没有检测到QQ");
                     return new IMessageBase[] { };
                 }
-                var qq = at.First() as AtMessage;
+                var qq = (at.First() as AtMessage).Target;
                 Logger.Instance.AddLog(LogType.Debug, "已检测到QQ号" + qq);
-                var member = await chat.Session.GetGroupMemberInfoAsync(chat.FromGroup, qq.Target);
-                await chat.Session.KickMemberAsync(chat.FromGroup, qq.Target);
+                var member = await chat.Session.GetGroupMemberInfoAsync(qq, chat.FromGroup);
+                await chat.Session.KickMemberAsync(qq, chat.FromGroup);
                 return new IMessageBase[] { new PlainMessage("已把" + member.Name + "踢出群聊！") };
             }
             return await base.GetReply(chat);

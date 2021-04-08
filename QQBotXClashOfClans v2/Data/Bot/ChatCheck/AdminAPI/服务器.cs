@@ -17,12 +17,9 @@ namespace QQBotXClashOfClans_v2
         {
             if(chat.Message == "/服务器")
             {
-                PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
                 StringBuilder sb = new StringBuilder();
-                sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: " + DateTime.Now.ToString() + "\n服务器CPU状态: ");
-                cpuCounter.NextValue();
-                Thread.Sleep(1000);
-                sb.Append(Convert.ToInt32(cpuCounter.NextValue()).ToString() + "%\n");
+                sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZoneInfo.Local.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: " + DateTime.Now.ToString() + "\n服务器CPU状态: ");
+                sb.Append(Convert.ToInt32(BaseData.Instance.cpuUsage).ToString("N0") + "%\n");
                 var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
                 sb.Append("服务器内存使用: ");
                 var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new
@@ -42,8 +39,14 @@ namespace QQBotXClashOfClans_v2
                 sb.AppendLine("\n部落战检测线程运行状态:" + (BaseData.Instance.checkClanWar.IsAlive?"正在在线":"已断开链接，自动重启线程中..."));
                 if (!BaseData.Instance.checkClanWar.IsAlive)
                 {
-                    Process.Start(Process.GetCurrentProcess().MainModule.FileName);
-                    Environment.Exit(0);
+                    Thread t = new Thread(() =>
+                    {
+                        //wait 5 sec then run this
+                        Thread.Sleep(5000);
+                        Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+                        Environment.Exit(0);
+                    });
+                    t.Start();
                 }
                 return new IMessageBase[]{new PlainMessage(sb.ToString())};
             }

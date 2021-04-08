@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using QQBotXClashOfClans_v2;
 
 namespace CocNET
@@ -16,6 +18,7 @@ namespace CocNET
             {
                 throw new Exception("缺少 [部落冲突][Api邮箱] 或者 [部落冲突][Api密码]");
             }
+            Token:
             try
             {
                 UTF8Encoding encode = new UTF8Encoding();
@@ -68,21 +71,22 @@ namespace CocNET
                 net.Close();
                 reply = reply.Remove(0, reply.IndexOf("["));
                 var result = reply.Split(',');
-                foreach (var r in result)
+                //We gonna speed things up while removing old keys
+                Parallel.ForEach(result, (r)=>
                 {
                     if (r.Contains("\"id\""))
                     {
                         string id = r.Replace("\"id\":\"", "").Replace("\"", "").Replace("{", "").Replace("[", "");
                         string payload = "{\"id\":\"" + id + "\"}";
                         data = encode.GetBytes(payload);
-                        request = WebRequest.CreateHttp("https://developer.clashofclans.com/api/apikey/revoke");
+                        var request = WebRequest.CreateHttp("https://developer.clashofclans.com/api/apikey/revoke");
                         request.Method = "POST";
                         request.CookieContainer = new CookieContainer();
                         request.CookieContainer.Add(new Uri("https://developer.clashofclans.com"), new Cookie("session", session));
                         request.CookieContainer.Add(new Uri("https://developer.clashofclans.com"), new Cookie("game-api-url", "https://api.clashofclans.com/v1/"));
                         request.CookieContainer.Add(new Uri("https://developer.clashofclans.com"), new Cookie("game-api-token", temptoken));
                         request.ContentType = "application/json";
-                        net = request.GetRequestStream();
+                        var net = request.GetRequestStream();
                         net.Write(data, 0, data.Length);
                         net.Close();
                         res = (HttpWebResponse)request.GetResponse();
@@ -92,7 +96,7 @@ namespace CocNET
                         Console.WriteLine(reply);
                         net.Close();
                     }
-                }
+                });
                 BaseData.GetIP(out string newIP);
                 data = encode.GetBytes("{\"name\":\"Admin Bot\",\"description\":\"Admin\",\"cidrRanges\":[\"" + newIP + "\"],\"scopes\":null}");
                 request = WebRequest.CreateHttp("https://developer.clashofclans.com/api/apikey/create");
@@ -116,26 +120,32 @@ namespace CocNET
                 token = token.Remove(token.Length - 3);
                 BaseData.SetToken(token);
                 data = encode.GetBytes("{}");
-                request = WebRequest.CreateHttp("https://developer.clashofclans.com/api/logout");
-                request.Method = "POST";
-                request.CookieContainer = new CookieContainer();
-                request.CookieContainer.Add(new Uri("https://developer.clashofclans.com"), new Cookie("session", session));
-                request.ContentType = "application/json";
-                request.ContentLength = data.Length;
-                net = request.GetRequestStream();
-                net.Write(data, 0, data.Length);
-                net.Close();
-                res = (HttpWebResponse)request.GetResponse();
-                net = res.GetResponseStream();
-                reader = new StreamReader(net, Encoding.UTF8);
-                reply = reader.ReadToEnd();
-                net.Close();
-                BaseData.UpdateIP();
+                //We dont want to wait it logout now, but we have to logout!
+                Thread t = new Thread(() =>
+                {
+                    var request = WebRequest.CreateHttp("https://developer.clashofclans.com/api/logout");
+                    request.Method = "POST";
+                    request.CookieContainer = new CookieContainer();
+                    request.CookieContainer.Add(new Uri("https://developer.clashofclans.com"), new Cookie("session", session));
+                    request.ContentType = "application/json";
+                    request.ContentLength = data.Length;
+                    var net = request.GetRequestStream();
+                    net.Write(data, 0, data.Length);
+                    net.Close();
+                    res = (HttpWebResponse)request.GetResponse();
+                    net = res.GetResponseStream();
+                    reader = new StreamReader(net, Encoding.UTF8);
+                    reply = reader.ReadToEnd();
+                    net.Close();
+                });
+                t.IsBackground = true;
+                t.Start();
+                BaseData.UpdateIP(newIP);
                 Logger.Instance.AddLog(LogType.Debug, "Token更新完毕！新Token为" + BaseData.Instance.config["部落冲突"]["Token"]);
             }
             catch
             {
-
+                goto Token;
             }
             
         }

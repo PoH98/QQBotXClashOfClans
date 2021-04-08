@@ -14,7 +14,7 @@ namespace QQBotXClashOfClans_v2
     {
         public override async Task<IEnumerable<IMessageBase>> GetReply(ChainEventArgs chat)
         {
-            if (chat.Message.StartsWith("/绑定"))
+            if (chat.Message.StartsWith("/绑定") && !chat.Message.Contains("群") && !chat.Message.Contains("查看"))
             {
                 Logger.Instance.AddLog(LogType.Debug, "接受到改名指令");
                 var sendMember = chat.Sender;
@@ -147,9 +147,10 @@ namespace QQBotXClashOfClans_v2
                 {
                     using var API = new GameAPI(chat.FromGroup, tag, chat.Session);
                     var Member = API.Member;
-                    if (chat.Message.Contains('#') && chat.Message.Where(x => x == '#').Count() == 1)
+                    var coctag = chat.MessageChain.Last() as PlainMessage;
+                    if (coctag.Message.Contains('#') && coctag.Message.Where(x => x == '#').Count() == 1)
                     {
-                        newname = "#" + chat.Message.Split('#').Last().Trim().ToUpper();
+                        newname = coctag.Message.Trim().ToUpper();
                         ICocCorePlayers players = BaseData.Instance.container.Resolve<ICocCorePlayers>();
                         var player = players.GetPlayer(newname);
                         if (!string.IsNullOrEmpty(player.Reason))
@@ -194,9 +195,9 @@ namespace QQBotXClashOfClans_v2
                             newname = string.Join(",", names);
                         }
                     }
-                    else if (chat.Message.Contains("http"))
+                    else if (coctag.Message.Contains("http"))
                     {
-                        newname = chat.Message.Replace("/审核", "").Replace(" ", "");
+                        newname = coctag.Message.Replace("/审核", "").Replace(" ", "");
                         newname = "#" + newname.Remove(0, newname.LastIndexOf("tag=") + 4);
                         if (newname.Contains("&"))
                         {
@@ -248,7 +249,7 @@ namespace QQBotXClashOfClans_v2
                     }
                     else
                     {
-                        throw new Exception();
+                        return new IMessageBase[] { new PlainMessage("你给我的是什么鬼？！") };
                     }
                     await chat.Session.ChangeGroupMemberInfoAsync(tag, chat.FromGroup, new GroupMemberCardInfo(newname, null));
                     return new IMessageBase[] { new PlainMessage("搞定！已改称为" + newname) };

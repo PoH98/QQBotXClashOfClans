@@ -378,9 +378,6 @@ namespace QQBotXClashOfClans_v2.Game
                     }
                     prey.Member.weapon = weapon;
                 }
-                Session.SendGroupMessage(Member.Member.GroupId, new PlainMessage("你尝试打劫" + prey.Member.Member.Nick + "然而对方直接掏出了" + prey.Member.weapon.Name + "(伤害: 3000-3600, 血量: 无限大)直接把你打成了灰，你没有损失任何金钱并且从训练营复活了，你还可以再选一次打劫对象！"));
-                prey.Dispose();
-                return this;
             }
             else if (prey.Member.Member.QQId == e.FromQQ)
             {
@@ -397,7 +394,67 @@ namespace QQBotXClashOfClans_v2.Game
                 prey.Dispose();
                 return this;
             }
-            if (prey.Member.Cash > 0)
+            if (prey.Member.Member.QQId == Program.LoggedInQQ || prey.Member.Member.QQId < 1 || prey.Member.Member.QQId == 2854196310)
+            {
+                Random rnd = new Random();
+                Member.CurrentHP = Member.weapon.maxHP + Member.BonusHP;
+                prey.Member.CurrentHP = prey.Member.weapon.maxHP + prey.Member.BonusHP;
+                do
+                {
+                    var MemberDamage = rnd.Next(Member.weapon.minDamage, Member.weapon.maxDamage) + Member.BonusDamage;
+                    var preyDamage = rnd.Next(prey.Member.weapon.minDamage, prey.Member.weapon.maxDamage) + prey.Member.BonusDamage;
+                    Member.CurrentHP -= preyDamage;
+                    prey.Member.CurrentHP -= MemberDamage;
+                    if (Member.Skill != null)
+                    {
+                        CalculateSkill(this, prey, MemberDamage);
+                    }
+                    if (prey.Member.Skill != null)
+                    {
+                        CalculateSkill(prey, this, preyDamage);
+                    }
+                    if (Member.weapon.WeaponSkill != WeaponSkill.None)
+                    {
+                        CalculateWeaponSkill(this, prey, MemberDamage);
+                    }
+                    if (prey.Member.weapon.WeaponSkill != WeaponSkill.None)
+                    {
+                        CalculateWeaponSkill(prey, this, preyDamage);
+                    }
+                    Round++;
+                }
+                while (Member.CurrentHP > 0 && prey.Member.CurrentHP > 0);
+                if (Member.CurrentHP > 0)
+                {
+                    var percent = rnd.Next(2, 6);
+                    var get = 5000;
+                    prey.Member.LastRobbed = DateTime.Now;
+                    Session.SendGroupMessage(Member.Member.GroupId, new PlainMessage("恭喜"), new AtMessage(Member.Member.QQId), new PlainMessage("打劫"), new AtMessage(prey.Member.Member.QQId), new PlainMessage("成功！获得了" + get + "金币！"));
+                }
+                else if (Member.CurrentHP <= 0 && prey.Member.CurrentHP <= 0)
+                {
+                    Session.SendGroupMessage(Member.Member.GroupId, new PlainMessage("恭喜两个人都挂了，你们都在训练营里复活又跑了出来，然而双方都没有任何损失"));
+                }
+                else
+                {
+                    if (Member.Cash > 0)
+                    {
+                        var percent = rnd.Next(2, 6);
+                        var get = (Member.Cash / 100) * percent;
+                        prey.Member.Cash += get;
+                        Member.Cash -= get;
+                        Session.SendGroupMessage(Member.Member.GroupId, new PlainMessage("恭喜"), new AtMessage(prey.Member.Member.QQId), new PlainMessage("防御成功！还从打劫者身上获得了" + get + "金币！"));
+                    }
+                    else
+                    {
+                        Session.SendGroupMessage(Member.Member.GroupId, new PlainMessage("恭喜"), new AtMessage(prey.Member.Member.QQId), new PlainMessage("防御成功！然而由于打劫者没钱了，只能给你卖身赔钱！"));
+                        Session.Mute(e.FromQQ, e.FromGroup, new TimeSpan(0, 30, 0));
+                    }
+                }
+                Member.Robbed = DateTime.Today;
+                prey.Dispose();
+            }
+            else if (prey.Member.Cash > 0)
             {
                 Random rnd = new Random();
                 Member.CurrentHP = Member.weapon.maxHP + Member.BonusHP;

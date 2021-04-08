@@ -15,6 +15,7 @@ using CocNET;
 using DataAccess;
 using System.Reflection;
 using Mirai_CSharp;
+using System.Diagnostics;
 
 namespace QQBotXClashOfClans_v2
 {
@@ -53,6 +54,9 @@ namespace QQBotXClashOfClans_v2
 
         private static BaseData _instance;
 
+        public PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
+
+        public double cpuUsage = 0;
         public static void InitFirstUse()
         {
             string[] key = { "查看指令" };
@@ -126,7 +130,7 @@ namespace QQBotXClashOfClans_v2
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 WebClient wc = new WebClient();
-                Instance.IPAddress = wc.DownloadString("http://bot.whatismyipaddress.com/");
+                Instance.IPAddress = wc.DownloadString("https://ipv4.icanhazip.com/");
                 wc.Dispose();
             }
             catch
@@ -379,16 +383,15 @@ namespace QQBotXClashOfClans_v2
             return (GetIP(out string newIP) == newIP);
         }
 
-        public static void UpdateIP()
+        public static void UpdateIP(string newIP)
         {
-            using WebClient wc = new WebClient();
-            Instance.IPAddress = wc.DownloadString("http://bot.whatismyipaddress.com/");
+            Instance.IPAddress = newIP;
         }
 
         public static string GetIP(out string newIP)
         {
             using WebClient wc = new WebClient();
-            newIP = wc.DownloadString("http://bot.whatismyipaddress.com/");
+            newIP = wc.DownloadString("https://ipv4.icanhazip.com/").Replace("\n","");
             return Instance.IPAddress;
         }
 

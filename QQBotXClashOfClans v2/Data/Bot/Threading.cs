@@ -30,6 +30,7 @@ namespace QQBotXClashOfClans_v2
             {
                 try
                 {
+                    BaseData.Instance.cpuUsage = BaseData.Instance.cpuCounter.NextValue();
                     Thread.Sleep(1000);
                     if ((DateTime.Now.Minute == 0 || DateTime.Now.Minute == 30) && DateTime.Now.Second == 0)
                     {
@@ -83,8 +84,7 @@ namespace QQBotXClashOfClans_v2
                                                     //New thread
                                                     Thread t = new Thread(() => {
                                                         Session.SendGroupMessage(Convert.ToInt64(clanID.KeyName), new AtAllMessage(), new PlainMessage("部落战已进入准备日！"));
-                                                        //Weird error which always more 12 hours
-                                                        var wait =  clanData.EndTime.ToLocalTime() - DateTime.Now - new TimeSpan(12, 0, 0);
+                                                        var wait =  clanData.EndTime.ToLocalTime() - DateTime.Now - new TimeSpan(23, 0, 0);
                                                         Logger.Instance.AddLog(LogType.Debug, "部落战当前准备日，还需要等待" + wait.Days + "天" + wait.Hours + "小时" + wait.Minutes + "分钟" + wait.Seconds + "秒");
                                                         if(wait.TotalSeconds > 0)
                                                         {
@@ -94,7 +94,14 @@ namespace QQBotXClashOfClans_v2
                                                         return;
                                                     });
                                                     t.IsBackground = true;
-                                                    War.Add(value, t);
+                                                    if (War.ContainsKey(value))
+                                                    {
+                                                        War[value] = t;
+                                                    }
+                                                    else
+                                                    {
+                                                        War.Add(value, t);
+                                                    }
                                                     t.Start();
                                                 }
                                                 else if(clanData.State.ToLower() == "inwar")
@@ -110,7 +117,14 @@ namespace QQBotXClashOfClans_v2
                                                         return;
                                                     });
                                                     t.IsBackground = true;
-                                                    War.Add(value, t);
+                                                    if (War.ContainsKey(value))
+                                                    {
+                                                        War[value] = t;
+                                                    }
+                                                    else
+                                                    {
+                                                        War.Add(value, t);
+                                                    }
                                                     t.Start();
                                                 }
                                             }

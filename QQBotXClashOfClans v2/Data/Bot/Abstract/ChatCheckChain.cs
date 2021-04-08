@@ -1,7 +1,6 @@
 ﻿using Mirai_CSharp.Models;
 using QQBotXClashOfClans_v2.Interface;
 using Native.Csharp.App.GameData;
-using QQBotXClashOfClans_v2;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,6 +10,9 @@ namespace QQBotXClashOfClans_v2
     public abstract class ChatCheckChain : IChain
     {
         private IChain nextChain;
+        /// <summary>
+        /// 发送者资料
+        /// </summary>
         internal GameMember Member { get; private set; }
         public virtual async Task<IEnumerable<IMessageBase>> GetReply(ChainEventArgs chat)
         {
@@ -23,6 +25,7 @@ namespace QQBotXClashOfClans_v2
                 catch(Exception ex)
                 {
                     var name = nextChain.GetType().Name;
+                    Logger.Instance.AddLog(LogType.Error, ex.ToString());
                     return new[] { new PlainMessage("处理指令时发生错误！" + name + ".GetReply()" + "! 错误详情: " + ex.Message) };
                 }
             }

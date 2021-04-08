@@ -43,9 +43,9 @@ namespace QQBotXClashOfClans_v2
                         result.Add(BaseData.TextToImg(sb.ToString(),chat.Session));
                         sb.Clear();
                         Array.Reverse(league.Rounds);
-                        foreach (var rounds in league.Rounds)
+                        Parallel.ForEach(league.Rounds, (rounds) =>
                         {
-                            foreach (var warTag in rounds.warTags)
+                            Parallel.ForEach(rounds.warTags, (warTag) =>
                             {
                                 if (warTag != "#0")
                                 {
@@ -57,7 +57,7 @@ namespace QQBotXClashOfClans_v2
                                         {
                                             sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.opponent.Name);
-                                            result.Add(BaseData.TextToImg(sb.ToString(),chat.Session));
+                                            result.Add(BaseData.TextToImg(sb.ToString(), chat.Session));
                                             sb.Clear();
                                         }
                                         else if (roundData.state == "inWar")
@@ -65,8 +65,7 @@ namespace QQBotXClashOfClans_v2
                                             sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.opponent.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.clan.Stars + ", 敌方战星: " + roundData.opponent.Stars);
-                                            result.Add(BaseData.TextToImg(sb.ToString(),chat.Session));
-                                            break;
+                                            result.Add(BaseData.TextToImg(sb.ToString(), chat.Session));
                                         }
                                     }
                                     else if (roundData.opponent.Tag == keypairs[chat.FromGroup.ToString()].ToUpper())
@@ -75,7 +74,7 @@ namespace QQBotXClashOfClans_v2
                                         {
                                             sb.AppendLine("下场联赛开战时间为: " + roundData.StartTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.clan.Name);
-                                            result.Add(BaseData.TextToImg(sb.ToString(),chat.Session));
+                                            result.Add(BaseData.TextToImg(sb.ToString(), chat.Session));
                                             sb.Clear();
                                         }
                                         else if (roundData.state == "inWar")
@@ -83,13 +82,12 @@ namespace QQBotXClashOfClans_v2
                                             sb.AppendLine("当前联赛结束时间为: " + roundData.EndTime.ToLocalTime().ToString("dd/MM/yyyy hh:mm:ss tt"));
                                             sb.AppendLine("对手为" + roundData.clan.Name);
                                             sb.AppendLine("当前我方战星: " + roundData.opponent.Stars + ", 敌方战星: " + roundData.clan.Stars);
-                                            result.Add(BaseData.TextToImg(sb.ToString(),chat.Session));
-                                            break;
+                                            result.Add(BaseData.TextToImg(sb.ToString(), chat.Session));
                                         }
                                     }
                                 }
-                            }
-                        }
+                            });
+                        });
                         return result;
                     }
                     else if (!string.IsNullOrEmpty(league.Reason))
