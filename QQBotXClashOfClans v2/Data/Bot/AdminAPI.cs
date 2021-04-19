@@ -63,7 +63,7 @@ namespace QQBotXClashOfClans_v2
             {
                 StringBuilder sb = new StringBuilder();
                 bool troopFull = true, spellFull = true, heroFull = true;
-                var troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel);
+                var troopsLV = BaseData.GetTownhallTroopsLV(player.TownHallLevel - 1);
                 sb.AppendLine("大本营等级：" + player.TownHallLevel + "，名字：" + player.Name);
                 sb.AppendLine("兵力：");
                 foreach (var troop in player.Troops)
@@ -204,7 +204,7 @@ namespace QQBotXClashOfClans_v2
                     }
                 }
                 bool allow;
-                if (levels.Count(x => x > 1) > 6 || heroLvNeed >= 40)
+                if (levels.Count(x => x >= 1) > 6 || heroLvNeed >= 30)
                 {
                     sb.AppendLine("不批准！科技不足！");
                     allow = false;
@@ -219,7 +219,7 @@ namespace QQBotXClashOfClans_v2
                     sb.AppendLine("战星已超过500，强制批准！");
                     allow = true;
                 }
-                await e.Session.SendGroupMessageAsync(e.EventArgs.FromGroup, new PlainMessage("新人审核资料如下：\n" + sb.ToString()));
+                await e.Session.SendGroupMessageAsync(e.EventArgs.FromGroup, new PlainMessage("新人距离上一本的审核资料如下：\n" + sb.ToString()));
                 return allow;
             }
             else

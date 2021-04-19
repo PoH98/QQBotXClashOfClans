@@ -3,8 +3,12 @@ using IniParser;
 using IniParser.Model;
 using Mirai_CSharp;
 using Mirai_CSharp.Models;
+using Native.Csharp.App.GameData;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,20 +82,85 @@ namespace QQBotXClashOfClans_v2
                 }
             }
             LoggedInQQ = qqId;
-            MiraiHttpSessionOptions options = new MiraiHttpSessionOptions("127.0.0.1", 8080,key);
-            await using var session = new MiraiHttpSession();
-            BaseData.Instance.checkClanWar = new Thread(new Threading(session).CheckClanWar)
+            Loop:
+            try
             {
-                IsBackground = true
-            };
-            BaseData.Instance.checkClanWar.Start();
-            session.AddPlugin(new GroupMessageHandler());
-            session.AddPlugin(new GroupRequestHandler());
-            session.AddPlugin(new GroupExitHandler());
-            Logger.Instance.AddLog(LogType.Info, "创建Event监听成功！");
-            await session.ConnectAsync(options, qqId);
-            Logger.Instance.AddLog(LogType.Info, "监听开始！");
-            await Task.Delay(-1);
+
+                MiraiHttpSessionOptions options = new MiraiHttpSessionOptions("127.0.0.1", 8080, key);
+                await using var session = new MiraiHttpSession();
+                BaseData.Instance.checkClanWar = new Thread(new Threading(session).CheckClanWar)
+                {
+                    IsBackground = true
+                };
+                BaseData.Instance.checkClanWar.Start();
+                session.AddPlugin(new GroupMessageHandler());
+                session.AddPlugin(new GroupRequestHandler());
+                session.AddPlugin(new GroupExitHandler());
+                Logger.Instance.AddLog(LogType.Info, "创建Event监听成功！");
+                await session.ConnectAsync(options, qqId);
+                Logger.Instance.AddLog(LogType.Info, "监听开始！");
+                do
+                {
+                    var input = Console.ReadLine();
+                    switch (input)
+                    {
+                        case "/D":
+                            if (!Directory.Exists("apk"))
+                            {
+                                Directory.CreateDirectory("apk");
+                                Logger.Instance.AddLog(LogType.Info,"把部落冲突APK文件放到这个文件夹内后再输入/D");
+                                Process.Start("explorer.exe", Path.Combine(Environment.CurrentDirectory, "apk"));
+                                break;
+                            }
+                            else
+                            {
+                                foreach(var f in Directory.GetFiles("apk","*.*", SearchOption.AllDirectories))
+                                {
+                                    if (!f.EndsWith(".apk"))
+                                    {
+                                        File.Delete(f);
+                                    }
+                                }
+                            }
+                            var files = Directory.GetFiles("apk", "*.apk", SearchOption.TopDirectoryOnly);
+                            Array.Sort(files, StringComparer.OrdinalIgnoreCase);
+                            var file = files.Last();
+                            var zip = file.Replace(".apk", ".zip");
+                            File.Copy(file, zip);
+                            ZipArchive zipFile = ZipFile.OpenRead(zip);
+                            zipFile.ExtractToDirectory(Path.Combine(Environment.CurrentDirectory, "apk"));
+                            foreach(var f in Directory.GetFiles("apk", "*.csv", SearchOption.AllDirectories))
+                            {
+                                File.WriteAllBytes(f, SCDecompress.Decompress(f));
+                                if(f.EndsWith("buildings.csv") || f.EndsWith("characters.csv") || f.EndsWith("heros.csv") || f.EndsWith("spells.csv") || f.EndsWith("texts.csv"))
+                                {
+                                    var local = Path.Combine(Environment.CurrentDirectory, f.Split('\\').Last());
+                                    if (File.Exists(local))
+                                    {
+                                        File.Delete(local);
+                                    }
+                                    File.Copy(f, local);
+                                }
+                            }
+                            FileIniDataParser parser = new FileIniDataParser();
+                            BaseData.UpdateTownhallINI(parser);
+                            BaseData.UpdateTranslate(parser);
+                            BaseData.Instance.chains.Clear();
+                            BaseData.Instance.checkClanWar.Abort();
+                            BaseData.Instance.config = null;
+                            GC.Collect();
+                            BaseData.LoadCOCData();
+                            break;
+                    }
+                }
+                while (true);
+            }
+            catch(Exception ex)
+            {
+                Logger.Instance.AddLog(LogType.Error, ex.ToString());
+                goto Loop;
+            }
+            
             
         }
     }
