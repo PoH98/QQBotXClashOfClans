@@ -2,6 +2,7 @@
 using CocNET.Types.Players;
 using Mirai_CSharp;
 using Mirai_CSharp.Models;
+using OpenHardwareMonitor.Hardware;
 using QQBotXClashOfClans_v2.Data;
 using QQBotXClashOfClans_v2.Game;
 using System;
@@ -15,6 +16,7 @@ namespace QQBotXClashOfClans_v2
 {
     public class Threading
     {
+        private readonly Computer computer = new Computer();
         private Dictionary<long, Thread> War { get; }
         private MiraiHttpSession Session { get; }
         public Threading(MiraiHttpSession session)
@@ -26,11 +28,36 @@ namespace QQBotXClashOfClans_v2
         {
             Logger.Instance.AddLog(LogType.Info, "部落战检测系统启动");
             DateTime lastBackup = DateTime.MinValue;
+            computer.Open();
+            computer.CPUEnabled = true;
+            computer.RAMEnabled = true;
             do
             {
                 try
                 {
-                    BaseData.Instance.cpuUsage = BaseData.Instance.cpuCounter.NextValue();
+                    foreach (var hardware in computer.Hardware)
+                    {
+                        switch (hardware.HardwareType)
+                        {
+                            case HardwareType.CPU:
+                                hardware.Update();
+                                var value = GetLoad(hardware);
+                                if(value != null)
+                                {
+                                    BaseData.Instance.cpuUsage = value.Value;
+                                }
+                                BaseData.Instance.cpuName = hardware.Name;
+                                break;
+                            case HardwareType.RAM:
+                                hardware.Update();
+                                value = GetLoad(hardware);
+                                if (value != null)
+                                {
+                                    BaseData.Instance.ramUsage = value.Value;
+                                }
+                                break;
+                        }
+                    }
                     Thread.Sleep(1000);
                     if ((DateTime.Now.Minute == 0 || DateTime.Now.Minute == 30) && DateTime.Now.Second == 0)
                     {
@@ -218,10 +245,22 @@ namespace QQBotXClashOfClans_v2
                 }
                 catch(Exception ex)
                 {
-                    Logger.Instance.AddLog(LogType.Error, "部落战检测出现错误: " + ex.Message);
+                    Logger.Instance.AddLog(LogType.Error, "部落战检测出现错误: " + ex.ToString());
                 }
             }
             while (true);
+        }
+
+        private double? GetLoad(IHardware hardware)
+        {
+            foreach(var sensor in hardware.Sensors)
+            {
+                if (sensor.SensorType == SensorType.Load)
+                {
+                    return sensor.Value;
+                }
+            }
+            return null;
         }
     }
 }

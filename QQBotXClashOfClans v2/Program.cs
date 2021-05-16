@@ -4,6 +4,8 @@ using IniParser.Model;
 using Mirai_CSharp;
 using Mirai_CSharp.Models;
 using Native.Csharp.App.GameData;
+using Newtonsoft.Json.Linq;
+using RestSharp.Serializers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -82,6 +84,7 @@ namespace QQBotXClashOfClans_v2
                 }
             }
             LoggedInQQ = qqId;
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             Loop:
             try
             {
@@ -97,8 +100,16 @@ namespace QQBotXClashOfClans_v2
                 session.AddPlugin(new GroupRequestHandler());
                 session.AddPlugin(new GroupExitHandler());
                 Logger.Instance.AddLog(LogType.Info, "创建Event监听成功！");
-                await session.ConnectAsync(options, qqId);
-                Logger.Instance.AddLog(LogType.Info, "监听开始！");
+                Retry:
+                try
+                {
+                    await session.ConnectAsync(options, qqId, true);
+                }
+                catch
+                {
+                    goto Retry;
+                }
+               Logger.Instance.AddLog(LogType.Info, "监听开始！");
                 do
                 {
                     var input = Console.ReadLine();
@@ -162,6 +173,11 @@ namespace QQBotXClashOfClans_v2
             }
             
             
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            SharedData.Instance.merchant.Dispose();
         }
     }
 }

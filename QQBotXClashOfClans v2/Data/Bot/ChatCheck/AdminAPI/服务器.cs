@@ -19,19 +19,12 @@ namespace QQBotXClashOfClans_v2
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("哔波哔波？\n服务器时区：UTF-" + TimeZoneInfo.Local.GetUtcOffset(DateTime.Now).Hours + "\n当前时间: " + DateTime.Now.ToString() + "\n服务器CPU状态: ");
-                sb.Append(Convert.ToInt32(BaseData.Instance.cpuUsage).ToString("N0") + "%\n");
-                var wmiObject = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+                sb.Append(BaseData.Instance.cpuUsage.ToString("N0") + "%\n");
                 sb.Append("服务器内存使用: ");
-                var memoryValues = wmiObject.Get().Cast<ManagementObject>().Select(mo => new
-                {
-                    FreePhysicalMemory = double.Parse(mo["FreePhysicalMemory"].ToString()),
-                    TotalVisibleMemorySize = double.Parse(mo["TotalVisibleMemorySize"].ToString())
-                }).FirstOrDefault();
-                if (memoryValues != null)
-                {
-                    sb.Append((((memoryValues.TotalVisibleMemorySize - memoryValues.FreePhysicalMemory) / memoryValues.TotalVisibleMemorySize) * 100).ToString("0") + "%");
-                }
-                if(BaseData.Instance.checkClanWar == null)
+                sb.Append(BaseData.Instance.ramUsage.ToString("N0") + "%\n");
+                sb.Append("服务器CPU名字: ");
+                sb.Append(BaseData.Instance.cpuName);
+                if (BaseData.Instance.checkClanWar == null)
                 {
                     Process.Start(Process.GetCurrentProcess().MainModule.FileName);
                     Environment.Exit(0);

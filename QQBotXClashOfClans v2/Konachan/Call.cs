@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Native.Csharp.App.ApiCall
@@ -13,14 +14,13 @@ namespace Native.Csharp.App.ApiCall
     {
         private WebClient wc;
         private string channel;
-        private int score, page = 1;
+        private int page = 1;
         private XmlSerializer serializer = new XmlSerializer(typeof(Posts));
-        public Call(int score = 0)
+        public Call()
         {
             wc = new WebClient();
             wc.Encoding = Encoding.UTF8;
             wc.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36");
-            this.score = score;
         }
 
         public void Dispose()
@@ -28,7 +28,7 @@ namespace Native.Csharp.App.ApiCall
             wc.Dispose();
         }
 
-        public List<Post> Request()
+        public async Task<IList<Post>> Request(int score = 0)
         {
             Random rnd = new Random();
             string url = "";
@@ -47,20 +47,29 @@ namespace Native.Csharp.App.ApiCall
                 Singleton.GetInstance().list.Add(channel, new List<uint>());
             }
             Load:
-            var result = serializer.Deserialize(wc.OpenRead(url)) as Posts;
-            var returnobj = result.Post.Where(x => x.rating.ToLower() == "s").ToList();
-            //Remove sended object
-            foreach (var obj in result.Post)
+            var result = serializer.Deserialize(await wc.OpenReadTaskAsync(url)) as Posts;
+            IList<Post> returnobj;
+            if(score < 6)
             {
-                if (Singleton.GetInstance().list[channel].Contains(obj.id))
-                {
-                    var remove = returnobj.Where(x => x.id == obj.id).FirstOrDefault();
-                    if (remove != null)
-                    {
-                        returnobj.Remove(remove);
-                    }
-                }
+                returnobj = result.Post.Where(x => x.rating.ToLower() == "s" || x.rating == "q").ToList();
             }
+            else
+            {
+                returnobj = result.Post.Where(x => x.rating.ToLower() == "s").ToList();
+            }
+            //Remove sended object
+            var instance = Singleton.GetInstance();
+           Parallel.ForEach(result.Post, (post) =>
+           {
+               if (instance.list[channel].Contains(post.id))
+               {
+                   var remove = returnobj.FirstOrDefault(x => x.id == post.id);
+                   if (remove != null)
+                   {
+                       returnobj.Remove(remove);
+                   }
+               }
+           });
             if(returnobj.Count < 1)
             {
                 page++;
@@ -78,7 +87,7 @@ namespace Native.Csharp.App.ApiCall
             return returnobj;
         }
 
-        public Post GetRandom(List<Post> list)
+        public Post GetRandom(IList<Post> list)
         {
             var rnd = new Random();
             var obj = list[rnd.Next(0, list.Count)];
@@ -90,23 +99,9 @@ namespace Native.Csharp.App.ApiCall
             return obj as Post;
         }
 
-        public string DownloadImage(Post json)
+        public async Task<Stream> DownloadImage(Post json)
         {
-            if (!Directory.Exists("Buffer"))
-            {
-                Directory.CreateDirectory("Buffer");
-            }
-            foreach(var file in Directory.GetFiles("Buffer"))
-            {
-                FileInfo info = new FileInfo(file);
-                if((DateTime.Now - info.CreationTime).Days > 1)
-                {
-                    info.Delete();
-                }
-            }
-            string randomName = "Buffer\\"+ Path.GetRandomFileName();
-            wc.DownloadFile(json.jpeg_url, randomName);
-            return randomName;
+            return await wc.OpenReadTaskAsync(json.jpeg_url);
         }
     }
 }

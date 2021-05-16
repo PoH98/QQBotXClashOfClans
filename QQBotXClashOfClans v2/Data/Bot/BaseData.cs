@@ -54,9 +54,8 @@ namespace QQBotXClashOfClans_v2
 
         private static BaseData _instance;
 
-        public PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
-
-        public double cpuUsage = 0;
+        public double cpuUsage = 0, ramUsage = 0;
+        public string cpuName = "";
         public static void InitFirstUse()
         {
             string[] key = { "查看指令" };

@@ -1,7 +1,6 @@
 ﻿using Mirai_CSharp.Models;
 using Native.Csharp.App.ApiCall;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace QQBotXClashOfClans_v2.Data.Bot.ChatCheck.ImageAPI
@@ -12,15 +11,15 @@ namespace QQBotXClashOfClans_v2.Data.Bot.ChatCheck.ImageAPI
         {
             if (chat.Message == "/图" || chat.Message == "/来图")
             {
-                using (var call = new Call(9))
+                using (var call = new Call())
                 {
-                    var result = call.Request();
+                    var result = await call.Request(9);
                     Logger.Instance.AddLog(LogType.Debug, "已获取图片json" + result.Count + "个");
                     if (result.Count > 0)
                     {
                         var obj = call.GetRandom(result);
-                        var path = call.DownloadImage(obj);
-                        return new IMessageBase[] { await chat.Session.UploadPictureAsync(UploadTarget.Group, path) };
+                        var stream = await call.DownloadImage(obj);
+                        return new IMessageBase[] { await chat.Session.UploadPictureAsync(UploadTarget.Group, stream) };
                     }
                     else
                     {
@@ -32,13 +31,13 @@ namespace QQBotXClashOfClans_v2.Data.Bot.ChatCheck.ImageAPI
             {
                 using (var call = new Call())
                 {
-                    var result = call.Request();
+                    var result = await call.Request();
                     Logger.Instance.AddLog(LogType.Debug, "已获取图片json" + result.Count + "个");
                     if (result.Count > 0)
                     {
                         var obj = call.GetRandom(result);
-                        var path = call.DownloadImage(obj);
-                        return new IMessageBase[] { await chat.Session.UploadPictureAsync(UploadTarget.Group, path) };
+                        var stream = await call.DownloadImage(obj);
+                        return new IMessageBase[] { await chat.Session.UploadPictureAsync(UploadTarget.Group, stream) };
                     }
                     else
                     {

@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.218
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QQBotXClashOfClans v2", "QQBotXClashOfClans v2\QQBotXClashOfClans v2.csproj", "{443D80B9-F30D-4F6A-B529-4FF7BCD098B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QQBotXClashOfClans v2", "QQBotXClashOfClans v2\QQBotXClashOfClans v2.csproj", "{443D80B9-F30D-4F6A-B529-4FF7BCD098B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirai-CSharp", "Mirai-CSharp-release-1.0.2.2\Mirai-CSharp\Mirai-CSharp.csproj", "{B21C045C-CD40-412A-AEC3-AA09F57D93B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenHardwareMonitorLib", "openhardwaremonitor-master\OpenHardwareMonitorLib.csproj", "{B0397530-545A-471D-BB74-027AE456DF1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{443D80B9-F30D-4F6A-B529-4FF7BCD098B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{443D80B9-F30D-4F6A-B529-4FF7BCD098B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{443D80B9-F30D-4F6A-B529-4FF7BCD098B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B21C045C-CD40-412A-AEC3-AA09F57D93B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21C045C-CD40-412A-AEC3-AA09F57D93B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21C045C-CD40-412A-AEC3-AA09F57D93B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21C045C-CD40-412A-AEC3-AA09F57D93B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0397530-545A-471D-BB74-027AE456DF1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0397530-545A-471D-BB74-027AE456DF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0397530-545A-471D-BB74-027AE456DF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0397530-545A-471D-BB74-027AE456DF1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
